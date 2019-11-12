@@ -4,7 +4,6 @@
 #include "pch.h"
 #include <iostream>
 #include <string>
-#include <istream>
 
 using namespace std;
 char iString[50];
@@ -46,7 +45,7 @@ char *SpaceEliminate(char *iString) {
 
 int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
 	char temp[10];
-	char CheckOp[5]= {'+','-','*','/','%'};
+	char CheckOp[5] = { '+','-','*','/','%' };
 	int StartIndex = 0;
 	int EndIndex = strlen(iData);
 	//ARG1
@@ -68,13 +67,17 @@ int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
 	//OP
 	for (int i = StartIndex + 1; iData[i] == 32; i++) StartIndex = i + 1;
 	for (int i = EndIndex - 1; iData[i] == 32; i--)EndIndex = i - 1;
+	op = iData[StartIndex];
 
 
 	if (StartIndex != EndIndex) {
 		return 5;
 	}
 	else {
-		op = iData[StartIndex];
-		return 0;
+		if ((op == '+') || (op == '-') || (op == '*') || (op == '/') || (op == '%')) {
+			return 0;
+		} else {
+			return 3;
+		}
 	}
 }
