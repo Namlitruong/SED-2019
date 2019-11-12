@@ -8,11 +8,11 @@
 
 using namespace std;
 char iString[50];
-char arg1;
-char arg2;
+char arg1[10];
+char arg2[10];
 char op;
 char *SpaceEliminate(char *);
-int ExtractInput(char *);
+int ExtractInput(char *, char *, char *, char &);
 
 int main() {
 	while (1) {
@@ -22,20 +22,19 @@ int main() {
 		cout << "Input the elements of simple 2-argument Calculator:   ";
 		cin.getline(iString, 50);
 		cout << "Eliminate Space Input:   |" << SpaceEliminate(iString) << "|" << endl;
-		Err = (ExtractInput(SpaceEliminate(iString)));
-		
-		
-		//cout << "DATA index 0:    |" << *(ExtractInput(SpaceEliminate(iString)) + 1) << endl;
-		/*cout << "DATA index 1:    |" << Data[1] << endl;
-		cout << "DATA index 2:    |" << Data[2] << endl;
-		cout << "DATA index 3:    |" << Data[3] << endl;*/
+		Err = ExtractInput(SpaceEliminate(iString), arg1, arg2, op);
+
+		cout << "out arg1:   |" << arg1 << "|" << endl;
+		cout << "out arg2:   |" << arg2 << "|" << endl;
+		cout << "out Op:     |" << op << "|" << endl;
+		cout << "Err Message:   " << Err << endl;
 	}
 }
 
 char *SpaceEliminate(char *iString) {
 	int StartIndex = 0;
 	int EndIndex = strlen(iString);
-	char*Data =  &(*iString);
+	char*Data = &(*iString);
 
 	for (int i = 1; iString[i - 1] == ' '; i++) StartIndex = i;
 	for (int i = strlen(iString) - 1; iString[i] == ' '; i--) EndIndex = i - 1;
@@ -45,15 +44,11 @@ char *SpaceEliminate(char *iString) {
 	return Data;
 }
 
-int ExtractInput(char *iData) {
-	char arg1[10];
-	char arg2[10];
+int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
 	char temp[10];
-	char op[2];
+	char CheckOp[5]= {'+','-','*','/','%'};
 	int StartIndex = 0;
 	int EndIndex = strlen(iData);
-	cout << "strlen iDATA   " << strlen(iData) << endl;
-	cout << "iDATA:   |" << iData << "|" << endl;
 	//ARG1
 	for (int i = 0; iData[i] != 32; i++) {
 		arg1[i] = iData[i];
@@ -70,29 +65,16 @@ int ExtractInput(char *iData) {
 		arg2[i] = temp[strlen(temp) - i - 1];
 	}
 	arg2[strlen(temp)] = '\0';
-
-	cout << "StartIndex:   " << StartIndex << "   EndIndex:   " << EndIndex << endl;
 	//OP
 	for (int i = StartIndex + 1; iData[i] == 32; i++) StartIndex = i + 1;
 	for (int i = EndIndex - 1; iData[i] == 32; i--)EndIndex = i - 1;
-	cout << "StartIndex:   " << StartIndex << "   EndIndex:   " << EndIndex << endl;
+
+
 	if (StartIndex != EndIndex) {
-		cout << "ERROR MESSAGE 5" << endl;
+		return 5;
 	}
 	else {
-		op[0] = iData[StartIndex];
-		op[1] = '\0';
+		op = iData[StartIndex];
+		return 0;
 	}
-
-	cout << "arg1:   |" << arg1 << "|" << endl;
-	cout << "arg2:   |" << arg2 << "|" << endl;
-	cout << "Op:     |" << op << "|" << endl;
-
-	Expression = {arg1, arg2, op};
-	cout << endl << "Input:   |" << Expression << "|" << endl << endl;
-
-	cout << "arg1:   |" << *Expression << "|" << endl;
-	cout << "arg2:   |" << *(Expression + 1) << "|" << endl;
-	cout << "Op:     |" << *(Expression + 2) << "|" << endl;
-	return Expression;
 }
