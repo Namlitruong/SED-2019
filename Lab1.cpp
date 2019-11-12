@@ -7,11 +7,13 @@
 
 using namespace std;
 char iString[50];
-char arg1[10];
-char arg2[10];
+int arg1;
+int arg2;
 char op;
+
 char *SpaceEliminate(char *);
-int ExtractInput(char *, char *, char *, char &);
+int ExtractInput(char *, int &, int &, char &);
+bool CheckInt(char *);
 
 int main() {
 	while (1) {
@@ -23,9 +25,6 @@ int main() {
 		cout << "Eliminate Space Input:   |" << SpaceEliminate(iString) << "|" << endl;
 		Err = ExtractInput(SpaceEliminate(iString), arg1, arg2, op);
 
-		cout << "out arg1:   |" << arg1 << "|" << endl;
-		cout << "out arg2:   |" << arg2 << "|" << endl;
-		cout << "out Op:     |" << op << "|" << endl;
 		cout << "Err Message:   " << Err << endl;
 	}
 }
@@ -43,9 +42,10 @@ char *SpaceEliminate(char *iString) {
 	return Data;
 }
 
-int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
+int ExtractInput(char *iData, int &oarg1, int &oarg2, char &op) {
+	char arg1[10];
+	char arg2[10];
 	char temp[10];
-	char CheckOp[5] = { '+','-','*','/','%' };
 	int StartIndex = 0;
 	int EndIndex = strlen(iData);
 	//ARG1
@@ -69,7 +69,11 @@ int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
 	for (int i = EndIndex - 1; iData[i] == 32; i--)EndIndex = i - 1;
 	op = iData[StartIndex];
 
+	cout << "out arg1:   |" << arg1 << "|" << endl;
+	cout << "out arg2:   |" << arg2 << "|" << endl;
+	cout << "out Op:     |" << op << "|" << endl;
 
+	if (!CheckInt(arg1) || !CheckInt(arg1)) return 1;
 	if (StartIndex != EndIndex) {
 		return 5;
 	}
@@ -80,4 +84,14 @@ int ExtractInput(char *iData, char *arg1, char *arg2, char &op) {
 			return 3;
 		}
 	}
+}
+
+bool CheckInt(char *Input) {
+	for (int i = 0; i < strlen(Input); i++) {
+		if (i == 0 && (*(Input + i) == '+' || *(Input + i) == '-')) continue;
+		if (((*(Input + i) < '0') || (*(Input + i) > '9'))) {
+			return 0;
+		}
+	}
+	return 1;
 }
