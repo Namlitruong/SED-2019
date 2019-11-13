@@ -13,7 +13,8 @@ char op;
 
 char *SpaceEliminate(char *);
 int ExtractInput(char *, int &, int &, char &);
-bool CheckInt(char *);
+bool CheckValid(char *);
+bool CheckRange(char *, int &);
 
 int main() {
 	while (1) {
@@ -24,6 +25,11 @@ int main() {
 		cin.getline(iString, 50);
 		cout << "Eliminate Space Input:   |" << SpaceEliminate(iString) << "|" << endl;
 		Err = ExtractInput(SpaceEliminate(iString), arg1, arg2, op);
+
+		cout << "int arg1:   |" << arg1 << "|" << endl;
+		cout << "int arg2:   |" << arg2 << "|" << endl;
+		cout << "out Op:     |" << op << "|" << endl;
+		cout << "SUM:     |" << arg1 + arg2 << "|" << endl;
 
 		cout << "Err Message:   " << Err << endl;
 	}
@@ -69,29 +75,40 @@ int ExtractInput(char *iData, int &oarg1, int &oarg2, char &op) {
 	for (int i = EndIndex - 1; iData[i] == 32; i--)EndIndex = i - 1;
 	op = iData[StartIndex];
 
-	cout << "out arg1:   |" << arg1 << "|" << endl;
-	cout << "out arg2:   |" << arg2 << "|" << endl;
-	cout << "out Op:     |" << op << "|" << endl;
+	cout << "string arg1:   |" << arg1 << "|" << endl;
+	cout << "string arg2:   |" << arg2 << "|" << endl;
+	cout << "out Op:     |" << op << "|" << endl << endl << endl;
 
-	if (!CheckInt(arg1) || !CheckInt(arg1)) return 1;
+	//checkrange
+	if (!CheckRange(arg1, oarg1) || !CheckRange(arg2, oarg2)) return 2;
+	if (!CheckValid(arg1) || !CheckValid(arg2)) return 1;
 	if (StartIndex != EndIndex) {
 		return 5;
 	}
 	else {
 		if ((op == '+') || (op == '-') || (op == '*') || (op == '/') || (op == '%')) {
-			return 0;
-		} else {
+			if ((op == '/') && (oarg2 == 0)) return 4;
+			else return 0;
+		}
+		else {
 			return 3;
 		}
 	}
 }
 
-bool CheckInt(char *Input) {
+bool CheckValid(char *Input) {
 	for (int i = 0; i < strlen(Input); i++) {
 		if (i == 0 && (*(Input + i) == '+' || *(Input + i) == '-')) continue;
 		if (((*(Input + i) < '0') || (*(Input + i) > '9'))) {
 			return 0;
 		}
 	}
+	return 1;
+}
+
+bool CheckRange(char *Input, int &oarg) {
+	if (strlen(Input) > 6) return 0;
+	oarg = atoi(Input);
+	if (oarg < -32768 || oarg > 32767) return 0;
 	return 1;
 }
