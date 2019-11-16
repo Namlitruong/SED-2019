@@ -5,7 +5,7 @@
 #include <iostream>
 
 using namespace std;
-char iString[50];
+char iString[1000];
 int arg1;
 int arg2;
 char op;
@@ -21,12 +21,18 @@ void PrintResult (int&, int&, char&, int);
 
 int main() {
 	while (1) {
+		cout << "___________________________________________________________\n";
+		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;
 		cout << "Input the elements of simple 2-argument Calculator:   ";
-		cin.getline(iString, 50);
-		cout << "STRLEN:    " << strlen(iString) << endl;
-		if (CheckiString(iString)) return 0;
-		if (ErrMess(ExtractInput(SpaceEliminate(iString), arg1, arg2, op))) {
-			PrintResult(arg1, arg2, op, DoCalculate(arg1, arg2, op));
+		cin.getline(iString, 1000);
+
+		if (strlen(iString) < 100) {
+			if (CheckiString(iString)) return 0;
+			if (ErrMess(ExtractInput(SpaceEliminate(iString), arg1, arg2, op))) {
+				PrintResult(arg1, arg2, op, DoCalculate(arg1, arg2, op));
+			}
+		}else {
+			cout << "Too many characters. Please input the expression again !!!" << endl;
 		}
 	}
 }
@@ -40,22 +46,21 @@ char* SpaceEliminate(char* iString) {
 	for (int i = strlen(iString) - 1; iString[i] == ' '; i--) EndIndex = i - 1; // check space from the back  
 	for (int i = 0; i <= (EndIndex - StartIndex); i++) Data[i] = iString[StartIndex + i]; // take out the expression to front
 	Data[(EndIndex - StartIndex) + 1] = '\0';
-
 	return Data;
 }
 
 int ExtractInput(char* iData, int& oarg1, int& oarg2, char& op) { //oarg: output argument
-	char arg1[10];
-	char arg2[10];
-	char temp[10];
+	char arg1[50];
+	char arg2[50];
+	char temp[50];
 	int StartIndex = 0;
 	int EndIndex = strlen(iData);
 
 	for (int i = 0; iData[i] != 32; i++) {
-		if (i == strlen(iData)) return 5;
+		if (i == strlen(iData)-1) return 5;
 	}
 	for (int i = 0; iData[i] == 32; i++) {
-		if (i == strlen(iData)) return 5;
+		if (i == strlen(iData)-1) return 5;
 	}
 	//ARG1
 	for (int i = 0; iData[i] != 32; i++) {
@@ -77,18 +82,14 @@ int ExtractInput(char* iData, int& oarg1, int& oarg2, char& op) { //oarg: output
 	arg2[strlen(temp)] = '\0';
 
 	//OP
-	//TODO return error check for invalid operators as start index differnet end index
 	for (int i = StartIndex + 1; iData[i] == 32; i++) StartIndex = i + 1;
 	for (int i = EndIndex - 1; iData[i] == 32; i--)EndIndex = i - 1;
 	op = iData[StartIndex];
-
-	//checkrange
 
 	if (!checkValidNumber(arg1) || !checkValidNumber(arg2)) return 1;
 	if (!CheckRange(arg1, oarg1) || !CheckRange(arg2, oarg2)) return 2;
 
 	if (StartIndex != EndIndex) {
-		//TODO check proper error
 		return 5;
 	}
 	else {
@@ -104,7 +105,6 @@ int ExtractInput(char* iData, int& oarg1, int& oarg2, char& op) { //oarg: output
 }
 
 bool CheckRange(char* Input, int& oarg) {
-	// if (strlen(Input) > 6) return 0;
 	oarg = atoi(Input);
 	if (oarg < -32768 || oarg > 32767) return 0;
 	return 1;
