@@ -1,12 +1,12 @@
-//###############################################
-//	School of Science & Technology				#
-//	EEET2482 - Software Engineering Design		#
-//	Lab 1 - Simple 2-Argument Calculator		#
-//	Team name: HaloSST							#
-//	Member 1: Nam Truong - s3518702				#
-//	Member 2: Tin Nguyen - s3607833				#
-//	Member 3: Hoang Tran - s3618889				#
-//###############################################
+//##########################################################################################################################################
+//	School of Science & Technology				
+//	EEET2482 - Software Engineering Design		
+//	Lab 1 - Simple 2-Argument Calculator		
+//	Team name: HaloSST							
+//	Member 1: Nam Truong - s3518702				
+//	Member 2: Tin Nguyen - s3607833				
+//	Member 3: Hoang Tran - s3618889				
+//###########################################################################################################################################
 
 #include "pch.h"
 #include <iostream>
