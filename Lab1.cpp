@@ -1,5 +1,12 @@
-// Lab1.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+//###############################################
+//	School of Science & Technology				#
+//	EEET2482 - Software Engineering Design		#
+//	Lab 1 - Simple 2-Argument Calculator		#
+//	Team name: HaloSST							#
+//	Member 1: Nam Truong - s3518702				#
+//	Member 2: Tin Nguyen - s3607833				#
+//	Member 3: Hoang Tran - s3618889				#
+//###############################################
 
 #include "pch.h"
 #include <iostream>
@@ -17,31 +24,28 @@ int arg2;
 char op;
 
 // Function prototype
-char* SpaceEliminate(char*);					//Function is used to eliminate spaces before or after the expression. Return a new string without any spaces before or after the expression.
-int ExtractInput(char*, int&, int&, char&);		//Extract correct data from the input string to arg1, arg2 and op. Return the error code.
-bool CheckRange(char*, int&);					//Convernt and check the range of the input argument and return the argument in the integer format.	
-bool checkValidNumber(char*);					//Check whether the argument is a valid interger or not.
-int DoCalculate(int&, int&, char&);				//Do the calculation and return the result correspond to the input arguments and operand.
-bool ErrMess(int);								//Print out the Error message if error occurs during the precess. 
-bool CheckExit(char *);							//Check if user input "Exit". the program will be exited and print the team information.
-void PrintResult (int&, int&, char&, int);		//If the lenth of the input string is correct and no Errors occur, The result will be printed.
+char* SpaceEliminate(char*);					
+int ExtractInput(char*, int&, int&, char&);		
+bool CheckRange(char*, int&);						
+bool checkValidNumber(char*);					
+int DoCalculate(int&, int&, char&);				
+bool ErrMess(int);								
+bool CheckExit(char *);							
+void PrintResult (int&, int&, char&, int);		
 
 //Main program
 int main() {
 	while (1) {
 		cout << "___________________________________________________________\n";
-		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;				//Acknowledge user the input constraint
+		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
 		cout << "Input the elements of simple 2-argument Calculator:   ";
-		cin.getline(iString, 1000);													//Declare and set the input lenght of iString is 1000, but just allow user to input 100 characters.
-																								//This action to prevent buffer overflow which will cause fatal error and exit the program immediately.
+		cin.getline(iString, 1000);																	//Declare and set the input lenght of iString is 1000, but just allow user to input 100 characters.
+																									//This action to prevent buffer overflow which will cause fatal error and exit the program immediately.
 		if (strlen(iString) < INPUTLIMIT) {
-			if (CheckExit(iString)) return 0;													//If the "Exit" is recognised, return 0 to exit the program and print team information.
-			if (ErrMess(ExtractInput(SpaceEliminate(iString), arg1, arg2, op))) {				//If no errors are detected, the result of the calculation will display.
-				PrintResult(arg1, arg2, op, DoCalculate(arg1, arg2, op));						
-			}
-		}else {
-			cout << "ERROR: Too many characters. Please input the expression again !!!" << endl;//Print error message if too many characters have been input
-		}
+			if (CheckExit(iString)) return 0;														//If the "Exit" is recognised, return 0 to exit the program and print team information.
+			if (ErrMess(ExtractInput(SpaceEliminate(iString), arg1, arg2, op))) 
+				PrintResult(arg1, arg2, op, DoCalculate(arg1, arg2, op));							//If no errors are detected, the result of the calculation will display.
+		}else cout << "ERROR: Too many characters. Please input the expression again !!!" << endl;	//Print error message if too many characters have been input
 	}
 }
 /*	Function name: SpaceEliminate.
@@ -136,21 +140,16 @@ bool CheckRange(char* Input, int& oarg) {
 bool checkValidNumber(char* inputArgv) {
 	bool dotDetect = false;
 
-	for (int i = 0; inputArgv[i] != '\0'; i++) {		// Using loop to scan the iput string
+	for (int i = 0; inputArgv[i] != '\0'; i++) {	// Using loop to scan the iput string
 
-		if (!isdigit(inputArgv[i]) && inputArgv[i] != '+' && inputArgv[i] != '-' && inputArgv[i] != '.') { // A number, '+', '-', and a dot are allowed at the first index. If not return false.
-			return false;
-		}
+		if (!isdigit(inputArgv[i]) && inputArgv[i] != '+' && inputArgv[i] != '-' && inputArgv[i] != '.') return false; // A number, '+', '-', and a dot are allowed at the first index. If not return false.
 
-		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+')) {	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
-			return false;
-		}
+		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+')) return false;	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
 		// A dot just can present one time inside the string and after the dot, everything must be zero or NULL.
 		if (dotDetect) {
 			if (inputArgv[i] == '.') return false;
 			else if (inputArgv[i] != '0') return false;
-		}
-		else {
+		} else {
 			if (inputArgv[i] == '.') dotDetect = true;
 		}
 	}
