@@ -8,7 +8,7 @@
 //	Member 3: Hoang Tran - s3618889				
 //###########################################################################################################################################
 
-// #include "pch.h"
+#include "pch.h"
 #include <iostream>
 #define ASCIIspace 32
 #define INPUTLIMIT 100
