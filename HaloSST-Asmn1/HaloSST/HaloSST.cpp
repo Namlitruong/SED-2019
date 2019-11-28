@@ -48,11 +48,6 @@ int Stack::pop()
 	}
 }
 
-char Stack::Search (int index) {
-	char item = myStack[index];
-	return item;
-}
-
 int Stack::takeTop() {
 	return top;
 }
@@ -69,9 +64,9 @@ class Stack Expr;
 
 char* SpaceEliminate(char*);
 bool CheckExit(char *);
-//int ExtractInput(char*, char&);
 int InsertStack(char*, Stack&);
 bool CheckOp(char);
+
 
 int main()
 {
@@ -134,13 +129,29 @@ bool CheckOp(char op) {
 }
 
 int InsertStack(char* iData, Stack &Expr) {
+	char subString[100];
+	char temp[100];
+	int count;
 	for (int i = 0; i < strlen(iData); i++) {
 		if (iData[i] != ' ') {
 			Expr.push(iData[i]);
 		}
-
-		cout << "CHECK:   " << Expr.myStack[Expr.takeTop()] << "  OP:"<< CheckOp(Expr.myStack[Expr.takeTop()]) << endl;
 		if (CheckOp(Expr.myStack[Expr.takeTop()]) && CheckOp(Expr.myStack[Expr.takeTop() - 1])) return 4;
+		if (Expr.myStack[Expr.takeTop()] == ')' && Expr.myStack[Expr.takeTop() - 1] == '(') return 4;
+
+		if (iData[i] == ')') {
+			for (count = 0; Expr.myStack[Expr.takeTop()] != '('; count++) {
+				temp[count] = Expr.pop();
+			}
+			temp[count] = '\0';
+
+			for (unsigned int i = 0; i < strlen(temp); i++) {
+				subString[i] = temp[strlen(temp) - i - 1];
+			}
+			subString[strlen(temp)-1] = '\0';
+
+			cout << "CHECK:   " << subString << endl;
+		}
 	}
 
 	return 0;
