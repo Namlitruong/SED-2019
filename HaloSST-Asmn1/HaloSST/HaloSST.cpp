@@ -22,7 +22,7 @@ public:
     int pop();
 	char popSub();
     int peek();
-	int peekSub();
+	char peekSub();
     int size();
     bool isEmpty();
     bool isFull();
@@ -106,7 +106,7 @@ int Stack::peek()
 	}
 }
 
-int Stack::peekSub()
+char Stack::peekSub()
 {
     if (!isEmpty()){
         return arrSub[top];
@@ -147,7 +147,7 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "-4");
+		strcpy(iString, "1+2*3");
 		cout << constructEvalStack(iString);
 		break;
 
@@ -321,8 +321,9 @@ int constructEvalStack(string f_str){
 
 			// TODO Operator or Unary?
 			// FIXME Precedence is wrong
+
 			while (!opt_stk.isEmpty() 
-				&& opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ){ 
+				&& ( opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ) ){ 
 
                 int arg2 = val_stk.pop(); 
 
@@ -333,7 +334,7 @@ int constructEvalStack(string f_str){
                 val_stk.push(evaluateExp(arg1, arg2, op)); 
             } 
               
-            opt_stk.push(f_str[idx]);
+            opt_stk.pushSub(f_str[idx]);
 		}
 	}
 
