@@ -9,54 +9,81 @@ using namespace std;
 #define MAX 1000
 //////////////////////////--Stack--/////////////////////////////
 class Stack {
-	int top;
+    int *arr;
+    int top;
+    int capacity;
 public:
-	char myStack[MAX];
-
-	Stack() { top = -1; }
-	bool push(char x);
-	int pop();
-	bool isEmpty();
-	char Search(int index);
-	int takeTop();
+    Stack(int size = MAX);     // constructor
+    ~Stack();                   // destructor
+ 
+    void push(int);
+    int pop();
+    int peek();
+    int size();
+    bool isEmpty();
+    bool isFull();
 };
 
-//pushes element on to the stack
-bool Stack::push(char item)
+Stack::Stack(int size)
 {
-	if (top >= (MAX - 1)) {
-		cout << "Stack Overflow!!!";
-		return false;
-	}
-	else {
-		myStack[++top] = item;
-		cout << item << endl;
-		return true;
-	}
+    arr = new int[size];
+    capacity = size;
+    top = -1;
+}
+
+// Destructor to free memory allocated to the stack
+Stack::~Stack()
+{
+    delete arr;
+}
+
+void Stack::push(int x)
+{
+    if (isFull())
+    {
+        cout << "Stack Overflow!!!";
+    }
+ 
+    cout << "Inserting " << x << endl;
+    arr[++top] = x;
 }
 
 //removes or pops elements out of the stack
 int Stack::pop()
 {
-	if (top < 0) {
-		cout << "Stack Underflow!!";
+    if (isEmpty())
+    {
+        cout << "Stack Underflow!!";
 		return 0;
-	}
-	else {
-		int item = myStack[top--];
-		return item;
-	}
+    }
+ 
+    cout << "Removing " << peek() << endl;
+ 
+    // decrease stack size by 1 and (optionally) return the popped element
+    return arr[top--];
 }
 
-int Stack::takeTop() {
-	return top;
+int Stack::size()
+{
+    return top + 1;
 }
 
+int Stack::peek()
+{
+    if (!isEmpty()){
+        return arr[top];
+	}
+}
 //check if stack is empty
 bool Stack::isEmpty()
 {
-	return (top < 0);
+    return top == -1;    // or return size() == 0;
 }
+bool Stack::isFull()
+{
+    return top == capacity - 1;    // or return size() == capacity;
+}
+
 //////////////////////////--Stack--/////////////////////////////
 
 char iString[1000];
@@ -198,7 +225,7 @@ int InsertStack(char* iData, Stack &Expr) {
 
 int constructEvalStack(string f_str){
 	int idx = 0;
-	Stack opt_stk, val_stk;
+	Stack opt_stk(500), val_stk(500);
 
 	for (idx = 0; idx < f_str.length(); idx++)
 	{
