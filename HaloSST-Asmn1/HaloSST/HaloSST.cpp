@@ -66,6 +66,7 @@ char* SpaceEliminate(char*);
 bool CheckExit(char *);
 int InsertStack(char*, Stack&);
 bool CheckOp(char);
+bool CheckSciCalChar(char);
 
 
 int main()
@@ -128,7 +129,48 @@ bool CheckOp(char op) {
 	return false;
 }
 
+bool CheckSciCalChar(char op) {
+	if (CheckOp(op) || (op == '.') || (op == 'e') || (op == 'E')) return true;
+	return false;
+}
+
 int InsertStack(char* iData, Stack &Expr) {
+	char subString[100];
+	char temp[100];
+	int count;
+	bool flagOp = false;
+	int Left = 0, Right = 0;
+
+	for (int i = 0; i < strlen(iData); i++) {
+		//Check for invalid char
+		if (!(isdigit(iData[i]) || CheckSciCalChar(iData[i]) || iData[i] == ')' || iData[i] == '(')) return 10;
+		//Check First index= 
+		if ((iData[0] == '*' ||iData[0] == '/' ||iData[0] == '%' ||iData[0] == '^')) return 1;
+		//Check empty parentheses
+		if (iData[i] == ')' && iData[i - 1] == '(') return 1;
+		if (iData[i-1] == ')' && iData[i] == '(') return 1;
+		//Check Op
+		cout << "CHECK:   " << iData[i] << "   CHECK2:   "<< flagOp << "   CHECK3:   " << !isdigit(iData[i]) <<endl;
+		if (!isdigit(iData[i]) && flagOp) return 2;
+		if ((CheckSciCalChar(iData[i]) && CheckSciCalChar(iData[i - 1])) || (CheckSciCalChar(iData[i]) && iData[i - 1] == '(') || CheckSciCalChar(iData[0])) flagOp = true;
+		if (isdigit(iData[i]) || iData[i] == '(') flagOp = false;
+		if ((iData[i] == '*' ||
+			iData[i] == '/' ||
+			iData[i] == '%' ||
+			iData[i] == '^') &&
+			CheckSciCalChar(iData[i-1])) return 3;
+		//Check numb of parentheses
+		if (iData[i] == '(') Left++;
+		if (iData[i] == ')') Right++;
+	}
+	if (Left != Right) return 4;
+
+	cout << "CHECK:   " << iData << endl;
+
+	return 0;
+}
+
+/*int InsertStack(char* iData, Stack &Expr) {
 	char subString[100];
 	char temp[100];
 	int count;
@@ -150,9 +192,9 @@ int InsertStack(char* iData, Stack &Expr) {
 			}
 			subString[strlen(temp)-1] = '\0';
 
-			cout << "CHECK:   " << subString << endl;
+			cout << "CHECK:   " << Expr.myStack << endl;
 		}
 	}
 
 	return 0;
-}
+}*/
