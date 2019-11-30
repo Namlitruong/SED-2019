@@ -104,6 +104,14 @@ int Stack::peek()
         return arr[top];
 	}
 }
+
+int Stack::peekSub()
+{
+    if (!isEmpty()){
+        return arrSub[top];
+	}
+}
+
 //check if stack is empty
 bool Stack::isEmpty()
 {
@@ -266,6 +274,10 @@ int constructEvalStack(string f_str){
 			cout << "Input is Number\r\n";
 
 			int val = 0; 
+			//TODO Unary boolean detection
+
+
+			// Then Value Detection
             while (idx < f_str.length() && isdigit(f_str[idx])) { 
 				// Next decimal (* 10) + ASCII number of Integer
                 val = (val * 10) + (f_str[idx] - '0'); 
@@ -277,6 +289,7 @@ int constructEvalStack(string f_str){
 					idx++;
 				}
             } 
+
 			val_stk.push(val);
 		}
 
@@ -284,18 +297,18 @@ int constructEvalStack(string f_str){
 		else if (f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
 
-			opt_stk.push(f_str[idx]);
+			opt_stk.pushSub(f_str[idx]);
 		}
 		// Input is Closing Parenthesis
 		else if (f_str[idx] == ')'){
 			cout << "Input is Closing\r\n";
 
-			while (!opt_stk.isEmpty() && opt_stk.peek() != '('){
+			while (!opt_stk.isEmpty() && opt_stk.peekSub() != '('){
 				int arg2 = val_stk.pop();
 
 				int arg1 = val_stk.pop();
 
-				int op = opt_stk.pop();
+				int op = opt_stk.popSub();
 
 				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
@@ -305,14 +318,16 @@ int constructEvalStack(string f_str){
 		else {
 			cout << "Input is Operator\r\n";
 
+			// TODO Operator or Unary?
+			// FIXME Precedence is wrong
 			while (!opt_stk.isEmpty() 
-				&& opPrecedence(opt_stk.pop()) >= opPrecedence(f_str[idx]) ){ 
+				&& opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ){ 
 
                 int arg2 = val_stk.pop(); 
 
                 int arg1 = val_stk.pop(); 
                   
-                char op = opt_stk.pop(); 
+                char op = opt_stk.popSub(); 
                   
                 val_stk.push(evaluateExp(arg1, arg2, op)); 
             } 
@@ -321,15 +336,17 @@ int constructEvalStack(string f_str){
 		}
 	}
 
+	// Final Calculation
 	while (!opt_stk.isEmpty()){
 		int arg2 = val_stk.pop(); 
 
 		int arg1 = val_stk.pop(); 
 			
-		char op = opt_stk.pop(); 
+		char op = opt_stk.popSub(); 
 			
 		val_stk.push(evaluateExp(arg1, arg2, op)); 		
 	}
+
 	int temp = val_stk.peek();
 	return val_stk.pop();
 }
