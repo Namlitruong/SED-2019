@@ -215,24 +215,25 @@ int constructEvalStack(string f_str){
 	{
 		// Input is Number
 		if (isdigit(f_str[idx])){
-			opt_stk.push(f_str[idx]);
+			cout << "Input is Number\r\n";
 			
 		}
 
 		// Input is Opening Parenthesis
 		else if(f_str[idx] == '('){
-
+			cout << "Input is Opening\r\n";
 		}
 		// Input is Closing Parenthesis
 		else if(f_str[idx] == ')'){
-
+			cout << "Input is Closing\r\n";
 		}
 		// Input is Operator 
 		else {
-
+			cout << "Input is Operator\r\n";
 		}
 	}
-	
+
+	return -1;
 }
 
 int opPrecedence(char op){ 
