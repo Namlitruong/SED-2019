@@ -22,6 +22,7 @@ public:
     int pop();
 	char popSub();
     int peek();
+	int peekSub();
     int size();
     bool isEmpty();
     bool isFull();
