@@ -10,6 +10,7 @@ using namespace std;
 //////////////////////////--Stack--/////////////////////////////
 class Stack {
     int *arr;
+	char *arrSub;
     int top;
     int capacity;
 public:
@@ -17,7 +18,9 @@ public:
     ~Stack();                   // destructor
  
     void push(int);
+	void pushSub(char);
     int pop();
+	char popSub();
     int peek();
     int size();
     bool isEmpty();
@@ -27,6 +30,7 @@ public:
 Stack::Stack(int size)
 {
     arr = new int[size];
+	arrSub = new char[size];
     capacity = size;
     top = -1;
 }
@@ -35,6 +39,7 @@ Stack::Stack(int size)
 Stack::~Stack()
 {
     delete arr;
+	delete arrSub;
 }
 
 void Stack::push(int x)
@@ -46,6 +51,17 @@ void Stack::push(int x)
  
     cout << "Inserting " << x << endl;
     arr[++top] = x;
+}
+
+void Stack::pushSub(char x)
+{
+    if (isFull())
+    {
+        cout << "Stack Overflow!!!";
+    }
+ 
+    cout << "Inserting " << x << endl;
+    arrSub[++top] = x;
 }
 
 //removes or pops elements out of the stack
@@ -61,6 +77,20 @@ int Stack::pop()
  
     // decrease stack size by 1 and (optionally) return the popped element
     return arr[top--];
+}
+
+char Stack::popSub()
+{
+    if (isEmpty())
+    {
+        cout << "Stack Underflow!!";
+		return 0;
+    }
+ 
+    cout << "Removing " << peek() << endl;
+ 
+    // decrease stack size by 1 and (optionally) return the popped element
+    return arrSub[top--];
 }
 
 int Stack::size()
@@ -108,7 +138,7 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "(12+16)*2/(5%2)");
+		strcpy(iString, "-4");
 		cout << constructEvalStack(iString);
 		break;
 
