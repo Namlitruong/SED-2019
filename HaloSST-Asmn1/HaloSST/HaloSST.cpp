@@ -78,12 +78,12 @@ int main()
 	while (1) {
 		cout << "___________________________________________________________\n";
 		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
-		cout << "Input the elements of simple 2-argument Calculator:   ";
+		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "(4+5)*6");
-		cout << "User input" << iString<< endl;
-		constructEvalStack(iString);
+		strcpy(iString, "(4+5)");
+		cout << constructEvalStack(iString);
+		break;
 
 		// if (CheckExit(iString)) return 0;
 
@@ -93,17 +93,6 @@ int main()
 		// {
 		// 	cout << Expr.pop() << endl;
 		// }
-	}
-
-	class Stack stack;
-	cout << "The Stack Push " << endl;
-	stack.push(2);
-	stack.push(4);
-	stack.push(6);
-	cout << "The Stack Pop : " << endl;
-	while (!stack.isEmpty())
-	{
-		cout << stack.pop() << endl;
 	}
 	return 0;
 
@@ -213,50 +202,79 @@ int constructEvalStack(string f_str){
 
 	for (idx = 0; idx < f_str.length(); idx++)
 	{
+		int tempVal = f_str[idx];
+
 		// Input is Number
 		if (isdigit(f_str[idx])){
 			cout << "Input is Number\r\n";
 
 			int val = 0; 
-            while(idx < f_str.length() && isdigit(f_str[idx])) { 
+            while (idx < f_str.length() && isdigit(f_str[idx])) { 
 				// Next decimal (* 10) + ASCII number of Integer
                 val = (val * 10) + (f_str[idx] - '0'); 
-                idx++;
+				
+				if (!isdigit(f_str[idx + 1]) ){
+					break;
+				}
+				else {
+					idx++;
+				}
             } 
 			val_stk.push(val);
 		}
 
 		// Input is Opening Parenthesis
-		else if(f_str[idx] == '('){
+		else if (f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
 
 			opt_stk.push(f_str[idx]);
 		}
 		// Input is Closing Parenthesis
-		else if(f_str[idx] == ')'){
+		else if (f_str[idx] == ')'){
 			cout << "Input is Closing\r\n";
 
-			while (!opt_stk.isEmpty() && opt_stk.takeTop() != "("){
-				int arg1 = val_stk.takeTop();
-				val_stk.pop();
+			while (!opt_stk.isEmpty() && opt_stk.pop() != '('){
+				int arg2 = val_stk.pop();
 
-				int arg2 = val_stk.takeTop();
-				val_stk.pop();
+				int arg1 = val_stk.pop();
 
-				char op = opt_stk.takeTop();
-				opt_stk.pop();
+				char op = opt_stk.pop();
 
-				val_stk.push(evaluateExp(arg1,agr2,op));
+				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
 
 		}
 		// Input is Operator 
 		else {
 			cout << "Input is Operator\r\n";
+
+			while (!opt_stk.isEmpty() 
+				&& opPrecedence(opt_stk.pop()) >= opPrecedence(f_str[idx]) ){ 
+
+                int arg2 = val_stk.pop(); 
+
+                int arg1 = val_stk.pop(); 
+                  
+                char op = opt_stk.pop(); 
+                  
+                val_stk.push(evaluateExp(arg1, arg2, op)); 
+            } 
+              
+            opt_stk.push(f_str[idx]);
 		}
 	}
 
-	return -1;
+	while (!opt_stk.isEmpty()){
+		int arg2 = val_stk.pop(); 
+
+		int arg1 = val_stk.pop(); 
+			
+		char op = opt_stk.pop(); 
+			
+		val_stk.push(evaluateExp(arg1, arg2, op)); 		
+	}
+	int temp = val_stk.pop();
+	return temp;
 }
 
 int opPrecedence(char op){ 
