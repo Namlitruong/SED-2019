@@ -68,6 +68,10 @@ int InsertStack(char*, Stack&);
 bool CheckOp(char);
 bool CheckSciCalChar(char);
 
+int constructEvalStack(string);
+int opPrecedence(char);
+int evaluateExp(int, int, char);
+
 
 int main()
 {
@@ -78,7 +82,7 @@ int main()
 		// cin.getline(iString, 1000);
 
 		strcpy(iString, "(4+5)*6");
-		cout << "User input" + iString<< endl;
+		cout << "User input" << iString<< endl;
 		constructEvalStack(iString);
 
 		// if (CheckExit(iString)) return 0;
@@ -210,9 +214,9 @@ int constructEvalStack(string f_str){
 	for (idx = 0; idx < f_str.length(); idx++)
 	{
 		// Input is Number
-		if (isDigit(f_str[idx])){
+		if (isdigit(f_str[idx])){
 			opt_stk.push(f_str[idx]);
-
+			
 		}
 
 		// Input is Opening Parenthesis
