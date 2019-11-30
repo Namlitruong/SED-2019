@@ -228,3 +228,26 @@ int constructEvalStack(string f_str){
 	}
 	
 }
+
+int opPrecedence(char op){ 
+    if(op == '+'||op == '-') {
+		return 1; 
+	}
+
+    if(op == '*'||op == '/') {
+		return 2; 
+	}
+    
+	// Else
+	return 0; 
+} 
+  
+int evaluateExp(int arg1, int arg2, char op){ 
+    switch(op){ 
+        case '+': return arg1 + arg2; 
+        case '-': return arg1 - arg2; 
+        case '*': return arg1 * arg2; 
+        case '/': return arg1 / arg2;
+		case '^': return arg1 ^ arg2;
+    } 
+} 
