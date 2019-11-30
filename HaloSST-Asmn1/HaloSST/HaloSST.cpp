@@ -108,7 +108,7 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "6%4");
+		strcpy(iString, "(12+16)*2/(5%2)");
 		cout << constructEvalStack(iString);
 		break;
 
@@ -309,8 +309,12 @@ int opPrecedence(char op){
 		return 1; 
 	}
 
-    if(op == '*'||op == '/') {
+    if(op == '*'||op == '/' || op == '%') {
 		return 2; 
+	}
+	
+	if(op == '^'){
+		return 3;
 	}
     
 	// Else
