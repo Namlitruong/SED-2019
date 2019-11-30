@@ -75,7 +75,9 @@ int main()
 		cout << "___________________________________________________________\n";
 		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
 		cout << "Input the elements of simple 2-argument Calculator:   ";
-		cin.getline(iString, 1000);
+		// cin.getline(iString, 1000);
+
+		strcpy(iString, "(4+5)*6");
 
 		if (CheckExit(iString)) return 0;
 
@@ -198,3 +200,31 @@ int InsertStack(char* iData, Stack &Expr) {
 
 	return 0;
 }*/
+
+int constructEvalStack(string f_str){
+
+	Stack opt_stk, val_stk;
+
+	for (int i = 0; i < f_str.length(); i++)
+	{
+		// Input is Number
+		if (isDigit(f_str[i])){
+			opt_stk.push(f_str[i]);
+
+		}
+
+		// Input is Opening Parenthesis
+		else if(f_str[i] == '('){
+
+		}
+		// Input is Closing Parenthesis
+		else if(f_str[i] == ')'){
+
+		}
+		// Input is Operator 
+		else {
+
+		}
+	}
+	
+}
