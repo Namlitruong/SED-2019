@@ -78,15 +78,17 @@ int main()
 		// cin.getline(iString, 1000);
 
 		strcpy(iString, "(4+5)*6");
+		cout << "User input" + iString<< endl;
+		constructEvalStack(iString);
 
-		if (CheckExit(iString)) return 0;
+		// if (CheckExit(iString)) return 0;
 
-		cout << "RETURN:   " << InsertStack(SpaceEliminate(iString), Expr) << endl;
+		// cout << "RETURN:   " << InsertStack(SpaceEliminate(iString), Expr) << endl;
 
-		while (!Expr.isEmpty())
-		{
-			cout << Expr.pop() << endl;
-		}
+		// while (!Expr.isEmpty())
+		// {
+		// 	cout << Expr.pop() << endl;
+		// }
 	}
 
 	class Stack stack;
@@ -202,23 +204,23 @@ int InsertStack(char* iData, Stack &Expr) {
 }*/
 
 int constructEvalStack(string f_str){
-
+	int idx = 0;
 	Stack opt_stk, val_stk;
 
-	for (int i = 0; i < f_str.length(); i++)
+	for (idx = 0; idx < f_str.length(); idx++)
 	{
 		// Input is Number
-		if (isDigit(f_str[i])){
-			opt_stk.push(f_str[i]);
+		if (isDigit(f_str[idx])){
+			opt_stk.push(f_str[idx]);
 
 		}
 
 		// Input is Opening Parenthesis
-		else if(f_str[i] == '('){
+		else if(f_str[idx] == '('){
 
 		}
 		// Input is Closing Parenthesis
-		else if(f_str[i] == ')'){
+		else if(f_str[idx] == ')'){
 
 		}
 		// Input is Operator 
