@@ -88,7 +88,7 @@ char Stack::popSub()
 		return 0;
     }
  
-    cout << "Removing " << peek() << endl;
+    cout << "Removing " << peekSub() << endl;
  
     // decrease stack size by 1 and (optionally) return the popped element
     return arrSub[top--];
@@ -138,6 +138,7 @@ int constructEvalStack(string);
 int opPrecedence(char);
 int evaluateExp(int, int, int);
 
+void uniTest(char*);
 
 int main()
 {
@@ -147,10 +148,12 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "1+2*3");
-		cout << constructEvalStack(iString);
+		uniTest("1+2*3");
+		uniTest("(1+2)*3");
+		uniTest("(12+16)*2/(5%2)");
+		uniTest("-(45*3–4/2)");
+		uniTest("(-4+5^2*(6+2))%3");
 		break;
-
 		// if (CheckExit(iString)) return 0;
 
 		// cout << "RETURN:   " << InsertStack(SpaceEliminate(iString), Expr) << endl;
@@ -162,6 +165,10 @@ int main()
 	}
 	return 0;
 
+}
+
+void uniTest(char* inp) {
+	cout << constructEvalStack(inp) << endl << endl;
 }
 
 char* SpaceEliminate(char* iString) {
@@ -314,6 +321,10 @@ int constructEvalStack(string f_str){
 				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
 
+			if (opt_stk.peekSub() == '('){
+				opt_stk.popSub();
+			}
+
 		}
 		// Input is Operator 
 		else {
@@ -339,7 +350,7 @@ int constructEvalStack(string f_str){
 	}
 
 	// Final Calculation
-	while (!opt_stk.isEmpty()){
+	while (!opt_stk.isEmpty() && !val_stk.isEmpty()){
 		int arg2 = val_stk.pop(); 
 
 		int arg1 = val_stk.pop(); 
@@ -349,8 +360,7 @@ int constructEvalStack(string f_str){
 		val_stk.push(evaluateExp(arg1, arg2, op)); 		
 	}
 
-	int temp = val_stk.peek();
-	return val_stk.pop();
+	return val_stk.peek();
 }
 
 int opPrecedence(char op){ 
