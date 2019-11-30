@@ -216,16 +216,39 @@ int constructEvalStack(string f_str){
 		// Input is Number
 		if (isdigit(f_str[idx])){
 			cout << "Input is Number\r\n";
-			
+
+			int val = 0; 
+            while(idx < f_str.length() && isdigit(f_str[idx])) { 
+				// Next decimal (* 10) + ASCII number of Integer
+                val = (val * 10) + (f_str[idx] - '0'); 
+                idx++;
+            } 
+			val_stk.push(val);
 		}
 
 		// Input is Opening Parenthesis
 		else if(f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
+
+			opt_stk.push(f_str[idx]);
 		}
 		// Input is Closing Parenthesis
 		else if(f_str[idx] == ')'){
 			cout << "Input is Closing\r\n";
+
+			while (!opt_stk.isEmpty() && opt_stk.takeTop() != "("){
+				int arg1 = val_stk.takeTop();
+				val_stk.pop();
+
+				int arg2 = val_stk.takeTop();
+				val_stk.pop();
+
+				char op = opt_stk.takeTop();
+				opt_stk.pop();
+
+				val_stk.push(evaluateExp(arg1,agr2,op));
+			}
+
 		}
 		// Input is Operator 
 		else {
