@@ -97,7 +97,7 @@ bool CheckSciCalChar(char);
 
 int constructEvalStack(string);
 int opPrecedence(char);
-int evaluateExp(int, int, char);
+int evaluateExp(int, int, int);
 
 
 int main()
@@ -108,7 +108,7 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		strcpy(iString, "(4+5)");
+		strcpy(iString, "6%4");
 		cout << constructEvalStack(iString);
 		break;
 
@@ -260,12 +260,12 @@ int constructEvalStack(string f_str){
 		else if (f_str[idx] == ')'){
 			cout << "Input is Closing\r\n";
 
-			while (!opt_stk.isEmpty() && opt_stk.pop() != '('){
+			while (!opt_stk.isEmpty() && opt_stk.peek() != '('){
 				int arg2 = val_stk.pop();
 
 				int arg1 = val_stk.pop();
 
-				char op = opt_stk.pop();
+				int op = opt_stk.pop();
 
 				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
@@ -300,8 +300,8 @@ int constructEvalStack(string f_str){
 			
 		val_stk.push(evaluateExp(arg1, arg2, op)); 		
 	}
-	int temp = val_stk.pop();
-	return temp;
+	int temp = val_stk.peek();
+	return val_stk.pop();
 }
 
 int opPrecedence(char op){ 
@@ -317,12 +317,13 @@ int opPrecedence(char op){
 	return 0; 
 } 
   
-int evaluateExp(int arg1, int arg2, char op){ 
-    switch(op){ 
+int evaluateExp(int arg1, int arg2, int op){ 
+    switch( (char) op){ 
         case '+': return arg1 + arg2; 
         case '-': return arg1 - arg2; 
         case '*': return arg1 * arg2; 
         case '/': return arg1 / arg2;
+		case '%': return arg1 % arg2;		
 		case '^': return arg1 ^ arg2;
     } 
 } 
