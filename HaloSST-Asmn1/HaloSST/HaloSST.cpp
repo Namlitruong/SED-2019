@@ -139,7 +139,7 @@ bool CheckSciCalChar(char);
 
 int constructEvalStack(string);
 int opPrecedence(char);
-int evaluateExp(int, int, int);
+int evaluateExp(int, int, char);
 
 void uniTest(const char*);
 
@@ -328,7 +328,7 @@ int constructEvalStack(string f_str){
 
 				int arg1 = val_stk.pop();
 
-				int op = opt_stk.popSub();
+				char op = opt_stk.popSub();
 
 				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
@@ -438,8 +438,8 @@ int opPrecedence(char op){
 	return 0; 
 } 
   
-int evaluateExp(int arg1, int arg2, int op){ 
-    switch( (char) op){ 
+int evaluateExp(int arg1, int arg2, char op){ 
+    switch(op){ 
         case '+': return arg1 + arg2; 
         case '-': return arg1 - arg2; 
         case '*': return arg1 * arg2; 
