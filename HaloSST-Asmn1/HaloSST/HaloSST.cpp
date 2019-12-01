@@ -105,6 +105,7 @@ int Stack::peek()
     if (!isEmpty()){
         return arr[top];
 	}
+	return -1;
 }
 
 char Stack::peekSub()
@@ -112,6 +113,7 @@ char Stack::peekSub()
     if (!isEmpty()){
         return arrSub[top];
 	}
+	return -1;
 }
 
 //check if stack is empty
@@ -139,7 +141,7 @@ int constructEvalStack(string);
 int opPrecedence(char);
 int evaluateExp(int, int, int);
 
-void uniTest(char*);
+void uniTest(const char*);
 
 int main()
 {
@@ -158,6 +160,8 @@ int main()
 		uniTest("1+!4");
 		uniTest("1+(!4)");
 
+		// uniTest("1+(!4)");
+
 		break;
 		// if (CheckExit(iString)) return 0;
 
@@ -172,8 +176,8 @@ int main()
 
 }
 
-void uniTest(char* inp) {
-	cout << constructEvalStack(inp) << endl << endl;
+void uniTest(const char* inp) {
+	cout << "Final result: " << constructEvalStack(inp) << endl << endl;
 }
 
 char* SpaceEliminate(char* iString) {
@@ -275,7 +279,8 @@ int InsertStack(char* iData, Stack &Expr) {
 }*/
 
 int constructEvalStack(string f_str){
-	int idx = 0;
+	int idx = 0, idx_Grp = 0;
+	int curr_Grp[500];
 	Stack opt_stk(500), val_stk(500);
 
 	for (idx = 0; idx < f_str.length(); idx++)
@@ -309,6 +314,10 @@ int constructEvalStack(string f_str){
 		// Input is Opening Parenthesis
 		else if (f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
+			
+			if(f_str[idx - 1] == unaryOp) {
+				curr_Grp[idx_Grp++] = -1;
+			}
 
 			opt_stk.pushSub(f_str[idx]);
 		}
@@ -358,6 +367,7 @@ int constructEvalStack(string f_str){
 					val_stk.push(val);
 				}
 				// TODO bracket group counter array
+				// NOTE approach from bracket detector
 				else if (f_str[idx + 1] == '(') {
 
 				}
@@ -419,5 +429,6 @@ int evaluateExp(int arg1, int arg2, int op){
         case '/': return arg1 / arg2;
 		case '%': return arg1 % arg2;		
 		case '^': return arg1 ^ arg2;
-    } 
+    }
+	return 0;
 } 
