@@ -157,10 +157,10 @@ int main()
 		// uniTest("-(45*3–4/2)");
 		// uniTest("(-4+5^2*(6+2))%3");
 
-		uniTest("1+!4");
-		uniTest("1+(!4)");
-
+		// uniTest("1+!4");
 		// uniTest("1+(!4)");
+
+		uniTest("1+!(4+1)");
 
 		break;
 		// if (CheckExit(iString)) return 0;
@@ -177,7 +177,7 @@ int main()
 }
 
 void uniTest(const char* inp) {
-	cout << "Final result: " << constructEvalStack(inp) << endl << endl;
+	cout << constructEvalStack(inp) << endl << endl;
 }
 
 char* SpaceEliminate(char* iString) {
@@ -285,8 +285,6 @@ int constructEvalStack(string f_str){
 
 	for (idx = 0; idx < f_str.length(); idx++)
 	{
-		int tempVal = f_str[idx];
-
 		// Input is Number
 		if (isdigit(f_str[idx])){
 			cout << "Input is Number\r\n";
@@ -337,56 +335,67 @@ int constructEvalStack(string f_str){
 
 			if (opt_stk.peekSub() == '('){
 				opt_stk.popSub();
+
+				if (idx_Grp >= 0){
+					int swapVal_temp = val_stk.pop();
+
+					swapVal_temp *= -1; // For clarity
+					val_stk.push(swapVal_temp);
+
+					idx_Grp--;
+				}
+
 			}
 
 		}
+		// TODO && not an operator condition
+		else if (f_str[idx] == unaryOp) {
+			cout << "Input is Unary\r\n";
+			
+			if (isdigit(f_str[idx + 1]) ){
+				int val = 0;
+				idx++;
+
+				while (idx < f_str.length() && isdigit(f_str[idx])) { 
+					// Next decimal (* 10) + ASCII number of Integer
+					val = (val * 10) + (f_str[idx] - '0'); 
+					
+					if (!isdigit(f_str[idx + 1]) ){
+						break;
+					}
+					else {
+						idx++;
+					}
+				}
+				
+				val *= -1; // For clarity
+				val_stk.push(val);
+			}
+			// TODO bracket group counter array
+			// NOTE approach from bracket detector
+			else {
+				continue;
+			}
+
+		} 
+
 		// Input is Operator 
 		else {
 			cout << "Input is Operator\r\n";
 
-			// TODO && not an operator condition
-			if (f_str[idx] == unaryOp) {
+			while (!opt_stk.isEmpty() 
+				&& ( opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ) ){ 
 
-				if (isdigit(f_str[idx + 1]) ){
-					int val = 0;
-					idx++;
+				int arg2 = val_stk.pop(); 
 
-					while (idx < f_str.length() && isdigit(f_str[idx])) { 
-						// Next decimal (* 10) + ASCII number of Integer
-						val = (val * 10) + (f_str[idx] - '0'); 
-						
-						if (!isdigit(f_str[idx + 1]) ){
-							break;
-						}
-						else {
-							idx++;
-						}
-					}
-					
-					val *= -1; // For clarity
-					val_stk.push(val);
-				}
-				// TODO bracket group counter array
-				// NOTE approach from bracket detector
-				else if (f_str[idx + 1] == '(') {
-
-				}
-
-			} else {
-				while (!opt_stk.isEmpty() 
-					&& ( opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ) ){ 
-
-					int arg2 = val_stk.pop(); 
-
-					int arg1 = val_stk.pop(); 
-					
-					char op = opt_stk.popSub(); 
-					
-					val_stk.push(evaluateExp(arg1, arg2, op)); 
-				} 
+				int arg1 = val_stk.pop(); 
 				
-				opt_stk.pushSub(f_str[idx]);
-			}
+				char op = opt_stk.popSub(); 
+				
+				val_stk.push(evaluateExp(arg1, arg2, op)); 
+			} 
+			
+			opt_stk.pushSub(f_str[idx]);
 		}
 	}
 
@@ -416,7 +425,15 @@ int opPrecedence(char op){
 	if(op == '^'){
 		return 3;
 	}
+
+	if(op == '!'){
+		return 4;
+	}
     
+	if(op == '(' || op == ')'){
+		return 5;
+	}
+
 	// Else
 	return 0; 
 } 
