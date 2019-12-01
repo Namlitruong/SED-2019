@@ -336,24 +336,31 @@ int constructEvalStack(string f_str){
 			cout << "Input is Operator\r\n";
 
 			// TODO && not an operator condition
-			if (f_str[idx] == unaryOp){
-				int val = 0;
-				idx++;
+			if (f_str[idx] == unaryOp) {
 
-				while (idx < f_str.length() && isdigit(f_str[idx])) { 
-					// Next decimal (* 10) + ASCII number of Integer
-					val = (val * 10) + (f_str[idx] - '0'); 
+				if (isdigit(f_str[idx + 1]) ){
+					int val = 0;
+					idx++;
+
+					while (idx < f_str.length() && isdigit(f_str[idx])) { 
+						// Next decimal (* 10) + ASCII number of Integer
+						val = (val * 10) + (f_str[idx] - '0'); 
+						
+						if (!isdigit(f_str[idx + 1]) ){
+							break;
+						}
+						else {
+							idx++;
+						}
+					}
 					
-					if (!isdigit(f_str[idx + 1]) ){
-						break;
-					}
-					else {
-						idx++;
-					}
+					val *= -1; // For clarity
+					val_stk.push(val);
 				}
-				
-				val *= -1; // For clarity
-				val_stk.push(val);
+				// TODO bracket group counter array
+				else if (f_str[idx + 1] == '(') {
+
+				}
 
 			} else {
 				while (!opt_stk.isEmpty() 
