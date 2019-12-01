@@ -155,12 +155,13 @@ int main()
 		// uniTest("(1+2)*3"); // 9
 		// uniTest("(12+16)*2/(5%2)"); // 56
 		// uniTest("!(45*3–4/2)"); // -133
-		uniTest("(!4+5^2*(6+2))%3"); // 1
+		// uniTest("(!4+5^2*(6+2))%3"); // 1
 
 		// uniTest("1+!4");
-		// uniTest("1+(!4)");
+		uniTest("1+(!4)");
 
 		// uniTest("1+!(4+1)");
+		// uniTest("!2+!(!4*(4+(!1)))"); // 18
 
 		break;
 		// if (CheckExit(iString)) return 0;
@@ -313,8 +314,32 @@ int constructEvalStack(string f_str){
 		else if (f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
 			
-			if(f_str[idx - 1] == unaryOp) {
-				curr_Grp[idx_Grp++] = -1;
+			if(idx > 0 && f_str[idx - 1] == unaryOp) {
+				idx_Grp++;
+			}
+			// Case x + (-A * x)
+			else if (f_str[idx + 1] == unaryOp && isdigit(f_str[idx + 2]) ) {
+				opt_stk.pushSub(f_str[idx]); // Push closing bracket
+
+				// Then jump to number and evaluate in order to stack
+				idx += 2;
+				int val = 0;
+
+				while (idx < f_str.length() && isdigit(f_str[idx])) { 
+					// Next decimal (* 10) + ASCII number of Integer
+					val = (val * 10) + (f_str[idx] - '0'); 
+					
+					if (!isdigit(f_str[idx + 1]) ){
+						break;
+					}
+					else {
+						idx++;
+					}
+				}
+				
+				val *= -1; // For clarity
+				val_stk.push(val);
+				continue;
 			}
 
 			opt_stk.pushSub(f_str[idx]);
