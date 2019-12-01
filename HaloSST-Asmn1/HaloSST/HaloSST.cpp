@@ -281,7 +281,6 @@ int InsertStack(char* iData, Stack &Expr) {
 
 int constructEvalStack(string f_str){
 	int idx = 0, idx_Grp = 0;
-	int curr_Grp[500];
 	Stack opt_stk(500), val_stk(500);
 
 	for (idx = 0; idx < f_str.length(); idx++)
@@ -291,8 +290,6 @@ int constructEvalStack(string f_str){
 			cout << "Input is Number\r\n";
 
 			int val = 0; 
-			//TODO Unary boolean detection
-
 
 			// Then Value Detection
             while (idx < f_str.length() && isdigit(f_str[idx])) { 
@@ -314,9 +311,11 @@ int constructEvalStack(string f_str){
 		else if (f_str[idx] == '('){
 			cout << "Input is Opening\r\n";
 			
+			// Detect case -(x+x)
 			if(idx > 0 && f_str[idx - 1] == unaryOp) {
 				idx_Grp++;
 			}
+
 			// Case x + (-A * x)
 			else if (f_str[idx + 1] == unaryOp && isdigit(f_str[idx + 2]) ) {
 				opt_stk.pushSub(f_str[idx]); // Push closing bracket
@@ -358,6 +357,7 @@ int constructEvalStack(string f_str){
 				val_stk.push(evaluateExp(arg1,arg2,op));
 			}
 
+			// Case -(x+x)
 			if (opt_stk.peekSub() == '('){
 				opt_stk.popSub();
 
@@ -377,6 +377,7 @@ int constructEvalStack(string f_str){
 		else if (f_str[idx] == unaryOp) {
 			cout << "Input is Unary\r\n";
 			
+			// Case -A
 			if (isdigit(f_str[idx + 1]) ){
 				int val = 0;
 				idx++;
@@ -439,6 +440,7 @@ int constructEvalStack(string f_str){
 	return val_stk.peek();
 }
 
+// Precedence in increasing order
 int opPrecedence(char op){ 
     if(op == '+'||op == '-') {
 		return 1; 
@@ -460,7 +462,7 @@ int opPrecedence(char op){
 		return 5;
 	}
 
-	// Else
+	// Redundant
 	return 0; 
 } 
   
@@ -480,5 +482,6 @@ int evaluateExp(int arg1, int arg2, char op){
 			return result_tmp;
 		}
     }
+	// Redundant 
 	return 0;
 } 
