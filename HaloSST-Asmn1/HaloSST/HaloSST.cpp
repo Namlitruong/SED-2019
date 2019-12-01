@@ -151,16 +151,16 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:  \r\n";
 		// cin.getline(iString, 1000);
 
-		// uniTest("1+2*3");
-		// uniTest("(1+2)*3");
-		// uniTest("(12+16)*2/(5%2)");
-		// uniTest("-(45*3–4/2)");
-		// uniTest("(-4+5^2*(6+2))%3");
+		// uniTest("1+2*3"); // 7
+		// uniTest("(1+2)*3"); // 9
+		// uniTest("(12+16)*2/(5%2)"); // 56
+		// uniTest("!(45*3–4/2)"); // -133
+		uniTest("(!4+5^2*(6+2))%3"); // 1
 
 		// uniTest("1+!4");
 		// uniTest("1+(!4)");
 
-		uniTest("1+!(4+1)");
+		// uniTest("1+!(4+1)");
 
 		break;
 		// if (CheckExit(iString)) return 0;
@@ -446,7 +446,14 @@ int evaluateExp(int arg1, int arg2, char op){
         case '*': return arg1 * arg2; 
         case '/': return arg1 / arg2;
 		case '%': return arg1 % arg2;		
-		case '^': return arg1 ^ arg2;
+		case '^': {
+			int result_tmp = 1;
+			for (int i = 0; i < arg2; i++)
+			{
+				result_tmp *= arg1;
+			};
+			return result_tmp;
+		}
     }
 	return 0;
 } 
