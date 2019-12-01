@@ -336,7 +336,7 @@ int constructEvalStack(string f_str){
 			if (opt_stk.peekSub() == '('){
 				opt_stk.popSub();
 
-				if (idx_Grp >= 0){
+				if (idx_Grp >= 1){
 					int swapVal_temp = val_stk.pop();
 
 					swapVal_temp *= -1; // For clarity
@@ -384,7 +384,8 @@ int constructEvalStack(string f_str){
 			cout << "Input is Operator\r\n";
 
 			while (!opt_stk.isEmpty() 
-				&& ( opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) ) ){ 
+				&& ( opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]) )
+				&& opt_stk.peekSub() != '(' ) { 
 
 				int arg2 = val_stk.pop(); 
 
