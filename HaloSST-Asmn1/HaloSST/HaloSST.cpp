@@ -459,7 +459,6 @@ bool ScitoInt(char *Input, int& oarg) {
 
 int constructEvalStack(string f_str, bool &Err5) {
 	int idx = 0, idx_Grp = 0;
-	int curr_Grp[500];
 	Stack opt_stk(500), val_stk(500);
 
 	for (idx = 0; idx < f_str.length(); idx++)
@@ -468,10 +467,7 @@ int constructEvalStack(string f_str, bool &Err5) {
 		if (isdigit(f_str[idx])) {
 
 			int val = 0;
-			//TODO Unary boolean detection
 
-
-			// Then Value Detection
 			while (idx < f_str.length() && isdigit(f_str[idx])) {
 				// Next decimal (* 10) + ASCII number of Integer
 				val = (val * 10) + (f_str[idx] - '0');
@@ -488,14 +484,40 @@ int constructEvalStack(string f_str, bool &Err5) {
 		}
 
 		// Input is Opening Parenthesis
-		else if (f_str[idx] == '(') {
+		else if (f_str[idx] == '('){
+			
+			if(idx > 0 && f_str[idx - 1] == unaryOp) {
+				idx_Grp++;
+			}
+			// Case x + (-A * x)
+			// FIXME else if to if. Corner case -(-A * x)
+			if (f_str[idx + 1] == unaryOp && isdigit(f_str[idx + 2]) ) {
+				opt_stk.pushSub(f_str[idx]); // Push closing bracket
 
-			if (idx >= 1 && f_str[idx - 1] == unaryOp) {
-				idx_Grp += 1;
+				// Then jump to number and evaluate in order to stack
+				idx += 2;
+				int val = 0;
+
+				while (idx < f_str.length() && isdigit(f_str[idx])) { 
+					// Next decimal (* 10) + ASCII number of Integer
+					val = (val * 10) + (f_str[idx] - '0'); 
+					
+					if (!isdigit(f_str[idx + 1]) ){
+						break;
+					}
+					else {
+						idx++;
+					}
+				}
+				
+				val *= -1; // For clarity
+				val_stk.push(val);
+				continue;
 			}
 
 			opt_stk.pushSub(f_str[idx]);
 		}
+
 		// Input is Closing Parenthesis
 		else if (f_str[idx] == ')') {
 
