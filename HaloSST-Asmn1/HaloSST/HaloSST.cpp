@@ -305,7 +305,7 @@ int CheckNum(char* iData, Stack &Expr) {
 			case NORMAL: {
 				subData = iData[i];
 				Expr.pop();
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
+				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
