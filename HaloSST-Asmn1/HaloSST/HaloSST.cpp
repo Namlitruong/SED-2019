@@ -320,7 +320,7 @@ int CheckNum(char* iData, Stack &Expr) {
 				break;
 			}
 			case LAST: {
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
+				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
