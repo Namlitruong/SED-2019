@@ -1,10 +1,8 @@
 // Ass1.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
+
 #include "pch.h"
 #include <iostream>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 #define INTUPPERLIMIT 32767
 #define INTLOWERLIMIT -32767
@@ -206,8 +204,6 @@ char* ExtractFromStack(char *oStr, Stack &iStack) {
 		Data[count] = temp[strlen(temp) - count - 1];
 	}
 	Data[strlen(temp)] = '\0';
-
-	cout << "EXTRCTFROMSTR:   " << Data << endl;
 	return Data;
 }
 
@@ -246,7 +242,7 @@ char *Filter(char *iData) {
 	char *Data = &(*iData);
 	for (int i = 0; i < strlen(Data); i++) {
 		if (i == 0 && Data[i] == '-') iData[i] = '!';
-		if ((CheckOp(Data[i-1]) || Data[i - 1] == '(' || Data[i-1] == 'e' || Data[i-1] == 'E') && Data[i] == '-') Data[i] = '!';
+		if ((CheckOp(Data[i - 1]) || Data[i - 1] == '(' || Data[i - 1] == 'e' || Data[i - 1] == 'E') && Data[i] == '-') Data[i] = '!';
 	}
 	return Data;
 }
@@ -261,7 +257,7 @@ int CheckExpr(char* iData) {
 		//Check First index= 
 		if ((iData[0] == '*' || iData[0] == '/' || iData[0] == '%' || iData[0] == '^' || iData[0] == 'e' || iData[0] == 'E')) return 4;
 		//Check Lat index= 
-		if (i == strlen(iData)-1 && (CheckOp(iData[i]) || iData[i] == 'e' || iData[i] == 'E' || iData[i] == '.')) return 4;
+		if (i == strlen(iData) - 1 && (CheckOp(iData[i]) || iData[i] == 'e' || iData[i] == 'E' || iData[i] == '.')) return 4;
 		//Check empty parentheses
 		if (iData[i] == ')' && iData[i - 1] == '(') return 4;
 		if (iData[i - 1] == ')' && iData[i] == '(') return 4;
@@ -311,8 +307,17 @@ int CheckNum(char* iData, Stack &Expr) {
 			case NORMAL: {
 				subData = iData[i];
 				Expr.pop();
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!' || (temp[count] == 'e' && Expr.peek() == '!')); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
 					temp[count] = Expr.pop();
+					if (Expr.peek() == '!') {
+						Expr.pop();
+						if (Expr.peek() == 'e') {
+							Expr.push('?');
+						}
+						else {
+							Expr.push('!');
+						}
+					}
 				}
 				break;
 			}
@@ -326,8 +331,16 @@ int CheckNum(char* iData, Stack &Expr) {
 				break;
 			}
 			case LAST: {
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!' || (temp[count] == 'e' && Expr.peek() == '!')); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
 					temp[count] = Expr.pop();
+					if (Expr.peek() == '!') {
+						Expr.pop();
+						if (Expr.peek() == 'e') {
+							Expr.push('?');
+						}else {
+							Expr.push('!');
+						}
+					}
 				}
 				break;
 			}
@@ -402,9 +415,9 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 
 		if (i == 0 && inputArgv[i] == '+' && inputArgv[i] == '-' && inputArgv[i] == '.') continue;// A number, '+', '-', and a dot are allowed at the first index. If not return false.
 
-		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+' )) return 1;	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
+		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+')) return 1;	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
 		// A dot just can present one time inside the string and after the dot, everything must be zero or NULL.
-		if (inputArgv[i] == '!') inputArgv[i] = '-';
+		if (inputArgv[i] == '!' || inputArgv[i] == '?') inputArgv[i] = '-';
 		if (dotDetect) {
 			if (inputArgv[i] == '.') return 1;
 			else if (inputArgv[i] != '0') return 1;
@@ -431,6 +444,7 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 		oarg = atoi(inputArgv);
 	}
 
+
 	if (oarg < INTLOWERLIMIT || oarg > INTUPPERLIMIT) return 2;
 	return 0;
 }
@@ -442,7 +456,7 @@ bool ScitoInt(char *Input, int& oarg) {
 
 	for (int i = 0; i < strlen(Input); i++) {
 		if (Input[i] == 'e' || Input[i] == 'E') count = i;
-		if (i !=0 && Input[i] == '-') flagNegPow = true;
+		if (i != 0 && Input[i] == '-') flagNegPow = true;
 	}
 
 	//if (strlen(Input) - (count + 1) > 2) return 1;
@@ -484,32 +498,32 @@ int constructEvalStack(string f_str, bool &Err5) {
 		}
 
 		// Input is Opening Parenthesis
-		else if (f_str[idx] == '('){
-			
-			if(idx > 0 && f_str[idx - 1] == unaryOp) {
+		else if (f_str[idx] == '(') {
+
+			if (idx > 0 && f_str[idx - 1] == unaryOp) {
 				idx_Grp++;
 			}
 			// Case x + (-A * x)
 			// FIXME else if to if. Corner case -(-A * x)
-			if (f_str[idx + 1] == unaryOp && isdigit(f_str[idx + 2]) ) {
+			if (f_str[idx + 1] == unaryOp && isdigit(f_str[idx + 2])) {
 				opt_stk.pushSub(f_str[idx]); // Push closing bracket
 
 				// Then jump to number and evaluate in order to stack
 				idx += 2;
 				int val = 0;
 
-				while (idx < f_str.length() && isdigit(f_str[idx])) { 
+				while (idx < f_str.length() && isdigit(f_str[idx])) {
 					// Next decimal (* 10) + ASCII number of Integer
-					val = (val * 10) + (f_str[idx] - '0'); 
-					
-					if (!isdigit(f_str[idx + 1]) ){
+					val = (val * 10) + (f_str[idx] - '0');
+
+					if (!isdigit(f_str[idx + 1])) {
 						break;
 					}
 					else {
 						idx++;
 					}
 				}
-				
+
 				val *= -1; // For clarity
 				val_stk.push(val);
 				continue;
