@@ -8,8 +8,11 @@
 //	Member 3: Hoang Tran - s3618889				
 //###########################################################################################################################################
 
+//////////////////////////--Built-in libraries--/////////////////////////////
 #include "pch.h"
 #include <iostream>
+
+//////////////////////////--Define Macro--/////////////////////////////
 #define INTUPPERLIMIT 32767
 #define INTLOWERLIMIT -32767
 #define MAX 1000
@@ -20,25 +23,33 @@ using namespace std;
 
 //////////////////////////--Stack--/////////////////////////////
 class Stack {
-	int *arr;
-	char *arrSub;
-	int top;
-	int capacity;
+	int *arr; 		// Integer array to store argument value
+	char *arrSub;	// Char array to store operator string
+	int top;		// Stack Length
+	int capacity;	// Stack Max limit
 public:
-	Stack(int size = MAX);     // constructor
-	~Stack();                   // destructor
+	Stack(int size = MAX);	// Class Constructor
+	~Stack();				// Class Destructor
 
+	// Declare Insert int/char functions
 	void push(int);
 	void pushSub(char);
+
+	// Declare Remove int/char functions
 	int pop();
 	char popSub();
+
+	// Declare int/char read-only functions
 	int peek();
 	char peekSub();
+
+	// Declare Utility functions
 	int size();
 	bool isEmpty();
 	bool isFull();
 };
 
+// Initial declaration for instance
 Stack::Stack(int size)
 {
 	arr = new int[size];
@@ -47,13 +58,14 @@ Stack::Stack(int size)
 	top = -1;
 }
 
-// Destructor to free memory allocated to the stack
+// Destructure release memory
 Stack::~Stack()
 {
 	delete arr;
 	delete arrSub;
 }
 
+// Insert integer to Stack instance
 void Stack::push(int x)
 {
 	if (isFull())
@@ -62,6 +74,7 @@ void Stack::push(int x)
 	arr[++top] = x;
 }
 
+// Insert char to Stack instance
 void Stack::pushSub(char x)
 {
 	if (isFull())
@@ -70,7 +83,7 @@ void Stack::pushSub(char x)
 	arrSub[++top] = x;
 }
 
-//removes or pops elements out of the stack
+// Remove integer or (optional) extract
 int Stack::pop()
 {
 	if (isEmpty())
@@ -78,11 +91,11 @@ int Stack::pop()
 		return 0;
 	}
 
-
-	// decrease stack size by 1 and (optionally) return the popped element
+	// Decrease stack size by 1 after return element
 	return arr[top--];
 }
 
+// Remove char or (optional) extract
 char Stack::popSub()
 {
 	if (isEmpty())
@@ -90,16 +103,17 @@ char Stack::popSub()
 		return 0;
 	}
 
-
-	// decrease stack size by 1 and (optionally) return the popped element
+	// Decrease stack size by 1 after return element
 	return arrSub[top--];
 }
 
+// Find Stack current size (int)
 int Stack::size()
 {
 	return top + 1;
 }
 
+// Find Stack current top element (int)
 int Stack::peek()
 {
 	if (!isEmpty()) {
@@ -108,6 +122,7 @@ int Stack::peek()
 	return -1;
 }
 
+// Find Stack current top element (char)
 char Stack::peekSub()
 {
 	if (!isEmpty()) {
@@ -116,14 +131,16 @@ char Stack::peekSub()
 	return -1;
 }
 
-//check if stack is empty
+// Find if Stack is currently empty (logic)
 bool Stack::isEmpty()
 {
-	return top == -1;    // or return size() == 0;
+	return top == -1;
 }
+
+// Find if Stack is currently full (logic)
 bool Stack::isFull()
 {
-	return top == capacity - 1;    // or return size() == capacity;
+	return top == capacity - 1;
 }
 //////////////////////////--Stack--/////////////////////////////
 
@@ -131,7 +148,7 @@ bool Stack::isFull()
 char iString[1000];
 class Stack Expr;
 
-//Function prototype
+//Function prototypes
 bool CheckExit(char *);
 int CheckExpr(char*);
 bool CheckOp(char);
@@ -520,7 +537,11 @@ void ScitoInt(char *Input, int& oarg) {
 	if (flagNegPow) oarg = 0; // If unary found after e which mean the value is 0 < value < 1. Then Int calculator will assign the value is zero.
 	else oarg = Numb * temp;
 }
-
+/*	Function name: constructEvalStack
+	Usage: Main function evaluate arugments/operand
+	Input: Filtered input string and boolean detector for 0 division corner case
+	Output: Calculation result in integer.
+*/
 int constructEvalStack(string f_str, bool &Err5) {
 	int idx = 0, idx_Grp = 0;
 	Stack opt_stk(500), val_stk(500);
@@ -673,7 +694,11 @@ int constructEvalStack(string f_str, bool &Err5) {
 
 	return val_stk.peek();
 }
-
+/*	Function name: opPrecedence
+	Usage: Measure level of precedence for detected operator
+	Input: Operator as char
+	Output: Level of precedence in integer (5 = highest).
+*/
 int opPrecedence(char op) {
 	if (op == '+' || op == '-') {
 		return 1;
@@ -698,7 +723,11 @@ int opPrecedence(char op) {
 	// Else
 	return 0;
 }
-
+/*	Function name: evaluateExp
+	Usage: Main function do calculation according to operator
+	Input: Integer arguments, Operator as char, Boolean for 0 division corner case
+	Output: Level of precedence in integer (5 = highest).
+*/
 int evaluateExp(int arg1, int arg2, char op, bool &Err5) {
 	switch (op) {
 	case '+': return arg1 + arg2;
