@@ -243,6 +243,9 @@ char *Filter(char *iData) {
 	for (int i = 0; i < strlen(Data); i++) {
 		if (i == 0 && Data[i] == '-') iData[i] = '!';
 		if ((CheckOp(Data[i - 1]) || Data[i - 1] == '(' || Data[i - 1] == 'e' || Data[i - 1] == 'E') && Data[i] == '-') Data[i] = '!';
+
+		if (i == 0 && Data[i] == '+') iData[i] = '0';
+		if ((CheckOp(Data[i - 1]) || Data[i - 1] == '(' || Data[i - 1] == 'e' || Data[i - 1] == 'E') && Data[i] == '+') Data[i] = '0';
 	}
 	return Data;
 }
@@ -443,7 +446,6 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 
 		oarg = atoi(inputArgv);
 	}
-
 
 	if (oarg < INTLOWERLIMIT || oarg > INTUPPERLIMIT) return 2;
 	return 0;
