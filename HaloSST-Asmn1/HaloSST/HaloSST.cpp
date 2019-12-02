@@ -314,7 +314,7 @@ int CheckNum(char* iData, Stack &Expr) {
 					temp[count] = Expr.pop();
 					if (Expr.peek() == '!') {
 						Expr.pop();
-						if (Expr.peek() == 'e') {
+						if (Expr.peek() == 'e' || Expr.peek() == 'E') {
 							Expr.push('?');
 						}
 						else {
@@ -338,7 +338,7 @@ int CheckNum(char* iData, Stack &Expr) {
 					temp[count] = Expr.pop();
 					if (Expr.peek() == '!') {
 						Expr.pop();
-						if (Expr.peek() == 'e') {
+						if (Expr.peek() == 'e' || Expr.peek() == 'E') {
 							Expr.push('?');
 						}else {
 							Expr.push('!');
