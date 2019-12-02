@@ -57,7 +57,9 @@ void Stack::push(int x)
 
 void Stack::pushSub(char x)
 {
-	if (isFull())	{}
+	if (isFull())
+	{
+	}
 	arrSub[++top] = x;
 }
 
@@ -69,6 +71,7 @@ int Stack::pop()
 		return 0;
 	}
 
+
 	// decrease stack size by 1 and (optionally) return the popped element
 	return arr[top--];
 }
@@ -79,6 +82,7 @@ char Stack::popSub()
 	{
 		return 0;
 	}
+
 
 	// decrease stack size by 1 and (optionally) return the popped element
 	return arrSub[top--];
@@ -114,6 +118,7 @@ bool Stack::isFull()
 {
 	return top == capacity - 1;    // or return size() == capacity;
 }
+
 //////////////////////////--Stack--/////////////////////////////
 
 char iString[1000];
@@ -146,8 +151,7 @@ int main()
 		int result;
 		cout << "___________________________________________________________\n";
 		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
-		cout << "#NOTE: Input String cannot contain whitespace." << endl;
-		cout << "Input the elements of the C++ Scientific Calculator:   ";
+		cout << "Input the elements of simple 2-argument Calculator:   ";
 		cin.getline(iString, 1000);
 
 		if (CheckExit(iString)) return 0;
@@ -240,7 +244,7 @@ char *Filter(char *iData) {
 	char *Data = &(*iData);
 	for (int i = 0; i < strlen(Data); i++) {
 		if (i == 0 && Data[i] == '-') iData[i] = '!';
-		if ((CharSci(Data[i-1]) || Data[i-1] == 'e' || Data[i-1] == 'E') && Data[i] == '-') Data[i] = '!';
+		if ((CheckOp(Data[i-1]) || Data[i - 1] == '(' || Data[i-1] == 'e' || Data[i-1] == 'E') && Data[i] == '-') Data[i] = '!';
 	}
 	return Data;
 }
@@ -305,7 +309,7 @@ int CheckNum(char* iData, Stack &Expr) {
 			case NORMAL: {
 				subData = iData[i];
 				Expr.pop();
-				for (count = 0; !(CharSci(Expr.peek())); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!' || (temp[count] == 'e' && Expr.peek() == '!')); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
@@ -320,7 +324,7 @@ int CheckNum(char* iData, Stack &Expr) {
 				break;
 			}
 			case LAST: {
-				for (count = 0; !(CharSci(Expr.peek())); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!' || (temp[count] == 'e' && Expr.peek() == '!')); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
