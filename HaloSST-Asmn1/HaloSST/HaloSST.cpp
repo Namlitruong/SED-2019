@@ -1,8 +1,10 @@
 // Ass1.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
-
 #include "pch.h"
 #include <iostream>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define INTUPPERLIMIT 32767
 #define INTLOWERLIMIT -32767
@@ -488,8 +490,8 @@ int constructEvalStack(string f_str, bool &Err5) {
 		// Input is Opening Parenthesis
 		else if (f_str[idx] == '(') {
 
-			if (idx >= 2 && f_str[idx - 1] == unaryOp) {
-				curr_Grp[idx_Grp++] = -1;
+			if (idx >= 1 && f_str[idx - 1] == unaryOp) {
+				idx_Grp += 1;
 			}
 
 			opt_stk.pushSub(f_str[idx]);
