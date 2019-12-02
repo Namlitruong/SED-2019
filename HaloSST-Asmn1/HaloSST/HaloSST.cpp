@@ -10,14 +10,13 @@
 
 #include "pch.h"
 #include <iostream>
-
 #define INTUPPERLIMIT 32767
 #define INTLOWERLIMIT -32767
 #define MAX 1000
 #define unaryOp '!'
+#define INPUTLIMIT 100
 
 using namespace std;
-
 
 //////////////////////////--Stack--/////////////////////////////
 class Stack {
@@ -126,31 +125,30 @@ bool Stack::isFull()
 {
 	return top == capacity - 1;    // or return size() == capacity;
 }
-
 //////////////////////////--Stack--/////////////////////////////
 
+//Global variables
 char iString[1000];
 class Stack Expr;
-char temp[1000];
 
+//Function prototype
 bool CheckExit(char *);
 int CheckExpr(char*);
 bool CheckOp(char);
-bool CheckSciCalChar(char);
+bool CheckOpSci(char);
 int CheckNum(char*, Stack&);
 bool CharSci(char);
-bool CheckSciNum(char);
-bool ScitoInt(char *Input, int& oarg);
+bool Check1stNum(char);
+void ScitoInt(char *, int&);
 int checkValidNumberAndRange(char*, int&);
-char* ExtractFromStack(char *oStr, Stack &iStack);
-void errCheck(int err1, int err2, bool err5);
+char* ExtractFromStack(char *, Stack &);
+void errCheck(int,int , bool);
 char *Filter(char *);
-//From Tin
 int constructEvalStack(string, bool&);
 int opPrecedence(char);
 int evaluateExp(int, int, char, bool&);
 
-
+//Main Program
 int main()
 {
 	while (1) {
@@ -163,14 +161,15 @@ int main()
 		cout << "Input the elements of simple 2-argument Calculator:   ";
 		cin.getline(iString, 1000);
 
-		if (CheckExit(iString)) return 0;
-
-		err1 = CheckExpr(iString);
-		Filter(iString);
-		if (err1 == 0) err2 = CheckNum(iString, Expr);
-		if (err2 == 0) result = constructEvalStack(ExtractFromStack(iString, Expr), err5);
-		if (err1 == 0 && err2 == 0 && err5 == 0) cout << "The Final Result:    " << result << endl;
-		errCheck(err1, err2, err5);
+		if (strlen(iString) < INPUTLIMIT) {
+			if (CheckExit(iString)) return 0;
+			err1 = CheckExpr(iString);
+			Filter(iString);
+			if (err1 == 0) err2 = CheckNum(iString, Expr);
+			if (err2 == 0) result = constructEvalStack(ExtractFromStack(iString, Expr), err5);
+			if (err1 == 0 && err2 == 0 && err5 == 0) cout << "The Final Result:    " << result << endl;
+			errCheck(err1, err2, err5);
+		}else cout << "ERROR: Too many characters. Please input the expression again !!!" << endl;
 	}
 }
 /*	Function name: errCheck.
@@ -212,12 +211,12 @@ char* ExtractFromStack(char *oStr, Stack &iStack) {
 	char temp[100];
 	char*Data = &(*oStr);
 	int count;
-	for (count = 0; !Expr.isEmpty(); count++) {
+	for (count = 0; !Expr.isEmpty(); count++) {		//Pop out all the data from the stack
 		temp[count] = (char)iStack.pop();
 	}
 	temp[count] = '\0';
 
-	for (count = 0; count < strlen(temp); count++) {
+	for (count = 0; count < strlen(temp); count++) {	//Flip the string, since stack is LIFO (Last In First Out)
 		Data[count] = temp[strlen(temp) - count - 1];
 	}
 	Data[strlen(temp)] = '\0';
@@ -247,103 +246,119 @@ bool CheckOp(char op) {
 	if ((op == '+') || (op == '-') || (op == '*') || (op == '/') || (op == '%') || (op == '^')) return true;
 	return false;
 }
-/*	Function name: CheckSciCalChar.
-	Usage: Check whether the input char is a character use to seperate digit
+/*	Function name: CheckOpSci.
+	Usage: Support to check Valid Expression
 	Input: Character
 	Output: Boolean flag to acknowledge the input is a character use to seperate digit
 */
-bool CheckSciCalChar(char op) {
+bool CheckOpSci(char op) {
 	if (CheckOp(op) || (op == '.') || (op == 'e') || (op == 'E')) return true;
 	return false;
 }
-/*	Function name: CheckSciCalChar.
+/*	Function name: CharSci.
 	Usage: Check whether the input char is a character use to seperate digit
 	Input: Character
 	Output: Boolean flag to acknowledge the input is a character use to seperate digit
 */
 bool CharSci(char op) {
-	if (CheckOp(op) || (op == ')') || (op == '(')) return true;
+	if (CheckOp(op) || (op == ')') || (op == '(') || (op == '!')) return true;
 	return false;
 }
-
-bool CheckSciNum(char c) {
+/*	Function name: Check1stNum.
+	Usage: Support for CheckNum function to extract number
+	Input: Character
+	Output: Boolean flag to acknowledge the input is in the defined set
+*/
+bool Check1stNum(char c) {
 	if (isdigit(c) || c == '.' || c == 'e' || c == 'E') return true;
 	return false;
 }
-
-char *Filter(char *iData) {
+/*	Function name: Filter.
+	Usage: Detect and replace unary signs ('-' into '!' and '+' into '0')
+	Input: Pointer to the input string
+	Output: Pointer to the target string
+*/
+char *Filter(char *iData) {// Unary can appear on the first index, after operators, after open parentheses and e-notation
 	char *Data = &(*iData);
 	for (int i = 0; i < strlen(Data); i++) {
-		if (i == 0 && Data[i] == '-') iData[i] = '!';
+		if (i == 0 && Data[i] == '-') iData[i] = '!';// Change '-' with '!'
 		if ((CheckOp(Data[i - 1]) || Data[i - 1] == '(' || Data[i - 1] == 'e' || Data[i - 1] == 'E') && Data[i] == '-') Data[i] = '!';
 
-		if (i == 0 && Data[i] == '+') iData[i] = '0';
+		if (i == 0 && Data[i] == '+') iData[i] = '0';// Change '+' with '0'
 		if ((CheckOp(Data[i - 1]) || Data[i - 1] == '(' || Data[i - 1] == 'e' || Data[i - 1] == 'E') && Data[i] == '+') Data[i] = '0';
 	}
 	return Data;
 }
-
+/*	Function name: CheckExpr.
+	Usage: Check the validation of the input expression or operators 
+	Input: Pointer to the input string
+	Output: Return error code for expression and operator validation (return 0 = no error)
+*/
 int CheckExpr(char* iData) {
 	bool flagOp = false;
 	int Left = 0, Right = 0;
 	// Invalid Expression Error Check
 	for (int i = 0; i < strlen(iData); i++) {
 		//Check for invalid char
-		if (!(isdigit(iData[i]) || CheckSciCalChar(iData[i]) || iData[i] == ')' || iData[i] == '(')) return 3;
-		//Check First index= 
+		if (!(isdigit(iData[i]) || CheckOpSci(iData[i]) || iData[i] == ')' || iData[i] == '(')) return 3;
+		//Check First index 
 		if ((iData[0] == '*' || iData[0] == '/' || iData[0] == '%' || iData[0] == '^' || iData[0] == 'e' || iData[0] == 'E')) return 4;
-		//Check Lat index= 
+		//Check Last index 
 		if (i == strlen(iData) - 1 && (CheckOp(iData[i]) || iData[i] == 'e' || iData[i] == 'E' || iData[i] == '.')) return 4;
 		//Check empty parentheses
 		if (iData[i] == ')' && iData[i - 1] == '(') return 4;
 		if (iData[i - 1] == ')' && iData[i] == '(') return 4;
 		//Check Op
-		if (!isdigit(iData[i]) && (iData[i] != '(') && flagOp) return 4;
-		if (CheckOp(iData[0]) && CheckOp(iData[1])) return 4;
-		if ((CheckSciCalChar(iData[i]) && CheckSciCalChar(iData[i - 1])) || (CheckSciCalChar(iData[i]) && iData[i - 1] == '(')) flagOp = true;
+		if (!isdigit(iData[i]) && (iData[i] != '(') && flagOp) return 4; // After '(' just operator can appear, that operator is unary.
+		if (CheckOp(iData[0]) && CheckOp(iData[1])) return 4;// The first number just have an unary sign. Then 2 operators at the beginning is error.
+		if ((CheckOpSci(iData[i]) && CheckOpSci(iData[i - 1])) || (CheckOpSci(iData[i]) && iData[i - 1] == '(')) flagOp = true; // Set operator flag
 		if (isdigit(iData[i]) || iData[i] == '(') flagOp = false;
 		if ((iData[i] == '*' ||
 			iData[i] == '/' ||
 			iData[i] == '%' ||
 			iData[i] == '^') &&
-			CheckSciCalChar(iData[i - 1])) return 4;
+			CheckOpSci(iData[i - 1])) return 4; // If 2 operators appear in a row, just '-' and '+' can appear in the second index
 		//Check numb of parentheses
 		if (iData[i] == '(') Left++;
 		if (iData[i] == ')') Right++;
 	}
-	if (Left != Right) return 4;
+	if (Left != Right) return 4; // Return error if the number of open and closing parentheses are not equal. 
 	return 0;
 }
-
+/*	Function name: CheckNum.
+	Usage: Using stack to detect, validate, store and convert numbers form an input string to an standard form. (Example: 2e2 = 200, 13.00 = 13)
+	Input: pointer to input string and the address of the stack 
+	Output: Boolean flag to acknowledge the input is a character use to determin digit (include scientific form)
+*/
 int CheckNum(char* iData, Stack &Expr) {
-	bool flagPow = false, flagOp = false;
+	bool flagOp = false;
 	char temp[50], analysedStr[50];
 	int count = 0;
-	int StartIndex = 0, EndIndex = 0;
 	char subData;
 	int oarg;
+	// Using the characters in the CharSci function to separated number. However, the first, the last or might be both numbers might not enclose 
+	// by those characters. Therefore, using Finite State Machine (FSM) to handle the mentioned cases.
 	enum Scenario { NORMAL = 1, FIRST = 2, LAST = 3, BOTH = 4 };
 	Scenario Sce = NORMAL;
 
 	for (int i = 0; i < strlen(iData); i++) {
 		Expr.push(iData[i]);
-		//////////////////////////////////
+		/////////////////////////--Define State--///////////////////////////
 		if (i == 0 && isdigit(iData[i])) Sce = FIRST;
 		if ((i == strlen(iData) - 1) && isdigit(iData[i])) {
 			Sce = LAST;
-			if (CheckSciNum(iData[0]) && flagOp == false) Sce = BOTH;
+			if (Check1stNum(iData[0]) && flagOp == false) Sce = BOTH;
 		}
-		/////////////////////////////////
-		if (i == 0 && (iData[i] == '-' || iData[i] == '+') || iData[i] == '!') continue;
-		if (CheckOp(iData[i]) || iData[i] == '!') flagOp = true;
-		if ((CheckOp(iData[i]) || iData[i] == ')' || i == strlen(iData) - 1) || iData[i] == '!') {
+		/////////////////////////--Define State--//////////////////////////
+		if (i == 0 && (iData[i] == '-' || iData[i] == '+') || iData[i] == '!') continue; // Skip the first index if it is an unary sign
+		if (CheckOp(iData[i]) || iData[i] == '!') flagOp = true; // Support to detect 'BOTH' state
 
-
+		if ((CheckOp(iData[i]) || iData[i] == ')' || i == strlen(iData) - 1) || iData[i] == '!') { //Enter the FSM to start to extract and analyse number
 			switch (Sce) {
 			case NORMAL: {
-				subData = iData[i];
+				subData = iData[i]; // Store 
 				Expr.pop();
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
+				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
 					if (Expr.peek() == '!') {
 						Expr.pop();
@@ -367,7 +382,7 @@ int CheckNum(char* iData, Stack &Expr) {
 				break;
 			}
 			case LAST: {
-				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
+				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
 					if (Expr.peek() == '!') {
 						Expr.pop();
@@ -435,10 +450,10 @@ int CheckNum(char* iData, Stack &Expr) {
 	return 0;
 }
 
-/*	Function name: checkValidNumber.
-	Usage: Check if the input argument is in the valid integer form.
-	Input: Argument in test form.
-	Output: Boolean flag if the argument is a valid integer or not.
+/*	Function name: checkValidNumberAndRange.
+	Usage: Check if the input number is in the valid integer form and in the defined range and convert it from text form into integer form.
+	Input: Pointer to an input argument, and address of the number in int datatype
+	Output: Error code for valid number and valid number range. 
 */
 int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 	bool dotDetect = false;
@@ -473,18 +488,20 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 	if (!numDetect) return 3;
 
 	if (sciDetect) {
-		if (ScitoInt(inputArgv, oarg)) return 2;
-	}
-	else {
-
+		ScitoInt(inputArgv, oarg);
+	}else{
 		oarg = atoi(inputArgv);
 	}
 
 	if (oarg < INTLOWERLIMIT || oarg > INTUPPERLIMIT) return 2;
 	return 0;
 }
-
-bool ScitoInt(char *Input, int& oarg) {
+/*	Function name: ScitoInt
+	Usage: Convert a scientific number in a text form to int.
+	Input: Pointer to the input number in text form, the address of a number in int form.
+	Output: NULL - void funvtion.
+*/
+void ScitoInt(char *Input, int& oarg) {
 	int Pow, Numb, temp = 1;
 	int count = 0;
 	bool flagNegPow = false;
@@ -494,7 +511,6 @@ bool ScitoInt(char *Input, int& oarg) {
 		if (i != 0 && Input[i] == '-') flagNegPow = true;
 	}
 
-	//if (strlen(Input) - (count + 1) > 2) return 1;
 	Pow = atoi(&Input[count + 1]);
 	Numb = atoi(Input);
 
@@ -503,7 +519,6 @@ bool ScitoInt(char *Input, int& oarg) {
 	}
 	if (flagNegPow) oarg = 0;
 	else oarg = Numb * temp;
-	return 0;
 }
 
 int constructEvalStack(string f_str, bool &Err5) {
