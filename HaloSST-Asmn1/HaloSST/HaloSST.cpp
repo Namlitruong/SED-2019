@@ -51,21 +51,13 @@ void Stack::push(int x)
 {
 	if (isFull())
 	{
-		cout << "Stack Overflow!!!";
 	}
-
-	cout << "Inserting " << x << endl;
 	arr[++top] = x;
 }
 
 void Stack::pushSub(char x)
 {
-	if (isFull())
-	{
-		cout << "Stack Overflow!!!";
-	}
-
-	cout << "Inserting " << x << endl;
+	if (isFull())	{}
 	arrSub[++top] = x;
 }
 
@@ -74,11 +66,8 @@ int Stack::pop()
 {
 	if (isEmpty())
 	{
-		cout << "Stack Underflow!!";
 		return 0;
 	}
-
-	cout << "Removing " << peek() << endl;
 
 	// decrease stack size by 1 and (optionally) return the popped element
 	return arr[top--];
@@ -88,11 +77,8 @@ char Stack::popSub()
 {
 	if (isEmpty())
 	{
-		cout << "Stack Underflow!!";
 		return 0;
 	}
-
-	cout << "Removing " << peekSub() << endl;
 
 	// decrease stack size by 1 and (optionally) return the popped element
 	return arrSub[top--];
@@ -128,11 +114,11 @@ bool Stack::isFull()
 {
 	return top == capacity - 1;    // or return size() == capacity;
 }
-
 //////////////////////////--Stack--/////////////////////////////
 
 char iString[1000];
 class Stack Expr;
+char temp[1000];
 
 bool CheckExit(char *);
 int CheckExpr(char*);
@@ -145,6 +131,7 @@ bool ScitoInt(char *Input, int& oarg);
 int checkValidNumberAndRange(char*, int&);
 char* ExtractFromStack(char *oStr, Stack &iStack);
 void errCheck(int err1, int err2, bool err5);
+char *Filter(char *);
 //From Tin
 int constructEvalStack(string, bool&);
 int opPrecedence(char);
@@ -155,19 +142,20 @@ int main()
 {
 	while (1) {
 		bool err5 = false;
-		int err1=0, err2=0;
+		int err1 = 0, err2 = 0;
 		int result;
 		cout << "___________________________________________________________\n";
 		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
-		cout << "Input the elements of simple 2-argument Calculator:   ";
+		cout << "#NOTE: Input String cannot contain whitespace." << endl;
+		cout << "Input the elements of the C++ Scientific Calculator:   ";
 		cin.getline(iString, 1000);
 
 		if (CheckExit(iString)) return 0;
 
 		err1 = CheckExpr(iString);
+		Filter(iString);
 		if (err1 == 0) err2 = CheckNum(iString, Expr);
-		if (err2 == 0) result = constructEvalStack(iString, err5);
-		cout << "FromStacktoString:   " << ExtractFromStack(iString, Expr) << endl;
+		if (err2 == 0) result = constructEvalStack(ExtractFromStack(iString, Expr), err5);
 		if (err1 == 0 && err2 == 0 && err5 == 0) cout << "The Final Result:    " << result << endl;
 		errCheck(err1, err2, err5);
 	}
@@ -212,6 +200,8 @@ char* ExtractFromStack(char *oStr, Stack &iStack) {
 		Data[count] = temp[strlen(temp) - count - 1];
 	}
 	Data[strlen(temp)] = '\0';
+
+	cout << "EXTRCTFROMSTR:   " << Data << endl;
 	return Data;
 }
 
@@ -246,6 +236,15 @@ bool CheckSciNum(char c) {
 	return false;
 }
 
+char *Filter(char *iData) {
+	char *Data = &(*iData);
+	for (int i = 0; i < strlen(Data); i++) {
+		if (i == 0 && Data[i] == '-') iData[i] = '!';
+		if ((CharSci(Data[i-1]) || Data[i-1] == 'e' || Data[i-1] == 'E') && Data[i] == '-') Data[i] = '!';
+	}
+	return Data;
+}
+
 int CheckExpr(char* iData) {
 	bool flagOp = false;
 	int Left = 0, Right = 0;
@@ -254,10 +253,12 @@ int CheckExpr(char* iData) {
 		//Check for invalid char
 		if (!(isdigit(iData[i]) || CheckSciCalChar(iData[i]) || iData[i] == ')' || iData[i] == '(')) return 3;
 		//Check First index= 
-		if ((iData[0] == '*' ||iData[0] == '/' ||iData[0] == '%' ||iData[0] == '^' || iData[0] == 'e' || iData[0] == 'E')) return 4;
+		if ((iData[0] == '*' || iData[0] == '/' || iData[0] == '%' || iData[0] == '^' || iData[0] == 'e' || iData[0] == 'E')) return 4;
+		//Check Lat index= 
+		if (i == strlen(iData)-1 && (CheckOp(iData[i]) || iData[i] == 'e' || iData[i] == 'E' || iData[i] == '.')) return 4;
 		//Check empty parentheses
 		if (iData[i] == ')' && iData[i - 1] == '(') return 4;
-		if (iData[i-1] == ')' && iData[i] == '(') return 4;
+		if (iData[i - 1] == ')' && iData[i] == '(') return 4;
 		//Check Op
 		if (!isdigit(iData[i]) && (iData[i] != '(') && flagOp) return 4;
 		if (CheckOp(iData[0]) && CheckOp(iData[1])) return 4;
@@ -267,7 +268,7 @@ int CheckExpr(char* iData) {
 			iData[i] == '/' ||
 			iData[i] == '%' ||
 			iData[i] == '^') &&
-			CheckSciCalChar(iData[i-1])) return 4;
+			CheckSciCalChar(iData[i - 1])) return 4;
 		//Check numb of parentheses
 		if (iData[i] == '(') Left++;
 		if (iData[i] == ')') Right++;
@@ -283,15 +284,8 @@ int CheckNum(char* iData, Stack &Expr) {
 	int StartIndex = 0, EndIndex = 0;
 	char subData;
 	int oarg;
-	enum Scenario {NORMAL = 1, FIRST = 2, LAST = 3, BOTH = 4};
+	enum Scenario { NORMAL = 1, FIRST = 2, LAST = 3, BOTH = 4 };
 	Scenario Sce = NORMAL;
-	
-	//Check Negative Power
-	/*for (int i = 0; i < strlen(iData); i++) {
-		if (iData[i] == '-' && flagPow) return 1;
-		if (iData[i] == '^' || iData[i] == 'e' || iData[i] == 'E') flagPow = true;
-		if (isdigit(iData[i])) flagPow = false;
-	}*/
 
 	for (int i = 0; i < strlen(iData); i++) {
 		Expr.push(iData[i]);
@@ -302,16 +296,16 @@ int CheckNum(char* iData, Stack &Expr) {
 			if (CheckSciNum(iData[0]) && flagOp == false) Sce = BOTH;
 		}
 		/////////////////////////////////
-		if (i == 0 && (iData[i] == '-' || iData[i] == '+')) continue;
-		if (CheckOp(iData[i])) flagOp = true;
-		if ((CheckOp(iData[i]) || iData[i] == ')' || i == strlen(iData) - 1)) {
-			
+		if (i == 0 && (iData[i] == '-' || iData[i] == '+') || iData[i] == '!') continue;
+		if (CheckOp(iData[i]) || iData[i] == '!') flagOp = true;
+		if ((CheckOp(iData[i]) || iData[i] == ')' || i == strlen(iData) - 1) || iData[i] == '!') {
+
 
 			switch (Sce) {
 			case NORMAL: {
 				subData = iData[i];
 				Expr.pop();
-				for (count = 0; !CharSci(Expr.peek()); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
@@ -326,7 +320,7 @@ int CheckNum(char* iData, Stack &Expr) {
 				break;
 			}
 			case LAST: {
-				for (count = 0; !CharSci(Expr.peek()); count++) {
+				for (count = 0; !(CharSci(Expr.peek()) || Expr.peek() == '!'); count++) {
 					temp[count] = Expr.pop();
 				}
 				break;
@@ -340,19 +334,17 @@ int CheckNum(char* iData, Stack &Expr) {
 			}
 
 			temp[count] = '\0';
-			cout << "CHECK1:   " << temp << endl;
 			for (unsigned int i = 0; i < strlen(temp); i++) {
 				analysedStr[i] = temp[strlen(temp) - i - 1];
 			}
 			analysedStr[strlen(temp)] = '\0';
-			cout << "CHECK2:   " << analysedStr << endl;
 			//////////////////////////////////////
 			int Select = checkValidNumberAndRange(analysedStr, oarg);
 			switch (Select) {
 			case 0:
 				snprintf(analysedStr, sizeof(analysedStr), "%d", oarg);
 				break;
-			case 1: 
+			case 1:
 				snprintf(analysedStr, sizeof(analysedStr), "%d", oarg);
 				return 1;
 			case 2:
@@ -363,7 +355,8 @@ int CheckNum(char* iData, Stack &Expr) {
 			///////////////////////////////
 
 			for (int j = 0; j < strlen(analysedStr); j++) {
-				Expr.push(analysedStr[j]);
+				if (analysedStr[j] == '-') Expr.push('!');
+				else Expr.push(analysedStr[j]);
 			}
 
 			switch (Sce) {
@@ -381,9 +374,8 @@ int CheckNum(char* iData, Stack &Expr) {
 			case BOTH:
 				break;
 			}
-			cout << "-------------------------------------END----------------------------------------" << endl;
 		}
-		
+
 	}
 	return 0;
 }
@@ -404,19 +396,22 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 
 		if (i == 0 && inputArgv[i] == '+' && inputArgv[i] == '-' && inputArgv[i] == '.') continue;// A number, '+', '-', and a dot are allowed at the first index. If not return false.
 
-		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+')) return 1;	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
+		if (i > 0 && (inputArgv[i] == '-' || inputArgv[i] == '+' )) return 1;	// After the first Index, just number is allowed, and maybe a dot if it not present at the first index.
 		// A dot just can present one time inside the string and after the dot, everything must be zero or NULL.
+		if (inputArgv[i] == '!') inputArgv[i] = '-';
 		if (dotDetect) {
 			if (inputArgv[i] == '.') return 1;
 			else if (inputArgv[i] != '0') return 1;
-		}else {
+		}
+		else {
 			if (inputArgv[i] == '.') dotDetect = true;
 		}
 
 		if (sciDetect) {
 			if (inputArgv[i] == 'e' || inputArgv[i] == 'E') return 1;
 			else if (inputArgv[i] == '.') return 1;
-		}else {
+		}
+		else {
 			if (inputArgv[i] == 'e' || inputArgv[i] == 'E') sciDetect = true;
 		}
 	}
@@ -424,12 +419,12 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 
 	if (sciDetect) {
 		if (ScitoInt(inputArgv, oarg)) return 2;
-	}else {
+	}
+	else {
+
 		oarg = atoi(inputArgv);
 	}
 
-	cout << "TEST Sci convert:  " << oarg << endl;
-	
 	if (oarg < INTLOWERLIMIT || oarg > INTUPPERLIMIT) return 2;
 	return 0;
 }
@@ -437,18 +432,22 @@ int checkValidNumberAndRange(char* inputArgv, int& oarg) {
 bool ScitoInt(char *Input, int& oarg) {
 	int Pow, Numb, temp = 1;
 	int count = 0;
+	bool flagNegPow = false;
+
 	for (int i = 0; i < strlen(Input); i++) {
 		if (Input[i] == 'e' || Input[i] == 'E') count = i;
+		if (i !=0 && Input[i] == '-') flagNegPow = true;
 	}
 
-	if (strlen(Input) - (count + 1) > 1) return 1;
+	//if (strlen(Input) - (count + 1) > 2) return 1;
 	Pow = atoi(&Input[count + 1]);
 	Numb = atoi(Input);
 
 	for (int i = 0; i < Pow; i++) {
 		temp = temp * 10;
 	}
-	oarg = Numb * temp;
+	if (flagNegPow) oarg = 0;
+	else oarg = Numb * temp;
 	return 0;
 }
 
@@ -461,7 +460,6 @@ int constructEvalStack(string f_str, bool &Err5) {
 	{
 		// Input is Number
 		if (isdigit(f_str[idx])) {
-			cout << "Input is Number\r\n";
 
 			int val = 0;
 			//TODO Unary boolean detection
@@ -485,7 +483,6 @@ int constructEvalStack(string f_str, bool &Err5) {
 
 		// Input is Opening Parenthesis
 		else if (f_str[idx] == '(') {
-			cout << "Input is Opening\r\n";
 
 			if (idx >= 2 && f_str[idx - 1] == unaryOp) {
 				curr_Grp[idx_Grp++] = -1;
@@ -495,7 +492,6 @@ int constructEvalStack(string f_str, bool &Err5) {
 		}
 		// Input is Closing Parenthesis
 		else if (f_str[idx] == ')') {
-			cout << "Input is Closing\r\n";
 
 			while (!opt_stk.isEmpty() && opt_stk.peekSub() != '(') {
 				int arg2 = val_stk.pop();
@@ -524,7 +520,6 @@ int constructEvalStack(string f_str, bool &Err5) {
 		}
 		// TODO && not an operator condition
 		else if (f_str[idx] == unaryOp) {
-			cout << "Input is Unary\r\n";
 
 			if (isdigit(f_str[idx + 1])) {
 				int val = 0;
@@ -555,7 +550,6 @@ int constructEvalStack(string f_str, bool &Err5) {
 
 		// Input is Operator 
 		else {
-			cout << "Input is Operator\r\n";
 
 			while (!opt_stk.isEmpty()
 				&& (opPrecedence(opt_stk.peekSub()) >= opPrecedence(f_str[idx]))
@@ -613,25 +607,6 @@ int opPrecedence(char op) {
 	return 0;
 }
 
-/*int evaluateExp(int arg1, int arg2, char op) {
-	switch (op) {
-	case '+': return arg1 + arg2;
-	case '-': return arg1 - arg2;
-	case '*': return arg1 * arg2;
-	case '/': return arg1 / arg2;
-	case '%': return arg1 % arg2;
-	case '^': {
-		int result_tmp = 1;
-		for (int i = 0; i < arg2; i++)
-		{
-			result_tmp *= arg1;
-		};
-		return result_tmp;
-	}
-	}
-	return 0;
-}*/
-
 int evaluateExp(int arg1, int arg2, char op, bool &Err5) {
 	switch (op) {
 	case '+': return arg1 + arg2;
@@ -653,11 +628,14 @@ int evaluateExp(int arg1, int arg2, char op, bool &Err5) {
 	}
 	case '^': {
 		int result_tmp = 1;
-		for (int i = 0; i < arg2; i++)
-		{
-			result_tmp *= arg1;
-		};
-		return result_tmp;
+		if (arg2 < 0) return 0;
+		else {
+			for (int i = 0; i < arg2; i++)
+			{
+				result_tmp *= arg1;
+			};
+			return result_tmp;
+		}
 	}
 	}
 	return 0;
