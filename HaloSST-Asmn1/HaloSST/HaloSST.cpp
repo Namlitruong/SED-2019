@@ -1,16 +1,24 @@
-// Ass1.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+//##########################################################################################################################################
+//	School of Science & Technology				
+//	EEET2482 - Software Engineering Design		
+//	Asigment 1 - C++ Scientific Calculator		
+//	Team name: HaloSST							
+//	Member 1: Nam Truong - s3518702				
+//	Member 2: Tin Nguyen - s3607833				
+//	Member 3: Hoang Tran - s3618889				
+//###########################################################################################################################################
 
 #include "pch.h"
 #include <iostream>
 
 #define INTUPPERLIMIT 32767
 #define INTLOWERLIMIT -32767
+#define MAX 1000
+#define unaryOp '!'
 
 using namespace std;
 
-#define MAX 1000
-#define unaryOp '!'
+
 //////////////////////////--Stack--/////////////////////////////
 class Stack {
 	int *arr;
@@ -151,6 +159,7 @@ int main()
 		int result;
 		cout << "___________________________________________________________\n";
 		cout << "\n#NOTE: Input String cannot larger than 100 character." << endl;					//Acknowledge user the input constraint
+		cout << "#NOTE: Input String cannot contain whitespace." << endl;
 		cout << "Input the elements of simple 2-argument Calculator:   ";
 		cin.getline(iString, 1000);
 
@@ -164,7 +173,11 @@ int main()
 		errCheck(err1, err2, err5);
 	}
 }
-
+/*	Function name: errCheck.
+	Usage: Print out the error message
+	Input: error codes from the error variables 
+	Output: NULL - void function.
+*/
 void errCheck(int err1, int err2, bool err5) {
 	switch (err1) {
 	case 3: {
@@ -190,7 +203,11 @@ void errCheck(int err1, int err2, bool err5) {
 
 	if (err5) cout << "ERROR CHECK 5: Division by 0" << endl;
 }
-
+/*	Function name: ExtractFromStack.
+	Usage: Take out all the data from a stack and put it in a assigned string
+	Input: Pointer to the target string, the address of the stack
+	Output: Pointer to the target string
+*/
 char* ExtractFromStack(char *oStr, Stack &iStack) {
 	char temp[100];
 	char*Data = &(*oStr);
@@ -206,7 +223,11 @@ char* ExtractFromStack(char *oStr, Stack &iStack) {
 	Data[strlen(temp)] = '\0';
 	return Data;
 }
-
+/*	Function name: CheckExit.
+	Usage: Check if the input string is Exit or not. If "Exit" is pressed then exit the program and print team information.
+	Input: pointer to input raw string.
+	Output: Boolean flag to acknowledge "Exit" have been pressed or not.
+*/
 bool CheckExit(char * iString) {
 	if (!strcmp(iString, "Exit") || !strcmp(iString, "exit")) { // Consider both Capital (Exit) and non-capital (exit) of the first character to compare with the input string.
 		cout << "LABORATORY GROUP HaloSST" << endl;
@@ -217,17 +238,29 @@ bool CheckExit(char * iString) {
 	}
 	return 0;
 }
-
+/*	Function name: CheckOp.
+	Usage: Check whether the input char is operator
+	Input: Character
+	Output: Boolean flag to acknowledge the input is an operator or not
+*/
 bool CheckOp(char op) {
 	if ((op == '+') || (op == '-') || (op == '*') || (op == '/') || (op == '%') || (op == '^')) return true;
 	return false;
 }
-
+/*	Function name: CheckSciCalChar.
+	Usage: Check whether the input char is a character use to seperate digit
+	Input: Character
+	Output: Boolean flag to acknowledge the input is a character use to seperate digit
+*/
 bool CheckSciCalChar(char op) {
 	if (CheckOp(op) || (op == '.') || (op == 'e') || (op == 'E')) return true;
 	return false;
 }
-
+/*	Function name: CheckSciCalChar.
+	Usage: Check whether the input char is a character use to seperate digit
+	Input: Character
+	Output: Boolean flag to acknowledge the input is a character use to seperate digit
+*/
 bool CharSci(char op) {
 	if (CheckOp(op) || (op == ')') || (op == '(')) return true;
 	return false;
