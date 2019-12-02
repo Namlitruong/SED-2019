@@ -356,10 +356,11 @@ int CheckNum(char* iData, Stack &Expr) {
 		if ((CheckOp(iData[i]) || iData[i] == ')' || i == strlen(iData) - 1) || iData[i] == '!') { //Enter the FSM to start to extract and analyse number
 			switch (Sce) {
 			case NORMAL: {
-				subData = iData[i]; // Store 
+				subData = iData[i]; // Store the character to detect number to push it in later
 				Expr.pop();
 				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
+					///////////////////--Enuse '?' to skip the process for e-notation--//////////////
 					if (Expr.peek() == '!') {
 						Expr.pop();
 						if (Expr.peek() == 'e' || Expr.peek() == 'E') {
@@ -368,14 +369,14 @@ int CheckNum(char* iData, Stack &Expr) {
 						else {
 							Expr.push('!');
 						}
-					}
+					}///////////////////--Enuse '?' to skip the process for e-notation--//////////////
 				}
 				break;
 			}
 			case FIRST: {
 				subData = iData[i];
 				Expr.pop();
-				for (count = 0; !Expr.isEmpty(); count++) {
+				for (count = 0; !Expr.isEmpty(); count++) { // First number, extract until empty the stack
 					temp[count] = Expr.pop();
 				}
 				Sce = NORMAL;
@@ -384,6 +385,7 @@ int CheckNum(char* iData, Stack &Expr) {
 			case LAST: {
 				for (count = 0; !(CharSci(Expr.peek())); count++) {
 					temp[count] = Expr.pop();
+					///////////////////--Enuse '?' to skip the process for e-notation--//////////////
 					if (Expr.peek() == '!') {
 						Expr.pop();
 						if (Expr.peek() == 'e' || Expr.peek() == 'E') {
@@ -392,10 +394,11 @@ int CheckNum(char* iData, Stack &Expr) {
 							Expr.push('!');
 						}
 					}
+					///////////////////--Enuse '?' to skip the process for e-notation--//////////////
 				}
 				break;
 			}
-			case BOTH: {
+			case BOTH: {// Same with First, but do not need to store the char that use to detect number
 				for (count = 0; !Expr.isEmpty(); count++) {
 					temp[count] = Expr.pop();
 				}
@@ -404,31 +407,29 @@ int CheckNum(char* iData, Stack &Expr) {
 			}
 
 			temp[count] = '\0';
+			//Stack is LIFO, thus, need to flip
 			for (unsigned int i = 0; i < strlen(temp); i++) {
 				analysedStr[i] = temp[strlen(temp) - i - 1];
 			}
 			analysedStr[strlen(temp)] = '\0';
-			//////////////////////////////////////
+			//Return error code
 			int Select = checkValidNumberAndRange(analysedStr, oarg);
 			switch (Select) {
 			case 0:
 				snprintf(analysedStr, sizeof(analysedStr), "%d", oarg);
 				break;
 			case 1:
-				snprintf(analysedStr, sizeof(analysedStr), "%d", oarg);
 				return 1;
 			case 2:
-				snprintf(analysedStr, sizeof(analysedStr), "%d", oarg);
 				return 2;
 			case 3:break;
 			}
-			///////////////////////////////
-
+			// After the validation and convertion push back the number in the text form.
 			for (int j = 0; j < strlen(analysedStr); j++) {
-				if (analysedStr[j] == '-') Expr.push('!');
+				if (analysedStr[j] == '-') Expr.push('!'); 
 				else Expr.push(analysedStr[j]);
 			}
-
+			// Push back the char using to detect number.
 			switch (Sce) {
 			case NORMAL: {
 				Expr.push(subData);
@@ -505,19 +506,18 @@ void ScitoInt(char *Input, int& oarg) {
 	int Pow, Numb, temp = 1;
 	int count = 0;
 	bool flagNegPow = false;
-
+	
 	for (int i = 0; i < strlen(Input); i++) {
-		if (Input[i] == 'e' || Input[i] == 'E') count = i;
-		if (i != 0 && Input[i] == '-') flagNegPow = true;
+		if (Input[i] == 'e' || Input[i] == 'E') count = i;//Count the number before 'e'
+		if (i != 0 && Input[i] == '-') flagNegPow = true;//Detect unary
 	}
-
+	//Calculate e-notation
 	Pow = atoi(&Input[count + 1]);
 	Numb = atoi(Input);
-
 	for (int i = 0; i < Pow; i++) {
 		temp = temp * 10;
 	}
-	if (flagNegPow) oarg = 0;
+	if (flagNegPow) oarg = 0; // If unary found after e which mean the value is 0 < value < 1. Then Int calculator will assign the value is zero.
 	else oarg = Numb * temp;
 }
 
