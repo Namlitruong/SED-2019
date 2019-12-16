@@ -18,14 +18,35 @@
 
 using namespace std;
 
+//////////////////////////--rentalItemCls--/////////////////////////////
+typedef struct rentalItemIDStct { 
+    int code;
+	int year;
+} itemID; 
+
+class rentalItemCls {
+private:
+	itemID id;
+	// int Title: captures the whole title of the item (e.g. ‘Game of thrones’)
+	// int Rental type: Record, DVD, or Game
+	// int Loan type: either 2-day loan or 1-week loan
+	// int Number of copies held in stock (e.g. 1, 2, 3 or more)
+	// int Rental fee (in USD)
+	// int Rental status: either borrowed or available.
+
+public:
+
+};
+
 //Function prototypes
-bool CheckExit(char *);
+bool CheckExit(string);
 
 //Main Program
 int main()
 {
 	while (1) {
-		char optSel_val[100];
+		string optSel_val; // Option Select Value
+
 		cout << "\n___________________________________________________________";
 		cout << "\nWelcome to HaloSST’s video store" << endl;
 		cout << "\nEnter an option below." << endl;
@@ -41,8 +62,10 @@ int main()
 		cout << "10. Search items or customers" << endl;
 		cout << "Exit." << endl;
 
-		cin.getline(optSel_val, sizeof(optSel_val) * sizeof(char) );
-		if (CheckExit(iString)) return 0;
+		getline(cin,optSel_val);
+		if (CheckExit(optSel_val)) return 0;
+
+		//TODO expand input valuator here
 
 	}
 }
@@ -52,8 +75,8 @@ int main()
 	Input: pointer to input raw string.
 	Output: Boolean flag to acknowledge "Exit" have been pressed or not.
 */
-bool CheckExit(char * iString) {
-	if (!strcmp(iString, "Exit") || !strcmp(iString, "exit")) { // Consider both Capital (Exit) and non-capital (exit) of the first character to compare with the input string.
+bool CheckExit(string optSel_str) {
+	if ( (optSel_str.compare("Exit") == 0) || optSel_str.compare("exit") == 0 ) { // Consider both Capital (Exit) and non-capital (exit) of the first character to compare with the input string.
 		cout << "ASSIGNMENT 2 - GROUP HaloSST" << endl;
 		cout << "s3518702, s3518702@rmit.edu.vn, Nam Truong" << endl;
 		cout << "s3607833, s3607833@rmit.edu.vn, Tin Nguyen" << endl;
