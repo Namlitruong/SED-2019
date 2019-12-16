@@ -19,16 +19,23 @@
 using namespace std;
 
 //////////////////////////--rentalItemCls--/////////////////////////////
-typedef struct rentalItemIDStct { 
+typedef struct rentalItemID { 
     int code;
 	int year;
 } itemID; 
 
+typedef enum recordMediaType { 
+	Action,
+	Horror,
+	Drama,
+	Comedy,
+} mediaType; 
+
 class rentalItemCls {
 private:
-	itemID id;
-	// int Title: captures the whole title of the item (e.g. ‘Game of thrones’)
-	// int Rental type: Record, DVD, or Game
+	itemID id;		// 
+	string title; 	// Captures the whole title of the item
+	mediaType type;	// Record, DVD, or Game
 	// int Loan type: either 2-day loan or 1-week loan
 	// int Number of copies held in stock (e.g. 1, 2, 3 or more)
 	// int Rental fee (in USD)
@@ -40,12 +47,22 @@ public:
 
 //Function prototypes
 bool CheckExit(string);
+bool ModifyItem();
+bool ModifyCtmr();
+bool PromoteCtmr();
+bool RentItem();
+bool ReturnItem();
+bool DispAllItem();
+bool DispOosItem();
+bool DispAllCtmr();
+bool DispGroupCtmr();
+bool SearchItemCtmr();
 
 //Main Program
 int main()
 {
 	while (1) {
-		string optSel_val; // Option Select Value
+		string optSel_str; // Option Select Raw String
 
 		cout << "\n___________________________________________________________";
 		cout << "\nWelcome to HaloSST’s video store" << endl;
@@ -62,10 +79,54 @@ int main()
 		cout << "10. Search items or customers" << endl;
 		cout << "Exit." << endl;
 
-		getline(cin,optSel_val);
+		getline(cin,optSel_str);
 		if (CheckExit(optSel_val)) return 0;
 
-		//TODO expand input valuator here
+		// TODO expand input valuator here
+		switch ( atoi(optSel_str.c_str()) )
+		{
+			case 1: 
+				ModifyItem();
+				break;
+
+			case 2: 
+				ModifyCtmr();
+				break;
+
+			case 3: 
+				PromoteCtmr();
+				break;
+			case 4: 
+				RentItem();
+				break;
+
+			case 5: 
+				ReturnItem();
+				break;
+
+			case 6: 
+				DispAllItem();
+				break;
+
+			case 7: 
+				DispOosItem();
+				break;
+
+			case 8: 
+				DispAllCtmr();
+				break;
+
+			case 9: 
+				DispGroupCtmr();
+				break;
+
+			case 10: 
+				SearchItemCtmr();
+				break;
+
+			default:
+				break;
+		}
 
 	}
 }
@@ -85,3 +146,34 @@ bool CheckExit(string optSel_str) {
 	}
 	return 0;
 }
+
+bool ModifyItem(){
+	cout << "ModifyItem Activated" << endl;
+};
+bool ModifyCtmr(){
+	cout << "ModifyCtmr Activated" << endl;
+};
+bool PromoteCtmr(){
+	cout << "PromoteCtmr Activated" << endl;
+};
+bool RentItem(){
+	cout << "RentItem Activated" << endl;
+};
+bool ReturnItem(){
+	cout << "ReturnItem Activated" << endl;
+};
+bool DispAllItem(){
+	cout << "DispAllItem Activated" << endl;
+};
+bool DispOosItem(){
+	cout << "DispOosItem Activated" << endl;
+};
+bool DispAllCtmr(){
+	cout << "DispAllCtmr Activated" << endl;
+};
+bool DispGroupCtmr(){
+	cout << "DispGroupCtmr Activated" << endl;
+};
+bool SearchItemCtmr(){
+	cout << "SearchItemCtmr Activated" << endl;
+};
