@@ -15,31 +15,66 @@
 #include <fstream>
 
 //////////////////////////--Define Macro--/////////////////////////////
-
+#define RENTAL_MAX 1000
 using namespace std;
 
 //////////////////////////--rentalItemCls--/////////////////////////////
+
+
+typedef struct rentalRecordType { 
+	
+	enum mediaType {
+		Record, 
+		DVD,
+		Game,
+	} media;
+
+	enum genreType { 
+		Action,
+		Horror,
+		Drama,
+		Comedy,
+	} genre; 
+
+} rentalType; 
+
+typedef enum customerLoyaltyType { 
+	Guest, 
+	Regular,
+	VIP,
+} ctmrType; 
+
 typedef struct rentalItemID { 
     int code;
 	int year;
 } itemID; 
 
-typedef enum recordMediaType { 
-	Action,
-	Horror,
-	Drama,
-	Comedy,
-} mediaType; 
-
 class rentalItemCls {
 private:
-	itemID id;		// 
+	itemID id;			// 
+	rentalType rental;	//
+
 	string title; 	// Captures the whole title of the item
-	mediaType type;	// Record, DVD, or Game
-	// int Loan type: either 2-day loan or 1-week loan
-	// int Number of copies held in stock (e.g. 1, 2, 3 or more)
-	// int Rental fee (in USD)
-	// int Rental status: either borrowed or available.
+	
+	int onStock; 		// e.g. 1, 2, 3 or more
+	double fee;		// in USD
+	
+	bool isWeekLoan; 	// either 2-day loan or 1-week loan
+	bool isAvailable;	// either borrowed or available.
+
+public:
+
+};
+
+class customerCls {
+private:
+	ctmrType type;	// Three types of customer accounts
+
+	int id; 		// Unique code of 3 digits
+	
+	string name, address, phone;
+	
+	char* rental[RENTAL_MAX];
 
 public:
 
@@ -65,7 +100,7 @@ int main()
 		string optSel_str; // Option Select Raw String
 
 		cout << "\n___________________________________________________________";
-		cout << "\nWelcome to HaloSST’s video store" << endl;
+		cout << "\nWelcome to Genie’s video store" << endl;
 		cout << "\nEnter an option below." << endl;
 		cout << "1. Add a new item, update or delete an existing item" << endl;
 		cout << "2. Add new customer or update an existing customer" << endl;
@@ -80,9 +115,9 @@ int main()
 		cout << "Exit." << endl;
 
 		getline(cin,optSel_str);
-		if (CheckExit(optSel_val)) return 0;
+		if (CheckExit(optSel_str)) return 0;
 
-		// TODO expand input valuator here
+		// TODO expand input evaluator here
 		switch ( atoi(optSel_str.c_str()) )
 		{
 			case 1: 
@@ -125,6 +160,7 @@ int main()
 				break;
 
 			default:
+				// TODO non-supported operator, merge w input evaluator
 				break;
 		}
 
@@ -147,33 +183,57 @@ bool CheckExit(string optSel_str) {
 	return 0;
 }
 
+//////////////////////////--Main Function--/////////////////////////////
 bool ModifyItem(){
 	cout << "ModifyItem Activated" << endl;
+
+	return 0;
 };
 bool ModifyCtmr(){
 	cout << "ModifyCtmr Activated" << endl;
+
+	return 0;
 };
 bool PromoteCtmr(){
 	cout << "PromoteCtmr Activated" << endl;
+
+	return 0;
 };
 bool RentItem(){
 	cout << "RentItem Activated" << endl;
+
+	return 0;
 };
 bool ReturnItem(){
 	cout << "ReturnItem Activated" << endl;
+
+	return 0;
 };
 bool DispAllItem(){
 	cout << "DispAllItem Activated" << endl;
+
+	return 0;
 };
 bool DispOosItem(){
 	cout << "DispOosItem Activated" << endl;
+
+	return 0;
 };
 bool DispAllCtmr(){
 	cout << "DispAllCtmr Activated" << endl;
+
+	return 0;
 };
 bool DispGroupCtmr(){
 	cout << "DispGroupCtmr Activated" << endl;
+
+	return 0;
 };
 bool SearchItemCtmr(){
 	cout << "SearchItemCtmr Activated" << endl;
+
+	return 0;
 };
+
+//////////////////////////--Utility Helper--/////////////////////////////
+
