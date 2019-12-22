@@ -21,7 +21,7 @@ item::item() {//by Defautl
 	isAvailable = 1; //borrowed(0) or available(1)
 	next = NULL;
 }
-item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, int rentFeeS, bool isAvailableS, item *nextS) { //parameterized
+item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS) { //parameterized
 	id = idS;
 	title = titleS;
 	rentalType = rentalTypeS;
@@ -29,7 +29,7 @@ item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatu
 	numOfCopy = numOfCopyS;
 	rentFee = rentFeeS;
 	isAvailable = isAvailableS;
-	next = nextS;
+	next = NULL;
 }
 item::item(const item& Obj) {//copy
 	id = Obj.id;
@@ -39,45 +39,45 @@ item::item(const item& Obj) {//copy
 	numOfCopy = Obj.numOfCopy;
 	rentFee = Obj.rentFee;
 	isAvailable = Obj.isAvailable;
-	next = Obj.next;
+	next = NULL;
 }
-item::~item(void) { delete next; }
+item::~item(void) { };
 /////////////////////////--ITEMS--//////////////////////////
 /////////////////////////--RECORD--//////////////////////////
 record::record() : item::item() {//By default
 	genreType = ACTION;
 }
-record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, int rentFeeS, bool isAvailableS, item *nextS, genreTypeEnum genreTypeS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS, nextS) {
+record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS, genreTypeEnum genreTypeS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {
 	genreType = genreTypeS;
 }
 record::record(const record& Obj) //Copy
 	: item::item(Obj) {
 	genreType = Obj.genreType;
 }
-record::~record(void) { delete next; }
+record::~record(void) {}
 /////////////////////////--RECORD--//////////////////////////
 /////////////////////////--DVD--//////////////////////////
 dvd::dvd() : item::item() {//By default
 	genreType = ACTION;
 }
-dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, int rentFeeS, bool isAvailableS, item *nextS, genreTypeEnum genreTypeS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS, nextS) {
+dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS, genreTypeEnum genreTypeS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {
 	genreType = genreTypeS;
 }
 dvd::dvd(const dvd& Obj) //Copy
 	: item::item(Obj) {
 	genreType = Obj.genreType;
 }
-dvd::~dvd(void) { delete next; }
+dvd::~dvd(void) {}
 /////////////////////////--DVD--//////////////////////////
 /////////////////////////--GAME--//////////////////////////
 game::game() : item::item() {}//By default
-game::game(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, int rentFeeS, bool isAvailableS, item *nextS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS, nextS) {}
+game::game(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {}
 game::game(const game& Obj) //Copy
 	: item::item(Obj) {}
-game::~game(void) { delete next; }
+game::~game(void) {}
 /////////////////////////--GAME--//////////////////////////
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
@@ -90,14 +90,13 @@ customer::customer() {//by Defautl
 	listOfRental = NULL;
 	next = NULL;
 }
-customer::customer(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS, customer* nextS) { //parameterized
+customer::customer(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) { //parameterized
 	id = idS;
 	name = nameS;
 	addr = addrS;
 	ctmType = ctmTypeS;
 	phone = phoneS;
 	listOfRental = listOfRentalS;
-	next = nextS;
 }
 customer::customer(const customer& Obj) {//copy
 	id = Obj.id;
@@ -106,13 +105,12 @@ customer::customer(const customer& Obj) {//copy
 	ctmType = Obj.ctmType;
 	phone = Obj.phone;
 	listOfRental = Obj.listOfRental;
-	next = Obj.next;
 }
 customer::~customer() { delete next; delete listOfRental; }
 /////////////////////////--Guest--//////////////////////////
 guest::guest() : customer::customer() {} //by default
-guest::guest(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS, customer* nextS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS, nextS) {
+guest::guest(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
+	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
 	this->maxVid = 2;
 	this->successReturn = 0;
 }
@@ -122,8 +120,8 @@ guest::~guest(void) {}
 /////////////////////////--Guest--//////////////////////////
 /////////////////////////--Regular--//////////////////////////
 regular::regular() : customer::customer() {} //by default
-regular::regular(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS, customer* nextS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS, nextS) {
+regular::regular(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
+	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
 	this->successReturn = 0;
 }
 regular::regular(const regular& Obj)//copy
@@ -132,8 +130,8 @@ regular::~regular(void) {}
 /////////////////////////--Regular--//////////////////////////
 /////////////////////////--VIP--//////////////////////////
 vip::vip() : customer::customer() {} //by default
-vip::vip(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS, customer* nextS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS, nextS) {
+vip::vip(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
+	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
 	this->rewardPoint = 0;
 }
 vip::vip(const vip& Obj)//copy

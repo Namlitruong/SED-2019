@@ -12,14 +12,70 @@
 #include "pch.h"
 #include "LinkedList.h"
 
-void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, int rentFee, bool isAvailable)
-{
-	item *newItem = new item(name);
-	head = newNode;
-	head->setData(1);
+void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable){
+	item *current = head;
+	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable);
+	if (current == NULL) {
+		head = newItem;
+	}else {
+		newItem->setNext(current);
+		head = newItem;
+	}
 }
 
-void ItemList::appendTail(string name)
+void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable, genreTypeEnum genreType) {
+	item *current = head;
+	item *newItem;
+	switch (rentalType) {
+	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	}
+	if (current == NULL) {
+		head = newItem;
+	}
+	else {
+		newItem->setNext(current);
+		head = newItem;
+	}
+}
+
+void ItemList::printList()
+{
+	item *current = head;
+	if (current == NULL)
+		cout << "No items are in the line" << endl;
+	else
+	{
+		while (current != NULL)
+		{
+			cout << "/////////////////////////////////////////////////" << endl;
+			cout << "Item ID: " << current->getID() <<endl;
+			cout << "Item Title: " << current->getTitle() << endl;
+			cout << "Item Type: " << current->getRentalType() << endl;
+			switch (current->getRentalType()) {
+			case 0:{
+				//record* child = dynamic_cast<record*>(current);
+				cout << "Item Genre: " << (static_cast<record*>(current))->getGenreType() << endl;
+				//delete child;
+				break;}
+			case 1: {
+				//dvd* child1 = dynamic_cast<dvd*>(current);
+				cout << "Item Genre: " << (static_cast<record*>(current))->getGenreType() << endl;
+				//delete child1;
+				break; }
+			}
+
+			cout << "Item Number of Copy: " << current->getNumOfCopy() << endl;
+			cout << "Item Rent Fee: " << current->getRentFee() << endl;
+			cout << "Item Status: " << current->getIsAvailable() << endl;
+			cout << "/////////////////////////////////////////////////" << endl;
+			current = current->getNext();
+		}
+	}
+}
+
+/*void ItemList::appendTail(string name)
 {
 	node *currentPtr = head;
 	while (currentPtr->getNext() != NULL)
@@ -117,4 +173,4 @@ void ItemList::removeNode(string name)
 			}
 		}
 	}
-}
+}*/

@@ -9,6 +9,7 @@
 //###########################################################################################################################################
 
 //////////////////////////--Built-in libraries--/////////////////////////////
+#pragma once
 #include "pch.h"
 #include <iostream>
 #include <string>
@@ -24,6 +25,7 @@ enum rentalTypeEnum {
 };
 
 enum genreTypeEnum {
+	NONE,
 	ACTION,
 	HORROR,
 	DRAMA,
@@ -36,12 +38,12 @@ protected:
 	rentalTypeEnum rentalType;
 	bool loanStatus;//1 weeks or 2 days
 	int numOfCopy;
-	int rentFee;
+	double rentFee;
 	bool isAvailable; //borrowed or available
 	item *next; // pointer to next
 public:
 	item();//by Defautl
-	item(string, string, rentalTypeEnum, bool, int, int, bool, item*); //parameterized
+	item(string, string, rentalTypeEnum, bool, int, double, bool); //parameterized
 	item(const item&);//copy
 	~item();
 	//////////////////--Getter--//////////////
@@ -51,49 +53,54 @@ public:
 	rentalTypeEnum getRentalType() { return this->rentalType; }
 	bool getLoanStatus() { return this->loanStatus; }
 	int getNumOfCopy() { return this->numOfCopy; }
-	int getRentFee() { return this->rentFee; }
+	double getRentFee() { return this->rentFee; }
 	bool getIsAvailable() { return this->isAvailable; }
 	//////////////////--Setter--//////////////
+	void setNext(item *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
 	void setTitle(string title) { this->title = title; }
 	void setRentalType(rentalTypeEnum rentalType) { this->rentalType = rentalType; }
 	void setLoanStatus(bool loanType) { this->loanStatus = loanType; }
 	void setNumOfCopy(int numOfCopy) { this->numOfCopy = numOfCopy; }
-	void setRentFee(int rentFee) { this->rentFee = rentFee; }
+	void setRentFee(double rentFee) { this->rentFee = rentFee; }
 	void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
-	void setNext(item *next) { this->next = next; }
+	//////////////////////////////VIRTTUAL
+	virtual void setGenreType(genreTypeEnum genreType) = 0;
+	virtual genreTypeEnum getGenreType() = 0;
 };
 
-class record : protected item {
-protected:
+class record : public item {
+protected: 
 	genreTypeEnum genreType;
 public:
 	record(); //by default
-	record(string, string, rentalTypeEnum, bool, int, int, bool, item*, genreTypeEnum); //parameterized
+	record(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //parameterized
 	record(const record&);//copy
 	~record();
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
 	genreTypeEnum getGenreType() { return this->genreType; }
 };
 
-class dvd : protected item {
+class dvd : public item {
 protected:
 	genreTypeEnum genreType;
 public:
 	dvd(); //By default
-	dvd(string, string, rentalTypeEnum, bool, int, int, bool, item*, genreTypeEnum); //parameterized
+	dvd(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //parameterized
 	dvd(const dvd&);//copy
 	~dvd();
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
 	genreTypeEnum getGenreType() { return this->genreType; }
 };
 
-class game : protected item {
+class game : public item {
 public:
 	game();//By default
-	game(string, string, rentalTypeEnum, bool, int, int, bool, item*); //parameterized
+	game(string, string, rentalTypeEnum, bool, int, double, bool); //parameterized
 	game(const game&);//copy
 	~game();
+	void setGenreType(genreTypeEnum genreType) {}
+	genreTypeEnum getGenreType() { return NONE; }
 };
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
@@ -113,7 +120,7 @@ protected:
 	customer *next; // pointer to next
 public:
 	customer();//by Defautl
-	customer(string, string, string, ctmTypeEnum, string, string*, customer*); //parameterized
+	customer(string, string, string, ctmTypeEnum, string, string*); //parameterized
 	customer(const customer&);//copy
 	~customer();
 	//////////////////--Getter--//////////////
@@ -131,9 +138,9 @@ public:
 	void setCtmType(ctmTypeEnum ctmType) { this->ctmType = ctmType; }
 	void setPhone(string phone) { this->phone = phone; }
 	//////////////////--RentalList--//////////////
-	void appendRental(string *);
-	void removeRental(string *);
-	void printRental();
+	//void appendRental(string *);
+	//void removeRental(string *);
+	//void printRental();
 };
 class guest : protected customer {
 protected:
@@ -141,7 +148,7 @@ protected:
 	int successReturn;
 public:
 	guest(); //by default
-	guest(string, string, string, ctmTypeEnum, string, string*, customer*); //parameterized
+	guest(string, string, string, ctmTypeEnum, string, string*); //parameterized
 	guest(const guest&);//copy
 	~guest();
 };
@@ -151,7 +158,7 @@ protected:
 	int successReturn;
 public:
 	regular(); //by default
-	regular(string, string, string, ctmTypeEnum, string, string*, customer*); //parameterized
+	regular(string, string, string, ctmTypeEnum, string, string*); //parameterized
 	regular(const regular&);//copy
 	~regular();
 };
@@ -161,7 +168,7 @@ protected:
 	int rewardPoint;
 public:
 	vip(); //by default
-	vip(string, string, string, ctmTypeEnum, string, string*, customer*); //parameterized
+	vip(string, string, string, ctmTypeEnum, string, string*); //parameterized
 	vip(const vip&);//copy
 	~vip();
 };

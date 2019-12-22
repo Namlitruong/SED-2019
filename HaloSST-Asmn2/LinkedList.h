@@ -9,6 +9,7 @@
 //###########################################################################################################################################
 
 //////////////////////////--Built-in libraries--/////////////////////////////
+#pragma once
 #include "pch.h"
 #include <iostream>
 #include <string>
@@ -22,12 +23,15 @@ class ItemList{
 public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
 	~ItemList() { cout << "Item List is destroyed" << endl; }
-	void appendHead(string, string, rentalTypeEnum, bool, int, int, bool);
+	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Game
+	void printList();
+	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool);
+	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();
 	void appendTail(string name);
 	void removeTail();
 	void removeNode(string name);
 	void size();
 	void printList();
-	void deleteList();
+	void deleteList();*/
 };
