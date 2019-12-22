@@ -15,7 +15,7 @@ protected:
 	int c;
 	parent* next;
 public:
-	parent() { a = 1; b = 2; c = 3;}
+	parent() { a = 1; b = 2; c = 3; }
 	~parent() {}
 	parent* getNext() { return next; }
 	void setNext(parent *next) { this->next = next; }
@@ -30,7 +30,7 @@ public:
 	child() { a = 1; b = 2; c = 3; A = 4; }
 	child(int a, int b, int c, int A) { this->a = a; this->b = b; this->c = c; this->A = A; }
 	~child() {}
-	void setA(int A) { this->A = A;}
+	void setA(int A) { this->A = A; }
 	int getA() { return this->A; }
 };
 
@@ -92,13 +92,13 @@ public:
 
 int main()
 {
-	ItemList *ListOfItem = new ItemList();
+	/*ItemList *ListOfItem = new ItemList();
 	ListOfItem->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ListOfItem->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
 	ListOfItem->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
 	ListOfItem->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
 	ListOfItem->printList();
-	delete ListOfItem;
+	delete ListOfItem;*/
 
 	/*ItemListTest *ListOfItem = new ItemListTest();
 	ListOfItem->appendChild1();
@@ -108,6 +108,16 @@ int main()
 	ListOfItem->appendChild1();
 	ListOfItem->printList();
 	delete ListOfItem;*/
+
+	CtmList *ListOfItem = new CtmList();
+	ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
+	ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
+	ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
+	ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
+	ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
+	ListOfItem->printList();
+
+	delete ListOfItem;
 
 	return 0;
 }

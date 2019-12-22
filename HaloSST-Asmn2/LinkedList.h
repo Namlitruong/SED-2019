@@ -24,8 +24,25 @@ public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
 	~ItemList() { cout << "Item List is destroyed" << endl; }
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Game
-	void printList();
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool);
+	void printList();
+	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
+	void removeHead();
+	void appendTail(string name);
+	void removeTail();
+	void removeNode(string name);
+	void size();
+	void printList();
+	void deleteList();*/
+};
+
+class CtmList {
+	customer *head;
+public:
+	CtmList() { head = NULL, cout << "Item List is created" << endl; }
+	~CtmList() { cout << "Item List is destroyed" << endl; }
+	void appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
+	void printList();
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();
 	void appendTail(string name);

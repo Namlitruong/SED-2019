@@ -103,6 +103,9 @@ public:
 	genreTypeEnum getGenreType() { return NONE; }
 };
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
+
+
+
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
 enum ctmTypeEnum {
 	GUEST,
@@ -116,11 +119,11 @@ protected:
 	string addr;
 	string phone;
 	ctmTypeEnum ctmType;
-	string *listOfRental;
+	string listOfRental[20];
 	customer *next; // pointer to next
 public:
 	customer();//by Defautl
-	customer(string, string, string, ctmTypeEnum, string, string*); //parameterized
+	customer(string, string, string, string, ctmTypeEnum); //parameterized
 	customer(const customer&);//copy
 	~customer();
 	//////////////////--Getter--//////////////
@@ -137,38 +140,45 @@ public:
 	void setAddr(string addr) { this->addr = addr; }
 	void setCtmType(ctmTypeEnum ctmType) { this->ctmType = ctmType; }
 	void setPhone(string phone) { this->phone = phone; }
-	//////////////////--RentalList--//////////////
-	//void appendRental(string *);
-	//void removeRental(string *);
-	//void printRental();
+	////////////////--VIRYUAL
+	//virtual int getSuccessReturn() = 0;
+	//virtual void successReturn() = 0;
+	//virtual int getMaxVid() = 0;
 };
-class guest : protected customer {
+class guest : public customer {
 protected:
 	int maxVid;
 	int successReturn;
 public:
 	guest(); //by default
-	guest(string, string, string, ctmTypeEnum, string, string*); //parameterized
+	guest(string, string, string, string, ctmTypeEnum); //parameterized
 	guest(const guest&);//copy
 	~guest();
+	//int getMaxVid() { return this->maxVid; }
+	//int getSuccessReturn() { return this->successReturn; }
+	//void successReturn() { this->successReturn++; }
 };
 
-class regular : protected customer {
+class regular : public customer {
 protected:
 	int successReturn;
 public:
 	regular(); //by default
-	regular(string, string, string, ctmTypeEnum, string, string*); //parameterized
+	regular(string, string, string, string, ctmTypeEnum); //parameterized
 	regular(const regular&);//copy
 	~regular();
+	//int getSuccessReturn() { return this->successReturn; }
+	//void successReturn() { this->successReturn++; }
 };
 
-class vip : protected customer {
+class vip : public customer {
 protected:
 	int rewardPoint;
 public:
 	vip(); //by default
-	vip(string, string, string, ctmTypeEnum, string, string*); //parameterized
+	vip(string, string, string, string, ctmTypeEnum); //parameterized
 	vip(const vip&);//copy
 	~vip();
+	//int getSuccessReturn() { return this->rewardPoint; }
+	//void successReturn() { this->rewardPoint = this->rewardPoint + 10; }
 };

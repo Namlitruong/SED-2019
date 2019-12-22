@@ -80,6 +80,9 @@ game::game(const game& Obj) //Copy
 game::~game(void) {}
 /////////////////////////--GAME--//////////////////////////
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
+
+
+
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
 customer::customer() {//by Defautl
 	id = "";
@@ -87,16 +90,14 @@ customer::customer() {//by Defautl
 	addr = "";
 	ctmType = GUEST;
 	phone = "";
-	listOfRental = NULL;
 	next = NULL;
 }
-customer::customer(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) { //parameterized
+customer::customer(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) { //parameterized
 	id = idS;
 	name = nameS;
 	addr = addrS;
 	ctmType = ctmTypeS;
 	phone = phoneS;
-	listOfRental = listOfRentalS;
 }
 customer::customer(const customer& Obj) {//copy
 	id = Obj.id;
@@ -104,13 +105,12 @@ customer::customer(const customer& Obj) {//copy
 	addr = Obj.addr;
 	ctmType = Obj.ctmType;
 	phone = Obj.phone;
-	listOfRental = Obj.listOfRental;
 }
 customer::~customer() { delete next; delete listOfRental; }
 /////////////////////////--Guest--//////////////////////////
 guest::guest() : customer::customer() {} //by default
-guest::guest(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
+guest::guest(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
+	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
 	this->maxVid = 2;
 	this->successReturn = 0;
 }
@@ -120,8 +120,8 @@ guest::~guest(void) {}
 /////////////////////////--Guest--//////////////////////////
 /////////////////////////--Regular--//////////////////////////
 regular::regular() : customer::customer() {} //by default
-regular::regular(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
+regular::regular(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
+	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
 	this->successReturn = 0;
 }
 regular::regular(const regular& Obj)//copy
@@ -130,8 +130,8 @@ regular::~regular(void) {}
 /////////////////////////--Regular--//////////////////////////
 /////////////////////////--VIP--//////////////////////////
 vip::vip() : customer::customer() {} //by default
-vip::vip(string idS, string nameS, string addrS, ctmTypeEnum ctmTypeS, string phoneS, string* listOfRentalS) //parameterized
-	: customer::customer(idS, nameS, addrS, ctmTypeS, phoneS, listOfRentalS) {
+vip::vip(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
+	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
 	this->rewardPoint = 0;
 }
 vip::vip(const vip& Obj)//copy
