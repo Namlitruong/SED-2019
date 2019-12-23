@@ -111,12 +111,17 @@ int main()
 
 	CtmList *ListOfItem = new CtmList();
 	ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
+	ListOfItem->addCtmItemList("I005-2015");
+	ListOfItem->addCtmItemList("I002-1988");
+	ListOfItem->addCtmItemList("I001-2001");
 	ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
 	ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
 	ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
 	ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
+	cout << "?????????????????????????????????" << endl;
+	ListOfItem->printCtm(ListOfItem->searchCtm("Linklqweqh Nguyen", "C0qqwe02"));
+	//cout << ListOfItem->searchCtm("Linh Nguyen", "C002")->getPhone() <<endl;
 	ListOfItem->printList();
-
 	delete ListOfItem;
 
 	return 0;

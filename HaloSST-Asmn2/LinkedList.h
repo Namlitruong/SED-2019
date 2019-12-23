@@ -43,6 +43,10 @@ public:
 	~CtmList() { cout << "Item List is destroyed" << endl; }
 	void appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void printList();
+	void printCtm(customer*);
+	void addCtmItemList(string);
+	customer* searchCtm(string, string);
+	//void printCtmRental();
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();
 	void appendTail(string name);

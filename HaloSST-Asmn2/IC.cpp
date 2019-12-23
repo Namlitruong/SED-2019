@@ -106,7 +106,23 @@ customer::customer(const customer& Obj) {//copy
 	ctmType = Obj.ctmType;
 	phone = Obj.phone;
 }
-customer::~customer() { delete next; delete listOfRental; }
+customer::~customer() { delete next; /*delete listOfRental;*/ }
+
+int customer::numOfRental() {
+	int i;
+	for (i = 0; !this->listOfRental[i].empty(); i++) {}
+	return i;
+}
+
+void customer::addItem(string item) {
+	this->listOfRental[this->numOfRental()] = item;
+}
+void customer::printCtmRental() {
+	cout << "Rental list of customer: "<< this->getName() <<" rent "<< this->numOfRental() <<" items"<< endl;
+	for (int i = 0; i < this->numOfRental(); i++) {
+		cout << this->listOfRental[i] << endl;
+	}
+}
 /////////////////////////--Guest--//////////////////////////
 guest::guest() : customer::customer() {} //by default
 guest::guest(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized

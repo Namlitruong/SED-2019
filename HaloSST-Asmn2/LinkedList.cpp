@@ -188,6 +188,41 @@ void CtmList::appendHead(string id, string name, string addr, string phone, ctmT
 	}
 }
 
+void CtmList::addCtmItemList(string item) { // Using to test, Can be upgrade when implement successfully search
+	head->addItem(item);
+}
+
+customer* CtmList::searchCtm(string name, string id) {// TODO: compare string work by work
+	customer *current = head;
+	while (current != NULL) {
+		if (current->getName().compare(name) && current->getID().compare(id)) {
+			cout << "Customer found" << endl;
+			cout << "Customer ID: " << current->getID() << endl;
+			cout << "Customer Name: " << current->getName() << endl;
+			return current;
+		}
+		else {
+			cout << "Customer is not exist in the list" << endl;
+			return NULL;
+		}
+		current = current->getNext();
+	}
+}
+
+void CtmList::printCtm(customer* ctm) {
+	cout << "/////////////////////////////////////////////////" << endl;
+	cout << "Customer ID: " << ctm->getID() << endl;
+	cout << "Customer Name: " << ctm->getName() << endl;
+	cout << "Customer Address: " << ctm->getAddr() << endl;
+	cout << "Customer Phone: " << ctm->getPhone() << endl;
+	cout << "Customer Type: " << ctm->getCtmType() << endl;
+	ctm->printCtmRental();
+	//current->successReturn();
+	//cout << "Customer MAX: " << current->getSuccessReturn() << endl;
+
+	cout << "/////////////////////////////////////////////////" << endl;
+}
+
 void CtmList::printList()
 {
 	customer *current = head;
@@ -197,16 +232,7 @@ void CtmList::printList()
 	{
 		while (current != NULL)
 		{
-			cout << "/////////////////////////////////////////////////" << endl;
-			cout << "Customer ID: " << current->getID() << endl;
-			cout << "Customer Name: " << current->getName() << endl;
-			cout << "Customer Address: " << current->getAddr() << endl;
-			cout << "Customer Phone: " << current->getPhone() << endl;
-			cout << "Customer Type: " << current->getCtmType() << endl;
-			//current->successReturn();
-			//cout << "Customer MAX: " << current->getSuccessReturn() << endl;
-
-			cout << "/////////////////////////////////////////////////" << endl;
+			printCtm(current);
 			current = current->getNext();
 		}
 	}

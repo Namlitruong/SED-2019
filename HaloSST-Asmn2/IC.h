@@ -133,6 +133,7 @@ public:
 	string getAddr() { return this->addr; }
 	ctmTypeEnum getCtmType() { return this->ctmType; }
 	string getPhone() { return this->phone; }
+	int numOfRental();
 	//////////////////--Setter--//////////////
 	void setNext(customer *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
@@ -140,6 +141,9 @@ public:
 	void setAddr(string addr) { this->addr = addr; }
 	void setCtmType(ctmTypeEnum ctmType) { this->ctmType = ctmType; }
 	void setPhone(string phone) { this->phone = phone; }
+	////////////////--Processing Item--/////////////////////////
+	void addItem(string);
+	void printCtmRental();
 	////////////////--VIRYUAL
 	//virtual int getSuccessReturn() = 0;
 	//virtual void successReturn() = 0;
