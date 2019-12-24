@@ -92,13 +92,13 @@ public:
 
 int main()
 {
-	/*ItemList *ListOfItem = new ItemList();
+	ItemList *ListOfItem = new ItemList();
 	ListOfItem->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ListOfItem->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
 	ListOfItem->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
 	ListOfItem->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
 	ListOfItem->printList();
-	delete ListOfItem;*/
+	delete ListOfItem;
 
 	/*ItemListTest *ListOfItem = new ItemListTest();
 	ListOfItem->appendChild1();
@@ -109,20 +109,20 @@ int main()
 	ListOfItem->printList();
 	delete ListOfItem;*/
 
-	CtmList *ListOfItem = new CtmList();
-	ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
-	ListOfItem->addCtmItemList("I005-2015");
-	ListOfItem->addCtmItemList("I002-1988");
-	ListOfItem->addCtmItemList("I001-2001");
-	ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
-	ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
-	ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
-	ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
-	cout << "?????????????????????????????????" << endl;
-	ListOfItem->printCtm(ListOfItem->searchCtm("Linklqweqh Nguyen", "C0qqwe02"));
-	//cout << ListOfItem->searchCtm("Linh Nguyen", "C002")->getPhone() <<endl;
-	ListOfItem->printList();
-	delete ListOfItem;
+	// CtmList *ListOfItem = new CtmList();
+	// ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
+	// ListOfItem->addCtmItemList("I005-2015");
+	// ListOfItem->addCtmItemList("I002-1988");
+	// ListOfItem->addCtmItemList("I001-2001");
+	// ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
+	// ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
+	// ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
+	// ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
+	// cout << "?????????????????????????????????" << endl;
+	// ListOfItem->printCtm(ListOfItem->searchCtm("Linklqweqh Nguyen", "C0qqwe02"));
+	// //cout << ListOfItem->searchCtm("Linh Nguyen", "C002")->getPhone() <<endl;
+	// ListOfItem->printList();
+	// delete ListOfItem;
 
 	return 0;
 }
