@@ -5,8 +5,19 @@
 #include "IC.h"
 #include "LinkedList.h"
 #include <iostream>
+#include <string>
+#include <fstream>
 
 using namespace std;
+
+#define ctmIdentifier 'C'
+#define itemIdentifier 'I'
+#define commentTag '#'
+
+#define dbInputLength 5
+
+
+
 
 class parent {
 protected:
@@ -90,15 +101,23 @@ public:
 	}
 };
 
+int initBaseDb(ItemList*, CtmList*);
+ctmTypeEnum ctmTypeUtil(string);
+char* str2arr(string);
+
 int main()
 {
-	ItemList *ListOfItem = new ItemList();
-	ListOfItem->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
-	ListOfItem->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
-	ListOfItem->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
-	ListOfItem->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
-	ListOfItem->printList();
-	delete ListOfItem;
+	ItemList *ItemLst = new ItemList();
+	CtmList *CustomerLst = new CtmList();
+
+	initBaseDb(ItemLst, CustomerLst);
+
+	ItemLst->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
+	ItemLst->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
+	ItemLst->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
+	ItemLst->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
+	ItemLst->printList();
+	delete ItemLst;
 
 	/*ItemListTest *ListOfItem = new ItemListTest();
 	ListOfItem->appendChild1();
@@ -109,7 +128,7 @@ int main()
 	ListOfItem->printList();
 	delete ListOfItem;*/
 
-	// CtmList *ListOfItem = new CtmList();
+	
 	// ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
 	// ListOfItem->addCtmItemList("I005-2015");
 	// ListOfItem->addCtmItemList("I002-1988");
@@ -125,5 +144,80 @@ int main()
 	// delete ListOfItem;
 
 	return 0;
+}
+
+int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+	string textLine;
+	bool isCtmProfile = false;
+	long totalRental = 0;
+	ifstream iFile("customers.txt");
+
+	if (iFile.is_open())
+	{
+		while ( getline(iFile, textLine) )
+		{
+			//TODO remove print
+			cout << textLine << '\n';
+			char firstChr = textLine[0]; 
+			
+			// Skip comments
+			if (firstChr == (char) commentTag) {
+				continue;
+			}
+
+			// Detect customer identifier
+			if (firstChr == (char) ctmIdentifier) {
+				isCtmProfile = true;
+
+				//TODO append to CtmList
+				string inputVal[dbInputLength];
+				const char delimeter = ',';
+				int cursor = 0, idxInput = 0;
+
+				// String Tokenizer into String Array
+				while ( (cursor = textLine.find(delimeter) ) != std::string::npos ) 
+				{
+					inputVal[idxInput++] = textLine.substr(0, cursor);
+					textLine.erase(0, cursor + 1); // Advance next term, +1 for delimeter
+					//NOTE cursor.length() would be redundant, unnecessary
+				}
+
+				// Update Customer Pointer
+				ctmPtr->appendHead(inputVal[0], inputVal[1], inputVal[2], inputVal[3], ctmTypeUtil(inputVal[5]));
+				//NOTE confirm no. of rentals
+				totalRental = atoi(inputVal[4].c_str());
+				continue;
+			}
+			
+			// TODO append ItemList
+			if (firstChr == (char) itemIdentifier) {
+
+				cout << textLine << '\n';
+			}
+		}
+		iFile.close();
+	}
+	return -1;
+}
+
+ctmTypeEnum ctmTypeUtil(string str) {
+	if (strcmp(str2arr(str.c_str()), "VIP"))
+	{
+		return ctmTypeEnum::VIP;
+	}
+	else if ( (strcmp(str2arr(str.c_str()), "REGULAR")) )
+	{
+		return ctmTypeEnum::REGULAR;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "GUEST")))
+	{
+		return ctmTypeEnum::GUEST;
+	}
+}
+
+char* str2arr(string str) {
+	char* cTypeStr = new char[str.length() + 1];
+	strcpy(cTypeStr, str.c_str() );
+	return cTypeStr;
 }
 
