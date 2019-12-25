@@ -282,11 +282,11 @@ ctmTypeEnum ctmTypeUtil(string str) {
 	{
 		return ctmTypeEnum::VIP;
 	}
-	else if ( (strcmp(str2arr(str.c_str()), "REGULAR")) )
+	else if ( (strcmp(str2arr(str.c_str()), "Regular")) )
 	{
 		return ctmTypeEnum::REGULAR;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "GUEST")))
+	else if ((strcmp(str2arr(str.c_str()), "Guest")))
 	{
 		return ctmTypeEnum::GUEST;
 	}
@@ -309,19 +309,19 @@ rentalTypeEnum rentalTypeUtil(string str) {
 
 
 genreTypeEnum genreTypeUtil(string str) {
-	if (strcmp(str2arr(str.c_str()), "ACTION"))
+	if (strcmp(str2arr(str.c_str()), "Action"))
 	{
 		return genreTypeEnum::ACTION;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "COMEDY")))
+	else if ((strcmp(str2arr(str.c_str()), "Comedy")))
 	{
 		return genreTypeEnum::COMEDY;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "DRAMA")))
+	else if ((strcmp(str2arr(str.c_str()), "Drama")))
 	{
 		return genreTypeEnum::DRAMA;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "HORROR")))
+	else if ((strcmp(str2arr(str.c_str()), "Horror")))
 	{
 		return genreTypeEnum::HORROR;
 	}
