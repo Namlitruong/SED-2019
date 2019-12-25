@@ -13,3 +13,7 @@ HaloSST-Asmn2/.vs/HaloSST-Asmn2/v15/.suo
 HaloSST-Asmn2/.vs/HaloSST-Asmn2/v15/Browse.VC.db
 HaloSST-Asmn2/.vs/
 HaloSST-Asmn2/Ass2.dSYM/
+*.suo
+.vs/
+*.VC.db
+[Dd]ebug/
