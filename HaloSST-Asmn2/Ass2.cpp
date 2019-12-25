@@ -14,7 +14,8 @@ using namespace std;
 #define itemIdentifier 'I'
 #define commentTag '#'
 
-#define dbInputLength 5
+#define ctmDbInLength 5
+#define itemDbInLength 7
 
 class parent {
 protected:
@@ -100,6 +101,9 @@ public:
 
 int initBaseDb(ItemList*, CtmList*);
 ctmTypeEnum ctmTypeUtil(string);
+rentalTypeEnum rentalTypeUtil(string);
+genreTypeEnum genreTypeUtil(string);
+bool rentalPeriodUtil(string);
 char* str2arr(string);
 
 int main()
@@ -108,6 +112,11 @@ int main()
 	CtmList *CustomerLst = new CtmList();
 
 	initBaseDb(ItemLst, CustomerLst);
+
+	ItemLst->printList();
+
+	//FIXME memory protected issue
+	CustomerLst->printList();
 
 	ItemLst->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ItemLst->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
@@ -147,14 +156,15 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	bool isCtmProfile = false;
 	long totalRental = 0;
-	ifstream iFile("customers.txt");
+	ifstream ctmFile("customers.txt");
+	ifstream itemFile("items.txt");
 
-	if (iFile.is_open())
+	// initialize Customer DB
+	
+	if (ctmFile.is_open())
 	{
-		while ( getline(iFile, textLine) )
+		while ( getline(ctmFile, textLine) )
 		{
-			//TODO remove print
-			// cout << textLine << '\n';
 			char firstChr = textLine[0]; 
 			
 			// Skip comments
@@ -167,16 +177,16 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 				isCtmProfile = true;
 
 				//TODO append to CtmList
-				string inputVal[dbInputLength];
+				string inputVal[ctmDbInLength];
 				const char delimeter = ',';
-				int cursor = 0, idxInput = 0;
+				int curCtm = 0, idxCtm = 0;
 
 				// String Tokenizer into String Array
-				while ( (cursor = textLine.find(delimeter) ) != std::string::npos ) 
+				while ( (curCtm = textLine.find(delimeter) ) != std::string::npos ) 
 				{
-					inputVal[idxInput++] = textLine.substr(0, cursor);
-					textLine.erase(0, cursor + 1); // Advance next term, +1 for delimeter
-					//NOTE cursor.length() would be redundant, unnecessary
+					inputVal[idxCtm++] = textLine.substr(0, curCtm);
+					textLine.erase(0, curCtm + 1); // Advance next term, +1 for delimeter
+					//NOTE curCtm.length() would be redundant, unnecessary
 				}
 
 				// Update Customer Pointer
@@ -188,7 +198,6 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 			
 			// TODO check error based on totalRental
 			if (firstChr == (char) itemIdentifier) {
-				cout << textLine << '\n';
 				if (totalRental >= 0)
 				{
 					ctmPtr->addCtmItemList(textLine);
@@ -196,7 +205,74 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 				}
 			}
 		}
-		iFile.close();
+		ctmFile.close();
+	}
+	
+
+	// Now initialize Items DB
+	if (itemFile.is_open())
+	{
+		while (getline(itemFile, textLine))
+		{
+			char firstChr = textLine[0];
+
+			// Skip comments
+			if (firstChr == (char)commentTag) {
+				continue;
+			}
+
+			// Update Item Database
+			if (firstChr == (char)itemIdentifier) {
+				string inputVal[itemDbInLength];
+				const char delimeter = ',';
+				int curItem = 0, idxItem = 0;
+
+				// String Tokenizer into String Array
+				while ((curItem = textLine.find(delimeter)) != std::string::npos)
+				{
+					inputVal[idxItem++] = textLine.substr(0, curItem);
+					textLine.erase(0, curItem + 1); // Advance next term, +1 for delimeter
+					//NOTE curItem.length() would be redundant, unnecessary
+				}
+				inputVal[idxItem] = textLine; // Last term
+
+				// Update Customer Pointer
+				// (				string id, 
+				//				 string title, 
+				//  rentalTypeEnum rentalType, 
+				//			  bool loanStatus, 
+				//				int numOfCopy, 
+				//			   double rentFee, 
+				//			 bool isAvailable, //TODO redundant, not provided in items.txt
+				//	 genreTypeEnum genreType); // DVD || Record Only
+
+				if (inputVal[2] == "DVD" || inputVal[2] == "Record") {
+					itemPtr->appendHead(inputVal[0], 
+										inputVal[1], 
+						rentalTypeUtil(inputVal[2]),
+					  rentalPeriodUtil(inputVal[3]), 
+						  atoi(inputVal[4].c_str()), 
+							 std::stod(inputVal[5]),
+						                       true,
+				genreTypeUtil(inputVal[6].c_str()));
+				}
+				else if (inputVal[2] == "Game"){
+					itemPtr->appendHead(inputVal[0],
+										inputVal[1],
+						rentalTypeUtil(inputVal[2]),
+					  rentalPeriodUtil(inputVal[3]),
+						  atoi(inputVal[4].c_str()),
+							 std::stod(inputVal[5]),
+											  true);
+				}
+				else {
+					// Redundant
+					// Extra error check
+				}
+				continue;
+			}
+		}
+		itemFile.close();
 	}
 	return -1;
 }
@@ -213,6 +289,52 @@ ctmTypeEnum ctmTypeUtil(string str) {
 	else if ((strcmp(str2arr(str.c_str()), "GUEST")))
 	{
 		return ctmTypeEnum::GUEST;
+	}
+}
+
+rentalTypeEnum rentalTypeUtil(string str) {
+	if (strcmp(str2arr(str.c_str()), "Game"))
+	{
+		return rentalTypeEnum::GAME;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "DVD")))
+	{
+		return rentalTypeEnum::DVD;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "Record")))
+	{
+		return rentalTypeEnum::RECORD;
+	}
+}
+
+
+genreTypeEnum genreTypeUtil(string str) {
+	if (strcmp(str2arr(str.c_str()), "ACTION"))
+	{
+		return genreTypeEnum::ACTION;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "COMEDY")))
+	{
+		return genreTypeEnum::COMEDY;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "DRAMA")))
+	{
+		return genreTypeEnum::DRAMA;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "HORROR")))
+	{
+		return genreTypeEnum::HORROR;
+	}
+}
+
+bool rentalPeriodUtil(string str) {
+	if (strcmp(str2arr(str.c_str()), "1-week"))
+	{
+		return true;
+	}
+	else if ((strcmp(str2arr(str.c_str()), "2-day")))
+	{
+		return false;
 	}
 }
 
