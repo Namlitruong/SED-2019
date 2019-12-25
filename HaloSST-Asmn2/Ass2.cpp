@@ -16,9 +16,6 @@ using namespace std;
 
 #define dbInputLength 5
 
-
-
-
 class parent {
 protected:
 	int a;
@@ -157,7 +154,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 		while ( getline(iFile, textLine) )
 		{
 			//TODO remove print
-			cout << textLine << '\n';
+			// cout << textLine << '\n';
 			char firstChr = textLine[0]; 
 			
 			// Skip comments
@@ -189,10 +186,14 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 				continue;
 			}
 			
-			// TODO append ItemList
+			// TODO check error based on totalRental
 			if (firstChr == (char) itemIdentifier) {
-
 				cout << textLine << '\n';
+				if (totalRental >= 0)
+				{
+					ctmPtr->addCtmItemList(textLine);
+					totalRental--;
+				}
 			}
 		}
 		iFile.close();
