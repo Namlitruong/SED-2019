@@ -40,7 +40,7 @@ protected:
 	int numOfCopy;
 	double rentFee;
 	bool isAvailable; //borrowed or available
-	item *next; // pointer to next
+	item *next = NULL; // pointer to next
 public:
 	item();//by Defautl
 	item(string, string, rentalTypeEnum, bool, int, double, bool); //parameterized
@@ -120,7 +120,7 @@ protected:
 	string phone;
 	ctmTypeEnum ctmType;
 	string listOfRental[20];
-	customer *next; // pointer to next
+	customer *next = NULL; // NOTE initialize with NULL to avoid segment fault
 public:
 	customer();//by Defautl
 	customer(string, string, string, string, ctmTypeEnum); //parameterized

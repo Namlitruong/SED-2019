@@ -112,18 +112,22 @@ int main()
 	CtmList *CustomerLst = new CtmList();
 
 	initBaseDb(ItemLst, CustomerLst);
-
+	// proof for Item DB Init
 	ItemLst->printList();
 
+	// proof for Item DB Init
 	//FIXME memory protected issue
 	CustomerLst->printList();
 
-	ItemLst->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
-	ItemLst->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
-	ItemLst->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
-	ItemLst->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
-	ItemLst->printList();
+	// IN-DEV
 	delete ItemLst;
+	delete CustomerLst;
+
+	//ItemLst->appendHead("I001-2001", "Medal of Honour", rentalTypeEnum::GAME, true, 3, 3.99, true);
+	//ItemLst->appendHead("I005-2015", "Halo", rentalTypeEnum::GAME, true, 2, 3.99, true);
+	//ItemLst->appendHead("I004-1999", "Rat Race", rentalTypeEnum::DVD, 1, 3, 1.99, true, genreTypeEnum::HORROR);
+	//ItemLst->appendHead("I003-1992", "Alpha Dog", rentalTypeEnum::RECORD, 1, 3, 1.99, true, genreTypeEnum::COMEDY);
+	//ItemLst->printList();
 
 	/*ItemListTest *ListOfItem = new ItemListTest();
 	ListOfItem->appendChild1();

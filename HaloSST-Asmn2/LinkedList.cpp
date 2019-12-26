@@ -210,6 +210,7 @@ customer* CtmList::searchCtm(string name, string id) {// TODO: compare string wo
 }
 
 void CtmList::printCtm(customer* ctm) {
+
 	cout << "/////////////////////////////////////////////////" << endl;
 	cout << "Customer ID: " << ctm->getID() << endl;
 	cout << "Customer Name: " << ctm->getName() << endl;
@@ -226,14 +227,17 @@ void CtmList::printCtm(customer* ctm) {
 void CtmList::printList()
 {
 	customer *current = head;
+
 	if (current == NULL)
 		cout << "No items are in the line" << endl;
 	else
 	{
+		//FIXME work-around for empty memory allocator
 		while (current != NULL)
 		{
 			printCtm(current);
 			current = current->getNext();
+
 		}
 	}
 }
