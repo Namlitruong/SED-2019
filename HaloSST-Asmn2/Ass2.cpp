@@ -341,7 +341,7 @@ bool rentalPeriodUtil(string str) {
 
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
-	strcpy(cTypeStr, str.c_str() );
+	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
 	return cTypeStr;
 }
 
