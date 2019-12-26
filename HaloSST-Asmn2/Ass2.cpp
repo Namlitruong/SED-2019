@@ -14,7 +14,7 @@ using namespace std;
 #define itemIdentifier 'I'
 #define commentTag '#'
 
-#define ctmDbInLength 5
+#define ctmDbInLength 6
 #define itemDbInLength 7
 
 class parent {
@@ -188,6 +188,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 					textLine.erase(0, curCtm + 1); // Advance next term, +1 for delimeter
 					//NOTE curCtm.length() would be redundant, unnecessary
 				}
+				inputVal[idxCtm] = textLine; // Last term
 
 				// Update Customer Pointer
 				ctmPtr->appendHead(inputVal[0], inputVal[1], inputVal[2], inputVal[3], ctmTypeUtil(inputVal[5]));
@@ -278,30 +279,30 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 }
 
 ctmTypeEnum ctmTypeUtil(string str) {
-	if (strcmp(str2arr(str.c_str()), "VIP"))
+	if (strcmp(str2arr(str.c_str()), "VIP") == 0)
 	{
 		return ctmTypeEnum::VIP;
 	}
-	else if ( (strcmp(str2arr(str.c_str()), "Regular")) )
+	else if ((strcmp(str2arr(str.c_str()), "Regular")) == 0)
 	{
 		return ctmTypeEnum::REGULAR;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "Guest")))
+	else if ((strcmp(str2arr(str.c_str()), "Guest")) == 0)
 	{
 		return ctmTypeEnum::GUEST;
 	}
 }
 
 rentalTypeEnum rentalTypeUtil(string str) {
-	if (strcmp(str2arr(str.c_str()), "Game"))
+	if (strcmp(str2arr(str.c_str()), "Game") == 0)
 	{
 		return rentalTypeEnum::GAME;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "DVD")))
+	else if ((strcmp(str2arr(str.c_str()), "DVD")) == 0)
 	{
 		return rentalTypeEnum::DVD;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "Record")))
+	else if ((strcmp(str2arr(str.c_str()), "Record")) == 0)
 	{
 		return rentalTypeEnum::RECORD;
 	}
@@ -309,30 +310,30 @@ rentalTypeEnum rentalTypeUtil(string str) {
 
 
 genreTypeEnum genreTypeUtil(string str) {
-	if (strcmp(str2arr(str.c_str()), "Action"))
+	if (strcmp(str2arr(str.c_str()), "Action") == 0)
 	{
 		return genreTypeEnum::ACTION;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "Comedy")))
+	else if ((strcmp(str2arr(str.c_str()), "Comedy")) == 0)
 	{
 		return genreTypeEnum::COMEDY;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "Drama")))
+	else if ((strcmp(str2arr(str.c_str()), "Drama")) == 0)
 	{
 		return genreTypeEnum::DRAMA;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "Horror")))
+	else if ((strcmp(str2arr(str.c_str()), "Horror")) == 0)
 	{
 		return genreTypeEnum::HORROR;
 	}
 }
 
 bool rentalPeriodUtil(string str) {
-	if (strcmp(str2arr(str.c_str()), "1-week"))
+	if (strcmp(str2arr(str.c_str()), "1-week") == 0)
 	{
 		return true;
 	}
-	else if ((strcmp(str2arr(str.c_str()), "2-day")))
+	else if ((strcmp(str2arr(str.c_str()), "2-day")) == 0)
 	{
 		return false;
 	}
