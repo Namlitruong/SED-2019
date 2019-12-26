@@ -70,7 +70,28 @@ void ItemList::printList()
 	}
 }
 
-/*void ItemList::appendTail(string name)
+void ItemList::deleteList()
+{
+	item* current = head;
+	while (current != NULL) {
+		current = current->getNext();
+		delete head;
+		head = current;
+	}
+}
+
+/*
+void ItemList::deleteList()
+{
+	node *currentPtr = head;
+	while (currentPtr != NULL)
+	{
+		currentPtr = currentPtr->getNext();
+		delete head;
+		head = currentPtr;
+	}
+}
+void ItemList::appendTail(string name)
 {
 	node *currentPtr = head;
 	while (currentPtr->getNext() != NULL)
@@ -95,16 +116,7 @@ void ItemList::printList()
 	}
 }
 
-void ItemList::deleteList()
-{
-	node *currentPtr = head;
-	while (currentPtr != NULL)
-	{
-		currentPtr = currentPtr->getNext();
-		delete head;
-		head = currentPtr;
-	}
-}
+
 
 void ItemList::removeHead()
 {

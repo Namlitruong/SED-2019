@@ -26,6 +26,7 @@ public:
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Video/Movies
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
 	void printList();
+	void deleteList();
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();
 	void appendTail(string name);
