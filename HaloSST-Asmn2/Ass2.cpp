@@ -100,24 +100,30 @@ public:
 };
 
 int initBaseDb(ItemList*, CtmList*);
+int finBaseDb(ItemList*, CtmList*);
 ctmTypeEnum ctmTypeUtil(string);
 rentalTypeEnum rentalTypeUtil(string);
 genreTypeEnum genreTypeUtil(string);
 bool rentalPeriodUtil(string);
 char* str2arr(string);
+string arr2str(string);
 
 int main()
 {
 	ItemList *ItemLst = new ItemList();
 	CtmList *CustomerLst = new CtmList();
 
+	// Initialize Database before run
 	initBaseDb(ItemLst, CustomerLst);
 	// proof for Item DB Init
-	ItemLst->printList();
+	//ItemLst->printList();
 
 	// proof for Item DB Init
 	//FIXME memory protected issue
-	CustomerLst->printList();
+	//CustomerLst->printList();
+
+	// Finalize Database before Exit
+	finBaseDb(ItemLst, CustomerLst);
 
 	// IN-DEV
 	delete ItemLst;
@@ -279,6 +285,38 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 		}
 		itemFile.close();
 	}
+	// TODO boolean status if necessary
+	return -1;
+}
+
+int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+	string textLine;
+	ofstream ctmFile("customers.txt", std::ios_base::app);
+	ofstream itemFile("items.txt", std::ios_base::app);
+
+	// Finalize Customer DB
+	if (ctmFile.is_open())
+	{
+		// IN-DEVELOP
+		// customer *current = ctmPtr->getHead();
+		// Iteratively output to buffer
+		//while (current->getNext() != NULL)
+		//{
+			//TODO arr2str Util function, getAllArr function from Ctm/Item cls
+		//	textLine = arr2str(current->getAllArr())
+
+			//inputVal[0],inputVal[1],rentalTypeUtil(inputVal[2]), rentalPeriodUtil(inputVal[3]),
+			//atoi(inputVal[4].c_str()), std::stod(inputVal[5]), true, genreTypeUtil(inputVal[6].c_str()));
+			
+		//	ctmFile << textLine;
+		//}
+		ctmFile.close();
+	}
+
+	// Now Finalize Items DB
+
+
+	// TODO boolean status if necessary
 	return -1;
 }
 
@@ -349,3 +387,14 @@ char* str2arr(string str) {
 	return cTypeStr;
 }
 
+string arr2str(string arr[]) {
+	bool firstTerm = true;
+	string temp;
+	// IN-DEVELOP
+	for (string &ele : arr)
+	{
+		if (!firstTerm) { temp.append(","); }
+		firstTerm = false;
+		temp.append(ele); // Append Element
+	}
+}
