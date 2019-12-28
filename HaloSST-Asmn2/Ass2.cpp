@@ -24,6 +24,10 @@ char* str2arr(string);
 string arr2str(string);
 string ctmTypeStr(ctmTypeEnum);
 bool CheckExit(string optSel_str);
+string rentalTypeStr(rentalTypeEnum);
+string rentalPeriodStr(bool);
+string double2str(double);
+string genreTypeStr(genreTypeEnum);
 
 int main()
 {
@@ -334,41 +338,65 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	ofstream ctmFile("customers.txt");
-	ofstream itemFile("items.txt", std::ios_base::app);
+	ofstream itemFile("items.txt");
+
 
 	// Finalize Customer DB
 	if (ctmFile.is_open())
 	{
 		// IN-DEVELOP
 		// Iteratively output to buffer
-		customer* current = ctmPtr->getCtmHead();
+		customer* currCtm = ctmPtr->getCtmHead();
 		ctmFile << "#Final Customer Database updated\r\n";
 		do {
 			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
-			textLine = current->getID() + ','
-				+ current->getName() + ','
-				+ current->getAddr() + ','
-				+ current->getPhone() + ','
-				+ std::to_string(current->numOfRental()) + ','
-				+ ctmTypeStr(current->getCtmType());
+			textLine = currCtm->getID() + ','
+				+ currCtm->getName() + ','
+				+ currCtm->getAddr() + ','
+				+ currCtm->getPhone() + ','
+				+ std::to_string(currCtm->numOfRental()) + ','
+				+ ctmTypeStr(currCtm->getCtmType());
 			
 			//TODO add rental List of each Customer
 			textLine += "\r\n";
 
-			for (int i = 0; i < current->numOfRental(); i++) {
-				textLine += *(current->getListOfRental() + i) + "\n";
+			for (int i = 0; i < currCtm->numOfRental(); i++) {
+				textLine += *(currCtm->getListOfRental() + i) + "\n";
 			};
 			if (textLine[textLine.length() - 1] != '\n'){
 				textLine += "\r\n";
 			}
 			
 			ctmFile << textLine;
-		} while ((current = current->getNext()) != NULL);
+		} while ((currCtm = currCtm->getNext()) != NULL);
 		ctmFile.close();
 	}
-
+	
 	// Now Finalize Items DB
+	if (itemFile.is_open())
+	{
+		// IN-DEVELOP
+		// Iteratively output to buffer
+		item* currItem = itemPtr->getItemHead();
+		itemFile << "#Final Item Database updated\r\n";
+		do {
+			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
+			textLine = currItem->getID() 	+ ','
+				+ currItem->getTitle() 		+ ','
+				+ rentalTypeStr(currItem->getRentalType()) 	+ ','
+				+ rentalPeriodStr(currItem->getLoanStatus())+ ','
+				+ std::to_string(currItem->getNumOfCopy()) 	+ ','
+				+ double2str(currItem->getRentFee()) 		+ ','
+				+ genreTypeStr(currItem->getGenreType());
+			// FIXME getGenreType() virtual function returns NONE except 1st iteration
 
+			if (textLine[textLine.length() - 1] != '\n'){
+				textLine += "\r\n";
+			}
+			itemFile << textLine;
+		} while ((currItem = currItem->getNext()) != NULL);
+		itemFile.close();
+	}
 
 	// TODO boolean status if necessary
 	return -1;
@@ -419,6 +447,19 @@ rentalTypeEnum rentalTypeUtil(string str) {
 	}
 }
 
+string rentalTypeStr(rentalTypeEnum rentalEnum) {
+	switch (rentalEnum)
+	{
+	case DVD:
+		return "DVD";
+	case RECORD:
+		return "Record";
+	case GAME:
+		return "Game";
+	default:
+		return "";
+	}
+}
 
 genreTypeEnum genreTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "Action") == 0)
@@ -439,6 +480,24 @@ genreTypeEnum genreTypeUtil(string str) {
 	}
 }
 
+string genreTypeStr(genreTypeEnum genreEnum){
+	switch (genreEnum)
+	{
+	case ACTION:
+		return "Action";
+	case HORROR:
+		return "Horror";
+	case DRAMA:
+		return "Drama";
+	case COMEDY:
+		return "Comedy";
+
+	case NONE:
+	default:
+		return "";
+	}
+}
+
 bool rentalPeriodUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "1-week") == 0)
 	{
@@ -450,12 +509,29 @@ bool rentalPeriodUtil(string str) {
 	}
 }
 
+string rentalPeriodStr(bool bl){
+	if (bl)
+	{
+		return "1-week";
+	}
+	else {
+		return "2-day";
+	}
+}
+
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
 	//FIXME swap strcpy_s for Windows supported "safe" String libary
 	//  strcpy_s(cTypeStr, str.length() + 1, str.c_str());
 	strcpy(cTypeStr, str.c_str());
 	return cTypeStr;
+}
+
+string double2str(double db) {
+	char buffer[100];
+	sprintf(buffer, "%.2f", db);
+	std::string str = buffer;
+	return str;
 }
 
 //string arr2str(string arr[]) {
