@@ -32,40 +32,40 @@ int main()
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
 
-	CustomerLst->printList();
-	CustomerLst->searchCtmID("C001");
-	CustomerLst->removeHead();
+	// CustomerLst->printList();
+	// CustomerLst->searchCtmID("C001");
+	// CustomerLst->removeHead();
 
-	CustomerLst->printList();
-	CustomerLst->searchCtmName("Minh Dinh");
-	CustomerLst->removeTail();
-	CustomerLst->printList();
-	CustomerLst->searchCtmID("C003");
+	// CustomerLst->printList();
+	// CustomerLst->searchCtmName("Minh Dinh");
+	// CustomerLst->removeTail();
+	// CustomerLst->printList();
+	// CustomerLst->searchCtmID("C003");
 	
-	CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
-	CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
-	CustomerLst->printList();
+	// CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
+	// CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
+	// CustomerLst->printList();
 
 
-	cout << "Test remove node" << endl;
-	int a = CustomerLst->removeNodeByID("C0013");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
+	// cout << "Test remove node" << endl;
+	// int a = CustomerLst->removeNodeByID("C0013");
+	// CustomerLst->printList();
+	// cout << "Node remove successfully: " << a << endl;
 
-	cout << "Test remove node1" << endl;
-	a = CustomerLst->removeNodeByID("C0012");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
+	// cout << "Test remove node1" << endl;
+	// a = CustomerLst->removeNodeByID("C0012");
+	// CustomerLst->printList();
+	// cout << "Node remove successfully: " << a << endl;
 
-	cout << "Test remove node2" << endl;
-	a = CustomerLst->removeNodeByID("C0015");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
+	// cout << "Test remove node2" << endl;
+	// a = CustomerLst->removeNodeByID("C0015");
+	// CustomerLst->printList();
+	// cout << "Node remove successfully: " << a << endl;
 
-	cout << "Size of the list: " << CustomerLst->size() << endl;
-	CustomerLst->deleteList();
-	cout << "Size of the list: " << CustomerLst->size() << endl;
-	CustomerLst->printList();
+	// cout << "Size of the list: " << CustomerLst->size() << endl;
+	// CustomerLst->deleteList();
+	// cout << "Size of the list: " << CustomerLst->size() << endl;
+	// CustomerLst->printList();
 
 	/*cout << "####################ITEM TEST ######################" << endl;
 
@@ -101,7 +101,7 @@ int main()
 	cout << "Size of the list: " << ItemLst->size() << endl;
 	ItemLst->printList();*/
 
-	//finBaseDb(ItemLst, CustomerLst);
+	finBaseDb(ItemLst, CustomerLst);
 
 	delete ItemLst;
 	delete CustomerLst;
@@ -117,7 +117,7 @@ int main()
 		string optSel_str; // Option Select Raw String
 
 		cout << "\n___________________________________________________________";
-		cout << "\nWelcome to Genie’s video store" << endl;
+		cout << "\nWelcome to Genieï¿½s video store" << endl;
 		cout << "\nEnter an option below." << endl;
 		cout << "1. Add a new item, update or delete an existing item" << endl;
 		cout << "2. Add new customer or update an existing customer" << endl;
@@ -331,7 +331,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	return -1;
 }
 
-/*int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	ofstream ctmFile("customers.txt");
 	ofstream itemFile("items.txt", std::ios_base::app);
@@ -342,26 +342,27 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 		// IN-DEVELOP
 		// Iteratively output to buffer
 		customer* current = ctmPtr->getCtmHead();
-		ctmFile << "#Final Customer Database updated";
+		ctmFile << "#Final Customer Database updated\r\n";
 		do {
 			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
-			textLine = "\r\n"
-				+ current->getID() + ','
+			textLine = current->getID() + ','
 				+ current->getName() + ','
 				+ current->getAddr() + ','
 				+ current->getPhone() + ','
 				+ std::to_string(current->numOfRental()) + ','
 				+ ctmTypeStr(current->getCtmType());
-
-				//for (int i = 0; i < current->numOfRental(); i++) {
-				//	textLine = + *(current->getListOfRental + i) + "\n";
-				//}
-			;
-			cout << textLine;
-
+			
 			//TODO add rental List of each Customer
+			textLine += "\r\n";
 
-			// ctmFile << textLine;
+			for (int i = 0; i < current->numOfRental(); i++) {
+				textLine += *(current->getListOfRental() + i) + "\n";
+			};
+			if (textLine[textLine.length() - 1] != '\n'){
+				textLine += "\r\n";
+			}
+			
+			ctmFile << textLine;
 		} while ((current = current->getNext()) != NULL);
 		ctmFile.close();
 	}
@@ -371,7 +372,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 
 	// TODO boolean status if necessary
 	return -1;
-}*/
+}
 
 ctmTypeEnum ctmTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "VIP") == 0)
@@ -452,8 +453,8 @@ bool rentalPeriodUtil(string str) {
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
 	//FIXME swap strcpy_s for Windows supported "safe" String libary
-	 strcpy_s(cTypeStr, str.length() + 1, str.c_str());
-//	strcpy(cTypeStr, str.c_str());
+	//  strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	strcpy(cTypeStr, str.c_str());
 	return cTypeStr;
 }
 
