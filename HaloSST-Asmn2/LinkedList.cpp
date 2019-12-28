@@ -129,27 +129,105 @@ void ItemList::removeTail() {
 	}
 }
 
-void ItemList::searchItem(string id) {
+//void ItemList::searchItem(string id) {
+//	item* current = head;
+//	if (current == NULL) {
+//		cout << "Linked list does not exit" << endl;
+//	}
+//	else {
+//		while (current != NULL) {
+//			if (current->getID() == id) {
+//				cout << "found" << endl;
+//				cout << "Item ID: " << current->getID() << endl;
+//			}
+//
+//			else if (current->getID() != id) {
+//
+//				cout << "not found" << endl;
+//			}
+//			current = current->getNext();
+//
+//		}
+//	}
+//}
+
+void ItemList::deleteList()
+{
+	while (head != NULL)	this->removeHead();
+}
+
+item* ItemList::searchItemTitle(string  title) {
 	item* current = head;
-	if (current == NULL) {
-		cout << "Linked list does not exit" << endl;
+	while (current != NULL) {
+		if (strcmp(current->getTitle().c_str(), title.c_str()) == 0) {
+			cout << "ITEM  FOUND" << endl;
+			cout << "Item ID: " << current->getID() << endl;
+			cout << "Item Title: " << current->getTitle() << endl;
+			return current;
+		}
+		current = current->getNext();
+	}
+	cout << "Item " << title << " is not exist in the list" << endl;
+	return NULL;
+};
+
+item* ItemList::searchItemID(string id) {// TODO: compare string work by work
+	item* current = head;
+	while (current != NULL) {
+		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+			cout << "ITEM FOUND" << endl;
+			cout << "Item ID: " << current->getID() << endl;
+			cout << "Item Title: " << current->getTitle() << endl;
+
+			return current;
+		}
+		current = current->getNext();
+	}
+	cout << "Item " << id << " is not exist in the list" << endl;
+	return NULL;
+}
+
+bool ItemList::removeItemByID(string id) {
+	item* current = head;
+	item* previous = NULL;
+	item* after = current->getNext();
+	if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+		this->removeHead();
+		return true;
 	}
 	else {
-		while (current != NULL) {
-			if (current->getID() == id) {
-				cout << "found" << endl;
-				cout << "Item ID: " << current->getID() << endl;
-			}
-
-			else if (current->getID() != id) {
-
-				cout << "not found" << endl;
-			}
+		while (strcmp(current->getID().c_str(), id.c_str()) != 0) {
+			previous = current;
 			current = current->getNext();
-
+			after = current->getNext();
+			if (after == NULL) {//	return false;	
+				if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+					this->removeTail();
+					return true;
+				}
+				else return false;
+			}
 		}
+		previous->setNext(after);
+		current->setNext(NULL);
+		delete current;
 	}
+	return true;
 }
+
+int ItemList::size()
+{
+	int count = 0;
+	item* current = head;
+	while (current != NULL)
+	{
+		count++;
+		current = current->getNext();
+	}
+	cout << "number of item: " << count << endl;
+	return count;
+}
+
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	customer *current = head;

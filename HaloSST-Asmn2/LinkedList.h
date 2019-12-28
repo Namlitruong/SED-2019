@@ -31,7 +31,13 @@ public:
 	void removeHead();
 	void removeTail();
 	void searchItem(string); // Not ready yet
+	
 	item *getItemHead() { return this->head; }
+	item* getItemHead() { return this->head; }
+	item* searchItemTitle(string);
+	item* searchItemID(string);
+	bool removeItemByID(string);
+	int size();
 
 	/*
 	void removeNode(string name);
