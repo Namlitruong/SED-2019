@@ -23,7 +23,7 @@ char* str2arr(string);
 
 int main()
 {
-	ItemList* ItemLst = new ItemList();
+	//ItemList* ItemLst = new ItemList();
 	// ----------Testing-----------
 	/*ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
@@ -35,31 +35,47 @@ int main()
 	ItemLst->searchItem("I001-2001");
 	ItemLst->searchItem("I008-2001");*/
 
+	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
+
+	CustomerLst->printList();
+	CustomerLst->searchCtmID("C001");
+	CustomerLst->removeHead();
+
+	CustomerLst->printList();
+	CustomerLst->searchCtmName("Minh Dinh");
+	CustomerLst->removeTail();
+	CustomerLst->printList();
+	CustomerLst->searchCtmID("C003");
+	
+	CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
+	CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
 	CustomerLst->printList();
 
-	cout << "TESTTTTTTTTTT:   " << CustomerLst->getCtmHead()->getName() << endl;
-	cout << "TESTTTTTTTTTT1:   " << CustomerLst->getCtmHead()->getAddr() << endl;
-	cout << "TESTTTTTTTTTT2:   " << CustomerLst->getCtmHead()->getID() << endl;
+
+	cout << "Test remove node" << endl;
+	int a = CustomerLst->removeNodeByID("C0013");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Test remove node1" << endl;
+	a = CustomerLst->removeNodeByID("C0012");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Test remove node2" << endl;
+	a = CustomerLst->removeNodeByID("C0015");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Size of the list: " << CustomerLst->size() << endl;
+	CustomerLst->deleteList();
+	cout << "Size of the list: " << CustomerLst->size() << endl;
+	CustomerLst->printList();
 
 	delete ItemLst;
 	delete CustomerLst;
-
-	/*ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
-	ListOfItem->addCtmItemList("I005-2015");
-	ListOfItem->addCtmItemList("I002-1988");
-	ListOfItem->addCtmItemList("I001-2001");
-	ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
-	ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
-	ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
-	ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
-	cout << "?????????????????????????????????" << endl;
-	ListOfItem->printCtm(ListOfItem->searchCtm("Linklqweqh Nguyen", "C0qqwe02"));
-	cout << ListOfItem->searchCtm("Linh Nguyen", "C002")->getPhone() <<endl;
-	ListOfItem->printList();
-	delete ListOfItem;*/
-
 	return 0;
 }
 
@@ -112,7 +128,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 			if (firstChr == (char)itemIdentifier) {
 				if (totalRental >= 0)
 				{
-					ctmPtr->addCtmItemList(textLine);
+					ctmPtr->addCtmItemList(ctmPtr->getCtmHead(), textLine);
 					totalRental--;
 				}
 			}

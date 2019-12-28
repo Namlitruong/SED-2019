@@ -106,19 +106,13 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 }
 
 void ItemList::removeHead() {
-	item* current = head;
-	if (current == NULL) {
+	if (head == NULL) {
 		cout << "Linked list does not exit" << endl;
 	}
-	else {
-		current = head->getNext();
-		delete head;
-		head = current;
-		while (current->getNext() != NULL) { // node exists
-			current = current->getNext(); // set current to next node
-
-		}
-	}
+	item* temp = head;
+	head = temp->getNext();
+	temp->setNext(NULL);
+	delete temp;
 }
 
 void ItemList::removeTail() {
@@ -156,102 +150,6 @@ void ItemList::searchItem(string id) {
 		}
 	}
 }
-
-/*
-void ItemList::deleteList()
-{
-	node *currentPtr = head;
-	while (currentPtr != NULL)
-	{
-		currentPtr = currentPtr->getNext();
-		delete head;
-		head = currentPtr;
-	}
-}
-void ItemList::appendTail(string name)
-{
-	node *currentPtr = head;
-	while (currentPtr->getNext() != NULL)
-		currentPtr = currentPtr->getNext();
-	currentPtr->setNext(new node(currentPtr->getData() + 1));
-	currentPtr->getNext()->setName(name);
-	currentPtr->getNext()->setNext(NULL);
-}
-void ItemList::printList()
-{
-	node *currentPtr = head;
-	if (currentPtr == NULL)
-		cout << "No people are in the line" << endl;
-	else
-	{
-		while (currentPtr != NULL)
-		{
-			cout << "The " << currentPtr->getData() << "th person in line is " << currentPtr->getName() << endl;
-			currentPtr = currentPtr->getNext();
-		}
-	}
-}
-void ItemList::removeHead()
-{
-	node *currentPtr = head->getNext();
-	delete head;
-	head = currentPtr;
-	while (currentPtr != NULL)
-	{
-		currentPtr->setData(currentPtr->getData() - 1);
-		currentPtr = currentPtr->getNext();
-	}
-}
-void ItemList::removeTail()
-{
-	node *currentPtr = head;
-	while (currentPtr->getNext()->getNext() != NULL)
-		currentPtr = currentPtr->getNext();
-	delete currentPtr->getNext();
-	currentPtr->setNext(NULL);
-}
-void ItemList::size()
-{
-	int count = 0;
-	node *currentPtr = head;
-	while (currentPtr != NULL)
-	{
-		count++;
-		currentPtr = currentPtr->getNext();
-	}
-	cout << "There are " << count << " people in line" << endl;
-}
-void ItemList::removeNode(string name)
-{
-	node *currentPtr = head;
-	if (currentPtr->getName() == name)
-		this->removeHead();
-	else
-	{
-		while ((currentPtr->getNext()->getName() != name) && (currentPtr->getNext()->getNext() != NULL))
-			currentPtr = currentPtr->getNext();
-		if (currentPtr->getNext()->getName() != name)
-			cout << "No people called " << name << " are in line" << endl;
-		else
-		{
-			if (currentPtr->getNext()->getNext() == NULL)
-				this->removeTail();
-			else
-			{
-				int tempNumber = currentPtr->getData();
-				node *tempPtr = currentPtr->getNext();
-				currentPtr->setNext(tempPtr->getNext());
-				delete tempPtr;
-				while (currentPtr->getNext() != NULL)
-				{
-					currentPtr = currentPtr->getNext();
-					currentPtr->setData(++tempNumber);
-				}
-			}
-		}
-	}
-}*/
-
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	customer *current = head;
@@ -270,25 +168,42 @@ void CtmList::appendHead(string id, string name, string addr, string phone, ctmT
 	}
 }
 
-void CtmList::addCtmItemList(string item) { // Using to test, Can be upgrade when implement successfully search
-	head->addItem(item);
+void CtmList::addCtmItemList(customer* Ctm, string item) { // Using to test, Can be upgrade when implement successfully search
+	Ctm->addItem(item);
 }
 
-customer* CtmList::searchCtm(string name, string id) {// TODO: compare string work by work
+customer* CtmList::searchCtmName(string name) {// TODO: compare string work by work
 	customer *current = head;
 	while (current != NULL) {
-		if (current->getName().compare(name) && current->getID().compare(id)) {
-			cout << "Customer found" << endl;
+		if (strcmp(current->getName().c_str(), name.c_str()) == 0) {
+			cout << "CUSTOMER FOUND" << endl;
 			cout << "Customer ID: " << current->getID() << endl;
 			cout << "Customer Name: " << current->getName() << endl;
+			cout << "Customer Phone: " << current->getPhone() << endl;
+			cout << "Customer Address: " << current->getAddr() << endl;
 			return current;
-		}
-		else {
-			cout << "Customer is not exist in the list" << endl;
-			return NULL;
 		}
 		current = current->getNext();
 	}
+	cout << "Customer " << name << " is not exist in the list" << endl;
+	return NULL;
+}
+
+customer* CtmList::searchCtmID(string id) {// TODO: compare string work by work
+	customer *current = head;
+	while (current != NULL) {
+		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+			cout << "CUSTOMER FOUND" << endl;
+			cout << "Customer ID: " << current->getID() << endl;
+			cout << "Customer Name: " << current->getName() << endl;
+			cout << "Customer Phone: " << current->getPhone() << endl;
+			cout << "Customer Address: " << current->getAddr() << endl;
+			return current;
+		}
+		current = current->getNext();
+	}
+	cout << "Customer " << id << " is not exist in the list" << endl;
+	return NULL;
 }
 
 void CtmList::printCtm(customer* ctm) {
@@ -299,10 +214,8 @@ void CtmList::printCtm(customer* ctm) {
 	cout << "Customer Phone: " << ctm->getPhone() << endl;
 	cout << "Customer Type: " << ctm->getCtmType() << endl;
 	ctm->printCtmRental();
-	//ctm->successReturn();
 	cout << "Customer Success Return: " << ctm->getSuccessReturn() << endl;
 	cout << "Customer MAX: " << ctm->getMaxVid() << endl;
-
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
@@ -310,7 +223,7 @@ void CtmList::printList()
 {
 	customer *current = head;
 	if (current == NULL)
-		cout << "No items are in the line" << endl;
+		cout << "No items are in the list" << endl;
 	else
 	{
 		while (current != NULL)
@@ -319,4 +232,91 @@ void CtmList::printList()
 			current = current->getNext();
 		}
 	}
+}
+
+void CtmList::removeHead() {
+	if (head == NULL) {
+		cout << "Linked list does not exit" << endl;
+	}
+	customer* temp = head;
+	head = temp->getNext();
+	temp->setNext(NULL);
+	delete temp;
+}
+
+void CtmList::appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
+	customer* current = head;
+	customer* newItem;
+	switch (ctmType) {
+	case 1: newItem = new regular(id, name, addr, phone, ctmType); break;
+	case 2: newItem = new vip(id, name, addr, phone, ctmType); break;
+	default: newItem = new guest(id, name, addr, phone, ctmType); break;
+	}
+	if (current == NULL) {
+		head = newItem;
+	}
+	else {
+		while (current->getNext() != NULL)
+			current = current->getNext(); // find tail node
+			current->setNext(newItem);
+	}
+}
+
+void CtmList::removeTail() {
+	customer* current = head;
+	if (current == NULL) {
+		cout << "Linked list does not exit" << endl;
+	}
+	else {
+		while (current->getNext()->getNext() != NULL) { // node exists
+			current = current->getNext(); // set current to next node
+		}
+		delete current->getNext();
+		current->setNext(NULL);
+	}
+}
+
+bool CtmList::removeNodeByID(string id) {
+	customer* current = head;
+	customer* previous = NULL;
+	customer* after = current->getNext();
+	if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+		this->removeHead();
+		return true;
+	}
+	else{
+		while (strcmp(current->getID().c_str(), id.c_str()) != 0) {
+			previous = current;
+			current = current->getNext();
+			after = current->getNext();
+			if (after == NULL) {//	return false;	
+				if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+					this->removeTail();
+					return true;
+				}
+				else return false;
+			}
+		}
+		previous->setNext(after);
+		current->setNext(NULL);
+		delete current;	
+	}
+	return true;
+}
+
+void CtmList::deleteList()
+{
+	while (head != NULL)	this->removeHead();
+}
+
+int CtmList::size()
+{
+	int count = 0;
+	customer *current = head;
+	while (current != NULL)
+	{
+		count++;
+		current = current->getNext();
+	}
+	return count;
 }

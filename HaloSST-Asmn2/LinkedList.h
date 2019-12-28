@@ -47,16 +47,14 @@ public:
 	void appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void printList();
 	void printCtm(customer*);
-	void addCtmItemList(string);
-	customer *getCtmHead() { return this->head; }
-	customer* searchCtm(string, string);
-	//void printCtmRental();
-	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
+	void addCtmItemList(customer*, string);
+	customer* getCtmHead() { return this->head; }
+	customer* searchCtmName(string);
+	customer* searchCtmID(string);
 	void removeHead();
-	void appendTail(string name);
+	void appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void removeTail();
-	void removeNode(string name);
-	void size();
-	void printList();
-	void deleteList();*/
+	bool removeNodeByID(string name);
+	int size();
+	void deleteList();
 };
