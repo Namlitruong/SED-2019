@@ -70,13 +70,89 @@ void ItemList::printList()
 	}
 }
 
-void ItemList::deleteList()
-{
+void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable) {
 	item* current = head;
-	while (current != NULL) {
-		current = current->getNext();
+	item* newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable);
+
+	if (current == NULL) {
+		head = newItem;
+	}
+	else {
+		while (current->getNext() != NULL)
+			current = current->getNext(); // find tail node
+		current->setNext(newItem);
+	}
+
+}
+
+void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable, genreTypeEnum genreType) {
+	item* current = head;
+	item* newItem;
+	switch (rentalType)
+	{
+	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	}
+	if (current == NULL) {
+		head = newItem;
+	}
+	else {
+		while (current->getNext() != NULL)
+			current = current->getNext(); // find tail node
+		current->setNext(newItem);
+	}
+}
+
+void ItemList::removeHead() {
+	item* current = head;
+	if (current == NULL) {
+		cout << "Linked list does not exit" << endl;
+	}
+	else {
+		current = head->getNext();
 		delete head;
 		head = current;
+		while (current->getNext() != NULL) { // node exists
+			current = current->getNext(); // set current to next node
+
+		}
+	}
+}
+
+void ItemList::removeTail() {
+	item* current = head;
+	if (current == NULL) {
+		cout << "Linked list does not exit" << endl;
+	}
+	else {
+		while (current->getNext()->getNext() != NULL) { // node exists
+			current = current->getNext(); // set current to next node
+		}
+		delete current->getNext();
+		current->setNext(NULL);
+	}
+}
+
+void ItemList::searchItem(string id) {
+	item* current = head;
+	if (current == NULL) {
+		cout << "Linked list does not exit" << endl;
+	}
+	else {
+		while (current != NULL) {
+			if (current->getID() == id) {
+				cout << "found" << endl;
+				cout << "Item ID: " << current->getID() << endl;
+			}
+
+			else if (current->getID() != id) {
+
+				cout << "not found" << endl;
+			}
+			current = current->getNext();
+
+		}
 	}
 }
 

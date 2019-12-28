@@ -23,13 +23,23 @@ char* str2arr(string);
 
 int main()
 {
-	ItemList *ItemLst = new ItemList();
-	CtmList *CustomerLst = new CtmList();
-	initBaseDb(ItemLst, CustomerLst);
+	ItemList* ItemLst = new ItemList();
+	// ----------Testing-----------
+	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
+	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
+	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
+	ItemLst->appendTail("I003-2003", "Pes 2020: New Era", rentalTypeEnum::RECORD, true, 3, 4.99, true, genreTypeEnum::ACTION);
+	ItemLst->removeHead();
+	ItemLst->removeTail();
 	ItemLst->printList();
-	CustomerLst->printList();
-	delete ItemLst;
-	delete CustomerLst;
+	ItemLst->searchItem("I001-2001");
+	ItemLst->searchItem("I008-2001");
+
+	// CtmList* CustomerLst = new CtmList();
+	// initBaseDb(ItemLst, CustomerLst);
+	// CustomerLst->printList();
+	// delete ItemLst;
+	// delete CustomerLst;
 
 	return 0;
 }

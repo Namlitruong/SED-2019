@@ -26,14 +26,15 @@ public:
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Video/Movies
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
 	void printList();
-	void deleteList();
-	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
+	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
+	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); 
 	void removeHead();
-	void appendTail(string name);
 	void removeTail();
+	void searchItem(string);
+
+	/*
 	void removeNode(string name);
 	void size();
-	void printList();
 	void deleteList();*/
 };
 
