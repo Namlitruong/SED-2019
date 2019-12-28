@@ -117,6 +117,7 @@ int customer::numOfRental() {
 void customer::addItem(string item) {
 	this->listOfRental[this->numOfRental()] = item;
 }
+
 void customer::printCtmRental() {
 	cout << "Rental list of customer: "<< this->getName() <<" rent "<< this->numOfRental() <<" items"<< endl;
 	for (int i = 0; i < this->numOfRental(); i++) {

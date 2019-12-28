@@ -42,8 +42,8 @@ public:
 class CtmList {
 	customer *head = NULL;
 public:
-	CtmList() { head = NULL, cout << "Item List is created" << endl; }
-	~CtmList() { cout << "Item List is destroyed" << endl; }
+	CtmList() { head = NULL, cout << "Customer List is created" << endl; }
+	~CtmList() { cout << "Customer List is destroyed" << endl; }
 	void appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void printList();
 	void printCtm(customer*);

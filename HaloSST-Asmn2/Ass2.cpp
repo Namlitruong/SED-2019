@@ -15,17 +15,18 @@ using namespace std;
 #define itemDbInLength 7
 
 int initBaseDb(ItemList*, CtmList*);
+int finBaseDb(ItemList*, CtmList*);
 ctmTypeEnum ctmTypeUtil(string);
 rentalTypeEnum rentalTypeUtil(string);
 genreTypeEnum genreTypeUtil(string);
 bool rentalPeriodUtil(string);
 char* str2arr(string);
+string arr2str(string);
+string ctmTypeStr(ctmTypeEnum);
 bool CheckExit(string optSel_str);
 
 int main()
 {
-	//ItemList* ItemLst = new ItemList();
-	// ----------Testing-----------
 
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
@@ -66,7 +67,7 @@ int main()
 	cout << "Size of the list: " << CustomerLst->size() << endl;
 	CustomerLst->printList();
 
-	cout << "####################ITEM TEST ######################" << endl;
+	/*cout << "####################ITEM TEST ######################" << endl;
 
 	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
@@ -98,7 +99,9 @@ int main()
 	cout << "Size of the list: " << ItemLst->size() << endl;
 	ItemLst->deleteList();
 	cout << "Size of the list: " << ItemLst->size() << endl;
-	ItemLst->printList();
+	ItemLst->printList();*/
+
+	//finBaseDb(ItemLst, CustomerLst);
 
 	delete ItemLst;
 	delete CustomerLst;
@@ -324,8 +327,51 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 		}
 		itemFile.close();
 	}
+	// TODO boolean status if necessary
 	return -1;
 }
+
+/*int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+	string textLine;
+	ofstream ctmFile("customers.txt");
+	ofstream itemFile("items.txt", std::ios_base::app);
+
+	// Finalize Customer DB
+	if (ctmFile.is_open())
+	{
+		// IN-DEVELOP
+		// Iteratively output to buffer
+		customer* current = ctmPtr->getCtmHead();
+		ctmFile << "#Final Customer Database updated";
+		do {
+			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
+			textLine = "\r\n"
+				+ current->getID() + ','
+				+ current->getName() + ','
+				+ current->getAddr() + ','
+				+ current->getPhone() + ','
+				+ std::to_string(current->numOfRental()) + ','
+				+ ctmTypeStr(current->getCtmType());
+
+				//for (int i = 0; i < current->numOfRental(); i++) {
+				//	textLine = + *(current->getListOfRental + i) + "\n";
+				//}
+			;
+			cout << textLine;
+
+			//TODO add rental List of each Customer
+
+			// ctmFile << textLine;
+		} while ((current = current->getNext()) != NULL);
+		ctmFile.close();
+	}
+
+	// Now Finalize Items DB
+
+
+	// TODO boolean status if necessary
+	return -1;
+}*/
 
 ctmTypeEnum ctmTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "VIP") == 0)
@@ -339,6 +385,21 @@ ctmTypeEnum ctmTypeUtil(string str) {
 	else if ((strcmp(str2arr(str.c_str()), "Guest")) == 0)
 	{
 		return ctmTypeEnum::GUEST;
+	}
+}
+
+string ctmTypeStr(ctmTypeEnum ctmEnum) {
+
+	switch (ctmEnum)
+	{
+	case GUEST:
+		return "Guest";
+	case REGULAR:
+		return "Regular";
+	case VIP:
+		return "VIP";
+	default:
+		return "";
 	}
 }
 
@@ -390,6 +451,20 @@ bool rentalPeriodUtil(string str) {
 
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
-	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	//FIXME swap strcpy_s for Windows supported "safe" String libary
+	 strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+//	strcpy(cTypeStr, str.c_str());
 	return cTypeStr;
 }
+
+//string arr2str(string arr[]) {
+	// bool firstTerm = true;
+	// string temp;
+	// // IN-DEVELOP
+	// for (string &ele : arr)
+	// {
+	// 	if (!firstTerm) { temp.append(","); }
+	// 	firstTerm = false;
+	// 	temp.append(ele); // Append Element
+	// }
+//}

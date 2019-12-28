@@ -134,6 +134,7 @@ public:
 	ctmTypeEnum getCtmType() { return this->ctmType; }
 	string getPhone() { return this->phone; }
 	int numOfRental();
+	string *getListOfRental(){ return this->listOfRental; }
 	//////////////////--Setter--//////////////
 	void setNext(customer *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
