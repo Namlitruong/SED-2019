@@ -50,25 +50,48 @@ void ItemList::printList()
 	{
 		while (current != NULL)
 		{
-			cout << "/////////////////////////////////////////////////" << endl;
-			cout << "Item ID: " << current->getID() << endl;
-			cout << "Item Title: " << current->getTitle() << endl;
-			cout << "Item Type: " << current->getRentalType() << endl;
-			switch (current->getRentalType()) {
-			case 0: {
-				cout << "Item Genre: " << (static_cast<record*>(current))->getGenreType() << endl;
-				break; }
-			case 1: {
-				cout << "Item Genre: " << (static_cast<dvd*>(current))->getGenreType() << endl;
-				break; }
-			}
-			cout << "Item Number of Copy: " << current->getNumOfCopy() << endl;
-			cout << "Item Rent Fee: " << current->getRentFee() << endl;
-			cout << "Item Status: " << current->getIsAvailable() << endl;
-			cout << "/////////////////////////////////////////////////" << endl;
+			printItem(current);
 			current = current->getNext();
 		}
 	}
+}
+
+void ItemList::printItem(item* its)
+{
+	cout << "/////////////////////////////////////////////////" << endl;
+	cout << "Item ID: " << its->getID() << endl;
+	cout << "Item Title: " << its->getTitle() << endl;
+	//cout << "Item Type: " << its->getRentalType() << endl;
+	switch (its->getRentalType()) {
+	case RECORD: {
+		cout << "Item Type: RECORD" << endl;
+		switch ((static_cast<record*>(its))->getGenreType()) {
+		case ACTION:	cout << "Item Genre: ACTION" << endl; break;
+		case HORROR:	cout << "Item Genre: HORROR" << endl; break;
+		case DRAMA:		cout << "Item Genre: DRAMA" << endl; break;
+		case COMEDY:	cout << "Item Genre: COMEDY" << endl; break;
+		default: break;
+		}
+		break; }
+	case DVD: {
+		cout << "Item Type: DVD" << endl;
+		switch ((static_cast<record*>(its))->getGenreType()) {
+		case ACTION:	cout << "Item Genre: ACTION" << endl; break;
+		case HORROR:	cout << "Item Genre: HORROR" << endl; break;
+		case DRAMA:		cout << "Item Genre: DRAMA" << endl; break;
+		case COMEDY:	cout << "Item Genre: COMEDY" << endl; break;
+		default: break;
+		}
+		break; }
+	default: {
+		cout << "Item Type: GAME" << endl;
+		break; }
+	}
+	cout << "Item Number of Copy: " << its->getNumOfCopy() << endl;
+	cout << "Item Status: " << its->getIsAvailable() << endl;
+
+	cout << "Item Rent Fee: " << its->getRentFee() << endl;
+	cout << "/////////////////////////////////////////////////" << endl;
 }
 
 void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable) {
@@ -79,9 +102,9 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 		head = newItem;
 	}
 	else {
-		while (current->getNext() != NULL)
-			current = current->getNext(); // find tail node
+		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
 		current->setNext(newItem);
+		newItem->setNext(NULL);
 	}
 
 }
@@ -99,9 +122,9 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 		head = newItem;
 	}
 	else {
-		while (current->getNext() != NULL)
-			current = current->getNext(); // find tail node
+		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
 		current->setNext(newItem);
+		newItem->setNext(NULL);
 	}
 }
 
@@ -129,56 +152,26 @@ void ItemList::removeTail() {
 	}
 }
 
-//void ItemList::searchItem(string id) {
-//	item* current = head;
-//	if (current == NULL) {
-//		cout << "Linked list does not exit" << endl;
-//	}
-//	else {
-//		while (current != NULL) {
-//			if (current->getID() == id) {
-//				cout << "found" << endl;
-//				cout << "Item ID: " << current->getID() << endl;
-//			}
-//
-//			else if (current->getID() != id) {
-//
-//				cout << "not found" << endl;
-//			}
-//			current = current->getNext();
-//
-//		}
-//	}
-//}
-
-void ItemList::deleteList()
-{
-	while (head != NULL)	this->removeHead();
-}
-
-item* ItemList::searchItemTitle(string  title) {
+item *ItemList::searchItemByTitle(string title) {
 	item* current = head;
 	while (current != NULL) {
 		if (strcmp(current->getTitle().c_str(), title.c_str()) == 0) {
-			cout << "ITEM  FOUND" << endl;
-			cout << "Item ID: " << current->getID() << endl;
-			cout << "Item Title: " << current->getTitle() << endl;
+			cout << "ITEM FOUND" << endl;
+			printItem(current);
 			return current;
 		}
 		current = current->getNext();
 	}
 	cout << "Item " << title << " is not exist in the list" << endl;
 	return NULL;
-};
+}
 
-item* ItemList::searchItemID(string id) {// TODO: compare string work by work
+item *ItemList::searchItemByID(string id) {
 	item* current = head;
 	while (current != NULL) {
 		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 			cout << "ITEM FOUND" << endl;
-			cout << "Item ID: " << current->getID() << endl;
-			cout << "Item Title: " << current->getTitle() << endl;
-
+			printItem(current);
 			return current;
 		}
 		current = current->getNext();
@@ -224,10 +217,13 @@ int ItemList::size()
 		count++;
 		current = current->getNext();
 	}
-	cout << "number of item: " << count << endl;
 	return count;
 }
 
+void ItemList::deleteList()
+{
+	while (head != NULL)	this->removeHead();
+}
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	customer *current = head;
@@ -250,32 +246,12 @@ void CtmList::addCtmItemList(customer* Ctm, string item) { // Using to test, Can
 	Ctm->addItem(item);
 }
 
-customer* CtmList::searchCtmName(string name) {// TODO: compare string work by work
-	customer *current = head;
-	while (current != NULL) {
-		if (strcmp(current->getName().c_str(), name.c_str()) == 0) {
-			cout << "CUSTOMER FOUND" << endl;
-			cout << "Customer ID: " << current->getID() << endl;
-			cout << "Customer Name: " << current->getName() << endl;
-			cout << "Customer Phone: " << current->getPhone() << endl;
-			cout << "Customer Address: " << current->getAddr() << endl;
-			return current;
-		}
-		current = current->getNext();
-	}
-	cout << "Customer " << name << " is not exist in the list" << endl;
-	return NULL;
-}
-
-customer* CtmList::searchCtmID(string id) {// TODO: compare string work by work
+customer* CtmList::searchCtmID(string id) {
 	customer *current = head;
 	while (current != NULL) {
 		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 			cout << "CUSTOMER FOUND" << endl;
-			cout << "Customer ID: " << current->getID() << endl;
-			cout << "Customer Name: " << current->getName() << endl;
-			cout << "Customer Phone: " << current->getPhone() << endl;
-			cout << "Customer Address: " << current->getAddr() << endl;
+			printCtm(current);
 			return current;
 		}
 		current = current->getNext();
@@ -284,16 +260,33 @@ customer* CtmList::searchCtmID(string id) {// TODO: compare string work by work
 	return NULL;
 }
 
+
+customer* CtmList::searchCtmName(string name) {
+	customer *current = head;
+	while (current != NULL) {
+		if (strcmp(current->getName().c_str(), name.c_str()) == 0) {
+			cout << "CUSTOMER FOUND" << endl;
+			printCtm(current);
+			return current;
+		}
+		current = current->getNext();
+	}
+	cout << "Customer " << name << " is not exist in the list" << endl;
+	return NULL;
+}
+
 void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 	cout << "Customer ID: " << ctm->getID() << endl;
 	cout << "Customer Name: " << ctm->getName() << endl;
-	cout << "Customer Address: " << ctm->getAddr() << endl;
 	cout << "Customer Phone: " << ctm->getPhone() << endl;
-	cout << "Customer Type: " << ctm->getCtmType() << endl;
+	cout << "Customer Address: " << ctm->getAddr() << endl;
+	switch (ctm->getCtmType()) {
+	case REGULAR: cout << "Customer Type: REGULAR" << endl; break;
+	case VIP:	cout << "Customer Type: VIP" << endl; break;
+	default:	cout << "Customer Type: GUEST" << endl; break;
+	}
 	ctm->printCtmRental();
-	cout << "Customer Success Return: " << ctm->getSuccessReturn() << endl;
-	cout << "Customer MAX: " << ctm->getMaxVid() << endl;
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
@@ -334,9 +327,9 @@ void CtmList::appendTail(string id, string name, string addr, string phone, ctmT
 		head = newItem;
 	}
 	else {
-		while (current->getNext() != NULL)
-			current = current->getNext(); // find tail node
-			current->setNext(newItem);
+		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
+		current->setNext(newItem);
+		newItem->setNext(NULL);
 	}
 }
 

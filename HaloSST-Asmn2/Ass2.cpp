@@ -20,20 +20,12 @@ rentalTypeEnum rentalTypeUtil(string);
 genreTypeEnum genreTypeUtil(string);
 bool rentalPeriodUtil(string);
 char* str2arr(string);
+bool CheckExit(string optSel_str);
 
 int main()
 {
 	//ItemList* ItemLst = new ItemList();
 	// ----------Testing-----------
-	/*ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
-	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
-	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
-	ItemLst->appendTail("I003-2003", "Pes 2020: New Era", rentalTypeEnum::RECORD, true, 3, 4.99, true, genreTypeEnum::ACTION);
-	ItemLst->removeHead();
-	ItemLst->removeTail();
-	ItemLst->printList();
-	ItemLst->searchItem("I001-2001");
-	ItemLst->searchItem("I008-2001");*/
 
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
@@ -74,10 +66,140 @@ int main()
 	cout << "Size of the list: " << CustomerLst->size() << endl;
 	CustomerLst->printList();
 
+	cout << "####################ITEM TEST ######################" << endl;
+
+	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
+	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
+	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
+	ItemLst->appendTail("I003-2003", "Pes 2020: New Era", rentalTypeEnum::RECORD, true, 3, 4.99, true, genreTypeEnum::ACTION);
+	ItemLst->printList();
+	ItemLst->removeHead();
+	ItemLst->removeTail();
+	ItemLst->printList();
+
+	ItemLst->searchItemByID("I001-2001");
+	ItemLst->searchItemByTitle("Captain America");
+
+	cout << "Test remove node" << endl;
+	a = ItemLst->removeItemByID("I002-2002");
+	ItemLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Test remove node1" << endl;
+	a = ItemLst->removeItemByID("I001-2001");
+	ItemLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Test remove node2" << endl;
+	a = ItemLst->removeItemByID("C0015");
+	ItemLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+
+	cout << "Size of the list: " << ItemLst->size() << endl;
+	ItemLst->deleteList();
+	cout << "Size of the list: " << ItemLst->size() << endl;
+	ItemLst->printList();
+
 	delete ItemLst;
 	delete CustomerLst;
 	return 0;
 }
+
+/*int main()
+{
+	ItemList* ItemLst = new ItemList();
+	CtmList* CustomerLst = new CtmList();
+	initBaseDb(ItemLst, CustomerLst);
+	while (1) {
+		string optSel_str; // Option Select Raw String
+
+		cout << "\n___________________________________________________________";
+		cout << "\nWelcome to Genie’s video store" << endl;
+		cout << "\nEnter an option below." << endl;
+		cout << "1. Add a new item, update or delete an existing item" << endl;
+		cout << "2. Add new customer or update an existing customer" << endl;
+		cout << "3. Promote an existing customer" << endl;
+		cout << "4. Rent an item" << endl;
+		cout << "5. Return an item" << endl;
+		cout << "6. Display all items" << endl;
+		cout << "7. Display out-of-stock items" << endl;
+		cout << "8. Display all customers" << endl;
+		cout << "9. Display group of customers" << endl;
+		cout << "10. Search items or customers" << endl;
+		cout << "Exit." << endl;
+
+		getline(cin, optSel_str);
+		if (CheckExit(optSel_str)) return 0;
+
+		// TODO expand input evaluator here
+		switch (atoi(optSel_str.c_str()))
+		{
+		case 1:
+			//ModifyItem();
+			break;
+
+		case 2:
+			//ModifyCtmr();
+			break;
+
+		case 3:
+			//PromoteCtmr();
+			break;
+		case 4:
+			//RentItem();
+			break;
+
+		case 5:
+			//ReturnItem();
+			break;
+
+		case 6:
+			ItemLst->printList();
+			break;
+
+		case 7:
+			//DispOosItem();
+			break;
+
+		case 8:
+			CustomerLst->printList();
+			break;
+
+		case 9:
+			//DispGroupCtmr();
+			break;
+
+		case 10:
+			//SearchItemCtmr();
+			break;
+
+		default:
+			// TODO non-supported operator, merge w input evaluator
+			break;
+		}
+
+	}
+	delete ItemLst;
+	delete CustomerLst;
+	return 0;
+}*/
+
+/*	Function name: CheckExit.
+Usage: Check if the input string is Exit or not. If "Exit" is pressed then exit the program and print team information.
+Input: pointer to input raw string.
+Output: Boolean flag to acknowledge "Exit" have been pressed or not.
+*/
+bool CheckExit(string optSel_str) {
+	if ((optSel_str.compare("Exit") == 0) || optSel_str.compare("exit") == 0) { // Consider both Capital (Exit) and non-capital (exit) of the first character to compare with the input string.
+		cout << "ASSIGNMENT 2 - GROUP HaloSST" << endl;
+		cout << "s3518702, s3518702@rmit.edu.vn, Nam Truong" << endl;
+		cout << "s3607833, s3607833@rmit.edu.vn, Tin Nguyen" << endl;
+		cout << "s3618889, s3618889@rmit.edu.vn, Hoang Tran" << endl;
+		return 1;
+	}
+return 0;
+}
+
 
 int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;

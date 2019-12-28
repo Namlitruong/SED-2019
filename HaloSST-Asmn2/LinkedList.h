@@ -19,34 +19,28 @@
 using namespace std;
 
 class ItemList {
-	item *head;
+	item *head = NULL;
 public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
 	~ItemList() { cout << "Item List is destroyed" << endl; }
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Video/Movies
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
 	void printList();
+	void printItem(item*);
 	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
 	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum);
 	void removeHead();
 	void removeTail();
-	void searchItem(string); // Not ready yet
-	
+	item *searchItemByTitle(string);
+	item *searchItemByID(string);
 	item *getItemHead() { return this->head; }
-	item* getItemHead() { return this->head; }
-	item* searchItemTitle(string);
-	item* searchItemID(string);
 	bool removeItemByID(string);
 	int size();
-
-	/*
-	void removeNode(string name);
-	void size();
-	void deleteList();*/
+	void deleteList();
 };
 
 class CtmList {
-	customer *head;
+	customer *head = NULL;
 public:
 	CtmList() { head = NULL, cout << "Item List is created" << endl; }
 	~CtmList() { cout << "Item List is destroyed" << endl; }
