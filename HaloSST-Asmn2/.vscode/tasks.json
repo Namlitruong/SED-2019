@@ -6,9 +6,9 @@
             "command": "clang++",
             "args": [
                 "-o",
-                "${fileDirname}/${fileBasenameNoExtension}",
-                "${fileDirname}/*.cpp",
-                "-g"
+                "${fileBasenameNoExtension}",
+                "*.cpp",
+                "-g",
             ],
             "type": "shell",
             "presentation": {
