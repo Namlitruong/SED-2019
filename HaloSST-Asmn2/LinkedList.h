@@ -18,7 +18,7 @@
 
 using namespace std;
 
-class ItemList{
+class ItemList {
 	item *head;
 public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
@@ -27,10 +27,11 @@ public:
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
 	void printList();
 	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
-	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); 
+	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum);
 	void removeHead();
 	void removeTail();
-	void searchItem(string);
+	void searchItem(string); // Not ready yet
+	item *getItemHead() { return this->head; }
 
 	/*
 	void removeNode(string name);
@@ -47,6 +48,7 @@ public:
 	void printList();
 	void printCtm(customer*);
 	void addCtmItemList(string);
+	customer *getCtmHead() { return this->head; }
 	customer* searchCtm(string, string);
 	//void printCtmRental();
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
