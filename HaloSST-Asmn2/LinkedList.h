@@ -19,13 +19,14 @@
 using namespace std;
 
 class ItemList{
-	item *head;
+	item *head = NULL;
 public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
 	~ItemList() { cout << "Item List is destroyed" << endl; }
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Game
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool);
 	void printList();
+	item *getItemHead() { return this->head; }
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();
 	void appendTail(string name);
@@ -37,7 +38,7 @@ public:
 };
 
 class CtmList {
-	customer *head;
+	customer *head = NULL;
 public:
 	CtmList() { head = NULL, cout << "Item List is created" << endl; }
 	~CtmList() { cout << "Item List is destroyed" << endl; }
@@ -46,6 +47,8 @@ public:
 	void printCtm(customer*);
 	void addCtmItemList(string);
 	customer* searchCtm(string, string);
+	customer *getCtmHead() { return this->head; }
+
 	//void printCtmRental();
 	/*void appendHead(string, string, rentalTypeEnum, bool, int, int, bool, genreTypeEnum); //Overloading using for Record and DVD
 	void removeHead();

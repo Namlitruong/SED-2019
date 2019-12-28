@@ -107,6 +107,7 @@ genreTypeEnum genreTypeUtil(string);
 bool rentalPeriodUtil(string);
 char* str2arr(string);
 string arr2str(string);
+string ctmTypeStr(ctmTypeEnum);
 
 int main()
 {
@@ -291,25 +292,32 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 
 int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
-	ofstream ctmFile("customers.txt", std::ios_base::app);
+	ofstream ctmFile("customers.txt");
 	ofstream itemFile("items.txt", std::ios_base::app);
-
+	
 	// Finalize Customer DB
 	if (ctmFile.is_open())
 	{
 		// IN-DEVELOP
-		// customer *current = ctmPtr->getHead();
 		// Iteratively output to buffer
-		//while (current->getNext() != NULL)
-		//{
-			//TODO arr2str Util function, getAllArr function from Ctm/Item cls
-		//	textLine = arr2str(current->getAllArr())
-
-			//inputVal[0],inputVal[1],rentalTypeUtil(inputVal[2]), rentalPeriodUtil(inputVal[3]),
-			//atoi(inputVal[4].c_str()), std::stod(inputVal[5]), true, genreTypeUtil(inputVal[6].c_str()));
+		customer* current = ctmPtr->getCtmHead();
+		ctmFile << "#Final Customer Database updated";
+		do{
+			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
+			textLine =  "\r\n"
+						+ current->getID() 		+ ','
+						+ current->getName() 	+ ','
+						+ current->getAddr() 	+ ','
+						+ current->getPhone() 	+ ','
+						+ std::to_string(current->numOfRental()) + ','
+						+ ctmTypeStr(current->getCtmType());
 			
-		//	ctmFile << textLine;
-		//}
+			cout << textLine;
+
+			//TODO add rental List of each Customer
+
+			// ctmFile << textLine;
+		} while( (current = current->getNext()) != NULL);
 		ctmFile.close();
 	}
 
@@ -333,6 +341,21 @@ ctmTypeEnum ctmTypeUtil(string str) {
 	{
 		return ctmTypeEnum::GUEST;
 	}
+}
+
+string ctmTypeStr(ctmTypeEnum ctmEnum) {
+
+    switch (ctmEnum)
+    {
+        case GUEST:   
+			return "Guest";
+        case REGULAR:   
+			return "Regular";
+        case VIP: 
+			return "VIP";
+        default:      
+			return "";
+    }
 }
 
 rentalTypeEnum rentalTypeUtil(string str) {
@@ -383,18 +406,20 @@ bool rentalPeriodUtil(string str) {
 
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
-	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	//FIXME swap strcpy_s for Windows supported "safe" String libary
+	// strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	strcpy(cTypeStr, str.c_str()); 
 	return cTypeStr;
 }
 
-string arr2str(string arr[]) {
-	bool firstTerm = true;
-	string temp;
-	// IN-DEVELOP
-	for (string &ele : arr)
-	{
-		if (!firstTerm) { temp.append(","); }
-		firstTerm = false;
-		temp.append(ele); // Append Element
-	}
-}
+//string arr2str(string arr[]) {
+	// bool firstTerm = true;
+	// string temp;
+	// // IN-DEVELOP
+	// for (string &ele : arr)
+	// {
+	// 	if (!firstTerm) { temp.append(","); }
+	// 	firstTerm = false;
+	// 	temp.append(ele); // Append Element
+	// }
+//}
