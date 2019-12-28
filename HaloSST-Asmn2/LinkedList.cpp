@@ -12,12 +12,13 @@
 #include "pch.h"
 #include "LinkedList.h"
 ////////////////////////////--ITEM--/////////////////////////////////////////
-void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable){
+void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable) {
 	item *current = head;
 	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable);
 	if (current == NULL) {
 		head = newItem;
-	}else {
+	}
+	else {
 		newItem->setNext(current);
 		head = newItem;
 	}
@@ -50,13 +51,13 @@ void ItemList::printList()
 		while (current != NULL)
 		{
 			cout << "/////////////////////////////////////////////////" << endl;
-			cout << "Item ID: " << current->getID() <<endl;
+			cout << "Item ID: " << current->getID() << endl;
 			cout << "Item Title: " << current->getTitle() << endl;
 			cout << "Item Type: " << current->getRentalType() << endl;
 			switch (current->getRentalType()) {
-			case 0:{
+			case 0: {
 				cout << "Item Genre: " << (static_cast<record*>(current))->getGenreType() << endl;
-				break;}
+				break; }
 			case 1: {
 				cout << "Item Genre: " << (static_cast<dvd*>(current))->getGenreType() << endl;
 				break; }
@@ -176,7 +177,6 @@ void ItemList::appendTail(string name)
 	currentPtr->getNext()->setName(name);
 	currentPtr->getNext()->setNext(NULL);
 }
-
 void ItemList::printList()
 {
 	node *currentPtr = head;
@@ -191,9 +191,6 @@ void ItemList::printList()
 		}
 	}
 }
-
-
-
 void ItemList::removeHead()
 {
 	node *currentPtr = head->getNext();
@@ -205,7 +202,6 @@ void ItemList::removeHead()
 		currentPtr = currentPtr->getNext();
 	}
 }
-
 void ItemList::removeTail()
 {
 	node *currentPtr = head;
@@ -214,7 +210,6 @@ void ItemList::removeTail()
 	delete currentPtr->getNext();
 	currentPtr->setNext(NULL);
 }
-
 void ItemList::size()
 {
 	int count = 0;
@@ -226,7 +221,6 @@ void ItemList::size()
 	}
 	cout << "There are " << count << " people in line" << endl;
 }
-
 void ItemList::removeNode(string name)
 {
 	node *currentPtr = head;
@@ -263,9 +257,9 @@ void CtmList::appendHead(string id, string name, string addr, string phone, ctmT
 	customer *current = head;
 	customer *newItem;
 	switch (ctmType) {
-	case 1: newItem = new regular (id, name, addr, phone, ctmType); break;
-	case 2: newItem = new vip (id, name, addr, phone, ctmType); break;
-	default: newItem = new guest (id, name, addr, phone, ctmType); break;
+	case 1: newItem = new regular(id, name, addr, phone, ctmType); break;
+	case 2: newItem = new vip(id, name, addr, phone, ctmType); break;
+	default: newItem = new guest(id, name, addr, phone, ctmType); break;
 	}
 	if (current == NULL) {
 		head = newItem;
@@ -305,8 +299,9 @@ void CtmList::printCtm(customer* ctm) {
 	cout << "Customer Phone: " << ctm->getPhone() << endl;
 	cout << "Customer Type: " << ctm->getCtmType() << endl;
 	ctm->printCtmRental();
-	//current->successReturn();
-	//cout << "Customer MAX: " << current->getSuccessReturn() << endl;
+	//ctm->successReturn();
+	cout << "Customer Success Return: " << ctm->getSuccessReturn() << endl;
+	cout << "Customer MAX: " << ctm->getMaxVid() << endl;
 
 	cout << "/////////////////////////////////////////////////" << endl;
 }

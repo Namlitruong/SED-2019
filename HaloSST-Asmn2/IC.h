@@ -145,34 +145,35 @@ public:
 	void addItem(string);
 	void printCtmRental();
 	////////////////--VIRYUAL
-	//virtual int getSuccessReturn() = 0;
-	//virtual void successReturn() = 0;
-	//virtual int getMaxVid() = 0;
+	virtual int getSuccessReturn() = 0;
+	virtual void successReturn() = 0;
+	virtual int getMaxVid() = 0;
 };
 class guest : public customer {
 protected:
 	int maxVid;
-	int successReturn;
+	int successReturnNumb;
 public:
 	guest(); //by default
 	guest(string, string, string, string, ctmTypeEnum); //parameterized
 	guest(const guest&);//copy
 	~guest();
-	//int getMaxVid() { return this->maxVid; }
-	//int getSuccessReturn() { return this->successReturn; }
-	//void successReturn() { this->successReturn++; }
+	int getMaxVid() { return this->maxVid; }
+	void successReturn() { this->successReturnNumb++; }
+	int getSuccessReturn() { return this->successReturnNumb; }
 };
 
 class regular : public customer {
 protected:
-	int successReturn;
+	int successReturnNumb;
 public:
 	regular(); //by default
 	regular(string, string, string, string, ctmTypeEnum); //parameterized
 	regular(const regular&);//copy
 	~regular();
-	//int getSuccessReturn() { return this->successReturn; }
-	//void successReturn() { this->successReturn++; }
+	int getMaxVid() { return 1000; }
+	void successReturn() { this->successReturnNumb++; }
+	int getSuccessReturn() { return this->successReturnNumb; }
 };
 
 class vip : public customer {
@@ -183,6 +184,7 @@ public:
 	vip(string, string, string, string, ctmTypeEnum); //parameterized
 	vip(const vip&);//copy
 	~vip();
-	//int getSuccessReturn() { return this->rewardPoint; }
-	//void successReturn() { this->rewardPoint = this->rewardPoint + 10; }
+	int getMaxVid() { return 1000; }
+	void successReturn() { this->rewardPoint = this->rewardPoint + 10; }
+	int getSuccessReturn() { return this->rewardPoint; }
 };

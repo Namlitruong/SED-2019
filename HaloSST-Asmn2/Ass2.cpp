@@ -25,7 +25,7 @@ int main()
 {
 	ItemList* ItemLst = new ItemList();
 	// ----------Testing-----------
-	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
+	/*ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
 	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
 	ItemLst->appendTail("I003-2003", "Pes 2020: New Era", rentalTypeEnum::RECORD, true, 3, 4.99, true, genreTypeEnum::ACTION);
@@ -33,13 +33,32 @@ int main()
 	ItemLst->removeTail();
 	ItemLst->printList();
 	ItemLst->searchItem("I001-2001");
-	ItemLst->searchItem("I008-2001");
+	ItemLst->searchItem("I008-2001");*/
 
-	// CtmList* CustomerLst = new CtmList();
-	// initBaseDb(ItemLst, CustomerLst);
-	// CustomerLst->printList();
-	// delete ItemLst;
-	// delete CustomerLst;
+	CtmList* CustomerLst = new CtmList();
+	initBaseDb(ItemLst, CustomerLst);
+	CustomerLst->printList();
+
+	cout << "TESTTTTTTTTTT:   " << CustomerLst->getCtmHead()->getName() << endl;
+	cout << "TESTTTTTTTTTT1:   " << CustomerLst->getCtmHead()->getAddr() << endl;
+	cout << "TESTTTTTTTTTT2:   " << CustomerLst->getCtmHead()->getID() << endl;
+
+	delete ItemLst;
+	delete CustomerLst;
+
+	/*ListOfItem->appendHead("C001", "Minh Dinh", "18 Irwin Street", "0421473243", ctmTypeEnum::VIP);
+	ListOfItem->addCtmItemList("I005-2015");
+	ListOfItem->addCtmItemList("I002-1988");
+	ListOfItem->addCtmItemList("I001-2001");
+	ListOfItem->appendHead("C002", "Hong Wang", "20 Irwin Street", "0424173255", ctmTypeEnum::GUEST);
+	ListOfItem->appendHead("C003", "Linh Nguyen", "12 Brunswick Street","0424173255", ctmTypeEnum::VIP);
+	ListOfItem->appendHead("C004", "Antony Zinc","114 Fraser Avenue","0424512345", ctmTypeEnum::VIP);
+	ListOfItem->appendHead("C005", "John Cain","45 Sydney Road","0424325123", ctmTypeEnum::VIP);
+	cout << "?????????????????????????????????" << endl;
+	ListOfItem->printCtm(ListOfItem->searchCtm("Linklqweqh Nguyen", "C0qqwe02"));
+	cout << ListOfItem->searchCtm("Linh Nguyen", "C002")->getPhone() <<endl;
+	ListOfItem->printList();
+	delete ListOfItem;*/
 
 	return 0;
 }

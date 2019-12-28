@@ -124,34 +124,48 @@ void customer::printCtmRental() {
 	}
 }
 /////////////////////////--Guest--//////////////////////////
-guest::guest() : customer::customer() {} //by default
+guest::guest() : customer::customer() { //by default
+	maxVid = 2;
+	successReturnNumb = 0;
+}
 guest::guest(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
 	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
-	this->maxVid = 2;
-	this->successReturn = 0;
+	maxVid = 2;
+	successReturnNumb = 0;
 }
 guest::guest(const guest& Obj)//copy
-	: customer::customer(Obj) {}
+	: customer::customer(Obj) {
+	maxVid = 2;
+	successReturnNumb = 0;
+}
 guest::~guest(void) {}
 /////////////////////////--Guest--//////////////////////////
 /////////////////////////--Regular--//////////////////////////
-regular::regular() : customer::customer() {} //by default
+regular::regular() : customer::customer() { //by default
+	successReturnNumb = 0;
+}
 regular::regular(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
 	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
-	this->successReturn = 0;
+	successReturnNumb = 0;
 }
 regular::regular(const regular& Obj)//copy
-	: customer::customer(Obj) {}
+	: customer::customer(Obj) {
+	successReturnNumb = 0;
+}
 regular::~regular(void) {}
 /////////////////////////--Regular--//////////////////////////
 /////////////////////////--VIP--//////////////////////////
-vip::vip() : customer::customer() {} //by default
+vip::vip() : customer::customer() { //by default
+	rewardPoint = 0;
+}
 vip::vip(string idS, string nameS, string addrS, string phoneS, ctmTypeEnum ctmTypeS) //parameterized
 	: customer::customer(idS, nameS, addrS, phoneS, ctmTypeS) {
-	this->rewardPoint = 0;
+	rewardPoint = 0;
 }
 vip::vip(const vip& Obj)//copy
-	: customer::customer(Obj) {}
+	: customer::customer(Obj) {
+	rewardPoint = 0;
+}
 vip::~vip(void) {}
 /////////////////////////--VIP--//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
