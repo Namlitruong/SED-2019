@@ -12,9 +12,120 @@
 
 using namespace std;
 
+string genItemID(ItemList* ItsLst, const char* year) {
+	char ID[10] = "I000-";
+	ID[5] = *(year + 0);
+	ID[6] = *(year + 1);
+	ID[7] = *(year + 2);
+	ID[8] = *(year + 3);
+	char tempID[4];
+	srand(ItsLst->size());
+	item *Its = NULL;
+	int range = 999 - 0 + 1;
+	bool flag = false;
+
+	while (!flag) {
+		int num = rand() % range + 0;
+		cout << "num in int: " << num << endl;
+		_itoa_s(num, tempID, 10);
+		cout << "Length: " << strlen(tempID) << endl;
+		switch (strlen(tempID)) {
+		case 1:
+			ID[3] = tempID[0];
+			break;
+		case 2:
+			ID[2] = tempID[0];
+			ID[3] = tempID[1];
+			break;
+		default:
+			ID[1] = tempID[0];
+			ID[2] = tempID[1];
+			ID[3] = tempID[2];
+			break;
+		}
+		Its = ItsLst->searchItemByID(ID);
+		if (Its == NULL) flag = true;
+	}
+	cout << ID << " can be used for new item" << endl;
+	return ID;
+}
+
+string genCtmID(CtmList* CtmLst) {
+	char ID[5] = "C000";
+	char tempID[4];
+	srand(CtmLst->size());
+	customer *Ctm = NULL;
+	int range = 999 - 0 + 1;
+	bool flag = false;
+
+	while (!flag) {
+		int num = rand() % range + 0;
+		_itoa_s(num, tempID, 10);
+		switch (strlen(tempID)) {
+		case 1:
+			ID[3] = tempID[0];
+			break;
+		case 2:
+			ID[2] = tempID[0];
+			ID[3] = tempID[1];
+			break;
+		default:
+			ID[1] = tempID[0];
+			ID[2] = tempID[1];
+			ID[3] = tempID[2];
+			break;
+		}
+		Ctm = CtmLst->searchCtmID(ID);
+		if (Ctm == NULL) flag = true;
+	}
+	cout << ID << " can be used for new customer" << endl;
+	return ID;
+}
+
+void SearchItemCtmr(CtmList* CustomerLst, ItemList* ItemLst) {
+	string select;
+	string tempCtm;
+	string tempItem;
+	customer* rentCtm = NULL;
+	item* rentItem = NULL;
+	bool flag = false;
+	while (!flag) {
+		cout << "\nEnter an option below." << endl;
+		cout << "1. Search Customers" << endl;
+		cout << "2. Search Items" << endl;
+		cout << "3. Exit Searching" << endl;
+		getline(cin, select);
+		switch (atoi(select.c_str()))
+		{
+		case 1:
+			cout << "Search Customer. Please enter customer ID or name: ";
+			getline(cin, tempCtm);
+			rentCtm = CustomerLst->searchCtmName(tempCtm);
+			if (rentCtm == NULL) {
+				cout << "Find with ID customer. " << endl;
+				rentCtm = CustomerLst->searchCtmID(tempCtm);
+			};
+			break;
+		case 2:
+			cout << "Search Item. Please enter Item ID or title: ";
+			getline(cin, tempItem);
+			rentItem = ItemLst->searchItemByTitle(tempItem);
+			if (rentItem == NULL) {
+				cout << "Find with ID Item. " << endl;
+				rentItem = ItemLst->searchItemByID(tempItem);
+			};
+			break;
+		default:
+			flag = true;
+			break;
+		}
+
+	}
+}
+
 void ModifyItem(ItemList* ItemLst) {
 	string select, temp;
-	string id, title, rentalType, genType, numbOfCopy, rentFee;
+	string year, title, rentalType, genType, numbOfCopy, rentFee;
 	bool loanStatus;
 	bool flag = false;
 	item * rentIts = NULL;
@@ -28,8 +139,8 @@ void ModifyItem(ItemList* ItemLst) {
 	switch (atoi(select.c_str())) {
 	case 1:
 		cout << "1. New Item" << endl;
-		cout << "Enter Item ID: "; getline(cin, id);
 		cout << "Enter Item Title: "; getline(cin, title);
+		cout << "Enter Item publised year: "; getline(cin, year);
 		//rental type
 		while (!flag) {
 			cout << "Select rental Type:" << endl;
@@ -89,9 +200,9 @@ void ModifyItem(ItemList* ItemLst) {
 		cout << "Enter Item Number of Copy: "; getline(cin, numbOfCopy);
 		cout << "Enter Item Rent Fee: "; getline(cin, rentFee);
 
-		if (rentalType != "Game") ItemLst->appendTail(id, title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()));
+		if (rentalType != "Game") ItemLst->appendTail(genItemID(ItemLst, year.c_str()), title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()));
 		else
-			ItemLst->appendTail(id, title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()), genreTypeUtil(genType));
+			ItemLst->appendTail(genItemID(ItemLst, year.c_str()), title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()), genreTypeUtil(genType));
 		break;
 	case 2:
 		cout << "2. Update item information" << endl;
@@ -101,27 +212,21 @@ void ModifyItem(ItemList* ItemLst) {
 		if (rentIts == NULL) break;
 		while (!flag) {
 			cout << "Select information that want to change (update):" << endl;
-			cout << "1. Item ID" << endl;
-			cout << "2. Item Title" << endl;
-			cout << "3. Rental Type" << endl;
-			cout << "4. Loan Type" << endl;
-			cout << "5. Number Of Copy" << endl;
-			cout << "6. Rent Fee" << endl;
-			cout << "7. Genre Type" << endl;
-			cout << "8. Exit" << endl;
+			cout << "1. Item Title" << endl;
+			cout << "2. Rental Type" << endl;
+			cout << "3. Loan Type" << endl;
+			cout << "4. Number Of Copy" << endl;
+			cout << "5. Rent Fee" << endl;
+			cout << "6. Genre Type" << endl;
+			cout << "7. Exit" << endl;
 			getline(cin, select);
 			switch (atoi(select.c_str())) {
 			case 1:
-				cout << "Enter updated item ID: ";
-				getline(cin, id);
-				rentIts->setID(id);
-				break;
-			case 2:
 				cout << "Enter updated item title: ";
 				getline(cin, title);
 				rentIts->setTitle(title);
 				break;
-			case 3:
+			case 2:
 				while (!flag) {
 					cout << "Select rental Type:" << endl;
 					cout << "1. RECORD" << endl;
@@ -141,7 +246,7 @@ void ModifyItem(ItemList* ItemLst) {
 				flag = false;
 				rentIts->setRentalType(rentalTypeUtil(rentalType));
 				break;
-			case 4:
+			case 3:
 				while (!flag) {
 					cout << "Select loan type:" << endl;
 					cout << "1. 1-week loan" << endl;
@@ -159,17 +264,17 @@ void ModifyItem(ItemList* ItemLst) {
 				flag = false;
 				rentIts->setLoanStatus(loanStatus);
 				break;
-			case 5:
+			case 4:
 				cout << "Enter updated Item Number of Copy: ";
 				getline(cin, numbOfCopy);
 				rentIts->setNumOfCopy(atoi(numbOfCopy.c_str()));
 				break;
-			case 6:
+			case 5:
 				cout << "Enter updated Item Rent Fee: ";
 				getline(cin, rentFee);
 				rentIts->setRentFee(atof(rentFee.c_str()));
 				break;
-			case 7:
+			case 6:
 				if (rentalType == "Game") break;
 				while (!flag) {
 					cout << "Select genre Type:" << endl;
@@ -223,7 +328,6 @@ void ModifyCtmr(CtmList* CustomerLst) {
 	switch (atoi(select.c_str())) {
 	case 1:
 		cout << "1. New customers" << endl;
-		cout << "Enter customer ID: "; getline(cin, id);
 		cout << "Enter customer Name: "; getline(cin, name);
 		cout << "Enter customer Address: "; getline(cin, addr);
 		cout << "Enter customer Phone: "; getline(cin, phone);
@@ -233,11 +337,11 @@ void ModifyCtmr(CtmList* CustomerLst) {
 		cout << "3. GUEST" << endl;
 		getline(cin, select);
 		switch (atoi(select.c_str())) {
-		case 1: ctmType = "Vip"; break;
+		case 1: ctmType = "VIP"; break;
 		case 2:	ctmType = "Regular"; break;
 		default: ctmType = "Guest"; break;
 		}
-		CustomerLst->appendTail(id, name, addr, phone, ctmTypeUtil(ctmType));
+		CustomerLst->appendTail(genCtmID(CustomerLst), name, addr, phone, ctmTypeUtil(ctmType));
 		break;
 	case 2:
 		cout << "2. Update customer information" << endl;

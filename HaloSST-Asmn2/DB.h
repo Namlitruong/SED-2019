@@ -47,3 +47,7 @@ void DispGroupCtmr(CtmList*);
 void DisplayOutofStock(ItemList*);
 void ModifyCtmr(CtmList*);
 void ModifyItem(ItemList*);
+void SearchItemCtmr(CtmList*, ItemList*);
+
+string genCtmID(CtmList*);
+string genItemID(ItemList* ItsLst, const char* year);
