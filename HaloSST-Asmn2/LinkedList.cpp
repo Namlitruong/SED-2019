@@ -12,9 +12,9 @@
 #include "pch.h"
 #include "LinkedList.h"
 ////////////////////////////--ITEM--/////////////////////////////////////////
-void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable) {
+void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
 	item *current = head;
-	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable);
+	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee);
 	if (current == NULL) {
 		head = newItem;
 	}
@@ -24,13 +24,13 @@ void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bo
 	}
 }
 
-void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable, genreTypeEnum genreType) {
+void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
 	item *current = head;
 	item *newItem;
 	switch (rentalType) {
-	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
-	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
-	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
+	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
+	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	}
 	if (current == NULL) {
 		head = newItem;
@@ -54,6 +54,20 @@ void ItemList::printList()
 			current = current->getNext();
 		}
 	}
+}
+
+void ItemList::printOosItem() {
+	item *current = head;
+	int count = 0;
+	while (current != NULL)
+	{
+		if (current->getNumOfCopy() == 0) {
+			printItem(current);
+			count++;
+		}
+		current = current->getNext();
+	}
+	if (count == 0)cout << "No Out of Stock Item" << endl;
 }
 
 void ItemList::printItem(item* its)
@@ -88,15 +102,17 @@ void ItemList::printItem(item* its)
 		break; }
 	}
 	cout << "Item Number of Copy: " << its->getNumOfCopy() << endl;
-	cout << "Item Status: " << its->getIsAvailable() << endl;
+	
+	if (its->getLoanStatus()) cout << "Item Loan tyle: 1-week loan" << endl;
+	else cout << "Item Loan tyle: 2-day loan" << endl;
 
 	cout << "Item Rent Fee: " << its->getRentFee() << endl;
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
-void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable) {
+void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
 	item* current = head;
-	item* newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable);
+	item* newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee);
 
 	if (current == NULL) {
 		head = newItem;
@@ -109,14 +125,14 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 
 }
 
-void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, bool isAvailable, genreTypeEnum genreType) {
+void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
 	item* current = head;
 	item* newItem;
 	switch (rentalType)
 	{
-	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
-	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
-	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, isAvailable, genreType); break;
+	case 0: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
+	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
+	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	}
 	if (current == NULL) {
 		head = newItem;
@@ -195,6 +211,34 @@ bool ItemList::removeItemByID(string id) {
 			after = current->getNext();
 			if (after == NULL) {//	return false;	
 				if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
+					this->removeTail();
+					return true;
+				}
+				else return false;
+			}
+		}
+		previous->setNext(after);
+		current->setNext(NULL);
+		delete current;
+	}
+	return true;
+}
+
+bool ItemList::removeItemNode(item* node) {
+	item* current = head;
+	item* previous = NULL;
+	item* after = current->getNext();
+	if (current == node) {
+		this->removeHead();
+		return true;
+	}
+	else {
+		while (current != node) {
+			previous = current;
+			current = current->getNext();
+			after = current->getNext();
+			if (after == NULL) {//	return false;	
+				if (current == node) {
 					this->removeTail();
 					return true;
 				}

@@ -37,13 +37,13 @@ protected:
 	string title;
 	rentalTypeEnum rentalType;
 	bool loanStatus;//1 weeks or 2 days
-	int numOfCopy;
+	int numOfCopy = 0;
 	double rentFee;
 	bool isAvailable; //borrowed or available
 	item *next = NULL; // pointer to next
 public:
 	item();//by Defautl
-	item(string, string, rentalTypeEnum, bool, int, double, bool); //parameterized
+	item(string, string, rentalTypeEnum, bool, int, double); //parameterized
 	item(const item&);//copy
 	~item();
 	//////////////////--Getter--//////////////
@@ -54,7 +54,6 @@ public:
 	bool getLoanStatus() { return this->loanStatus; }
 	int getNumOfCopy() { return this->numOfCopy; }
 	double getRentFee() { return this->rentFee; }
-	bool getIsAvailable() { return this->isAvailable; }
 	//////////////////--Setter--//////////////
 	void setNext(item *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
@@ -63,7 +62,6 @@ public:
 	void setLoanStatus(bool loanType) { this->loanStatus = loanType; }
 	void setNumOfCopy(int numOfCopy) { this->numOfCopy = this->numOfCopy + numOfCopy; }
 	void setRentFee(double rentFee) { this->rentFee = rentFee; }
-	void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
 	//////////////////////////////VIRTTUAL
 	virtual void setGenreType(genreTypeEnum genreType) = 0;
 	virtual genreTypeEnum getGenreType() = 0;
@@ -74,7 +72,7 @@ protected:
 	genreTypeEnum genreType;
 public:
 	record(); //by default
-	record(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //parameterized
+	record(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //parameterized
 	record(const record&);//copy
 	~record();
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
@@ -86,7 +84,7 @@ protected:
 	genreTypeEnum genreType;
 public:
 	dvd(); //By default
-	dvd(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //parameterized
+	dvd(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //parameterized
 	dvd(const dvd&);//copy
 	~dvd();
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
@@ -96,7 +94,7 @@ public:
 class game : public item {
 public:
 	game();//By default
-	game(string, string, rentalTypeEnum, bool, int, double, bool); //parameterized
+	game(string, string, rentalTypeEnum, bool, int, double); //parameterized
 	game(const game&);//copy
 	~game();
 	void setGenreType(genreTypeEnum genreType) {}

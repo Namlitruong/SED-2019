@@ -35,6 +35,9 @@ int PromoteCtmrByID(CtmList*);
 int promoteCtm(customer*, CtmList*);
 int autoPromoteCtmr(CtmList*);
 void DispGroupCtmr(CtmList*);
+void DisplayOutofStock(ItemList*);
+void ModifyCtmr(CtmList*);
+void ModifyItem(ItemList*);
 int main()
 {
 	ItemList* ItemLst = new ItemList();
@@ -68,10 +71,10 @@ int main()
 		switch (atoi(optSel_str.c_str()))
 		{
 		case 1: //Hoang
-			//ModifyItem();
+			ModifyItem(ItemLst);
 			break;
 		case 2://Hoang
-			//ModifyCtmr();
+			ModifyCtmr(CustomerLst);
 			break;
 		case 3:
 			PromoteCtmrByID(CustomerLst);
@@ -85,8 +88,8 @@ int main()
 		case 6:
 			ItemLst->printList();
 			break;
-		case 7://Hoang
-			//DispOosItem();
+		case 7:
+			DisplayOutofStock(ItemLst);
 			break;
 		case 8:
 			CustomerLst->printList();
@@ -106,6 +109,277 @@ int main()
 	delete ItemLst;
 	delete CustomerLst;
 	return 0;
+}
+
+void ModifyItem(ItemList* ItemLst) {
+	string select, temp;
+	string id, title, rentalType, genType, numbOfCopy, rentFee;
+	bool loanStatus;
+	bool flag = false;
+	item * rentIts = NULL;
+
+	cout << "\nEnter an option below." << endl;
+	cout << "1. New item" << endl;
+	cout << "2. Update item information" << endl;
+	cout << "3. Remove item" << endl;
+	cout << "Exit." << endl;
+	getline(cin, select);
+	switch (atoi(select.c_str())) {
+	case 1:
+		cout << "1. New Item" << endl;
+		cout << "Enter Item ID: "; getline(cin, id);
+		cout << "Enter Item Title: "; getline(cin, title);
+		//rental type
+		while (!flag) {
+			cout << "Select rental Type:" << endl;
+			cout << "1. RECORD" << endl;
+			cout << "2. DVD" << endl;
+			cout << "3. GAME" << endl;
+			getline(cin, select);
+			switch (atoi(select.c_str())) {
+			case 1: rentalType = "Record"; flag = true; break;
+			case 2:	rentalType = "DVD"; flag = true; break;
+			case 3:	rentalType = "Game"; flag = true; break;
+			default:
+				cout << "Enter rental type again !!!";
+				flag = false;
+				break;
+			}
+		}
+		flag = false;
+		//genre type
+		if (rentalType != "Game") {
+			while (!flag) {
+				cout << "Select genre Type:" << endl;
+				cout << "1. ACTION" << endl;
+				cout << "2. HORROR" << endl;
+				cout << "3. DRAMA" << endl;
+				cout << "4. COMEDY" << endl;
+				getline(cin, select);
+				switch (atoi(select.c_str())) {
+				case 1: genType = "Action"; flag = true; break;
+				case 2:	genType = "Horror"; flag = true; break;
+				case 3:	genType = "Drama"; flag = true; break;
+				case 4:	genType = "Comedy"; flag = true; break;
+				default:
+					cout << "Enter genre type again !!!";
+					flag = false;
+					break;
+				}
+			}
+		}
+		flag = false;
+		//Loan type
+		while (!flag) {
+			cout << "Select loan type:" << endl;
+			cout << "1. 1-week loan" << endl;
+			cout << "2. 2-day loan" << endl;
+			getline(cin, select);
+			switch (atoi(select.c_str())) {
+			case 1: loanStatus = true; flag = true; break;
+			case 2:	loanStatus = false; flag = true; break;
+			default:
+				cout << "Enter loan type again !!!";
+				flag = false;
+				break;
+			}
+		}
+		flag = false;
+		cout << "Enter Item Number of Copy: "; getline(cin, numbOfCopy);
+		cout << "Enter Item Rent Fee: "; getline(cin, rentFee);
+
+		if (rentalType != "Game") ItemLst->appendTail(id, title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()));
+		else 
+			ItemLst->appendTail(id, title, rentalTypeUtil(rentalType), loanStatus, atoi(numbOfCopy.c_str()), atof(rentFee.c_str()), genreTypeUtil(genType));
+		break;
+	case 2:
+		cout << "2. Update item information" << endl;
+		cout << "Enter Item ID: ";
+		getline(cin, temp);
+		rentIts = ItemLst->searchItemByID(temp);
+		if (rentIts == NULL) break;
+		while (!flag) {
+			cout << "Select information that want to change (update):" << endl;
+			cout << "1. Item ID" << endl;
+			cout << "2. Item Title" << endl;
+			cout << "3. Rental Type" << endl;
+			cout << "4. Loan Type" << endl;
+			cout << "5. Number Of Copy" << endl;
+			cout << "6. Rent Fee" << endl;
+			cout << "7. Genre Type" << endl;
+			cout << "8. Exit" << endl;
+			getline(cin, select);
+			switch (atoi(select.c_str())) {
+			case 1:
+				cout << "Enter updated item ID: ";
+				getline(cin, id);
+				rentIts->setID(id);
+				break;
+			case 2:
+				cout << "Enter updated item title: ";
+				getline(cin, title);
+				rentIts->setTitle(title);
+				break;
+			case 3:
+				while (!flag) {
+					cout << "Select rental Type:" << endl;
+					cout << "1. RECORD" << endl;
+					cout << "2. DVD" << endl;
+					cout << "3. GAME" << endl;
+					getline(cin, select);
+					switch (atoi(select.c_str())) {
+					case 1: rentalType = "Record"; flag = true; break;
+					case 2:	rentalType = "DVD"; flag = true; break;
+					case 3:	rentalType = "Game"; flag = true; break;
+					default:
+						cout << "Enter rental type again !!!";
+						flag = false;
+						break;
+					}
+				}
+				flag = false;
+				rentIts->setRentalType(rentalTypeUtil(rentalType));
+				break;
+			case 4:
+				while (!flag) {
+					cout << "Select loan type:" << endl;
+					cout << "1. 1-week loan" << endl;
+					cout << "2. 2-day loan" << endl;
+					getline(cin, select);
+					switch (atoi(select.c_str())) {
+					case 1: loanStatus = true; flag = true; break;
+					case 2:	loanStatus = false; flag = true; break;
+					default:
+						cout << "Enter loan type again !!!";
+						flag = false;
+						break;
+					}
+				}
+				flag = false;
+				rentIts->setLoanStatus(loanStatus);
+				break;
+			case 5:
+				cout << "Enter updated Item Number of Copy: "; 
+				getline(cin, numbOfCopy);
+				rentIts->setNumOfCopy(atoi(numbOfCopy.c_str()));
+				break;
+			case 6:
+				cout << "Enter updated Item Rent Fee: ";
+				getline(cin, rentFee);
+				rentIts->setRentFee(atof(rentFee.c_str()));
+				break;
+			case 7:
+				if (rentalType == "Game") break;
+				while (!flag) {
+					cout << "Select genre Type:" << endl;
+					cout << "1. ACTION" << endl;
+					cout << "2. HORROR" << endl;
+					cout << "3. DRAMA" << endl;
+					cout << "4. COMEDY" << endl;
+					getline(cin, select);
+					switch (atoi(select.c_str())) {
+					case 1: genType = "Action"; flag = true; break;
+					case 2:	genType = "Horror"; flag = true; break;
+					case 3:	genType = "Drama"; flag = true; break;
+					case 4:	genType = "Comedy"; flag = true; break;
+					default:
+						cout << "Enter genre type again !!!";
+						flag = false;
+						break;
+					}
+				}
+				static_cast<record*>(rentIts)->setGenreType(genreTypeUtil(genType));
+				flag = false;
+				break;
+			default:
+				flag = true;
+				break;
+			}
+		}
+		break;
+	case 3: 
+		cout << "3. Remove item" << endl;
+		cout << "Enter Item ID: ";
+		getline(cin, temp);
+		rentIts = ItemLst->searchItemByID(temp);
+		if (rentIts == NULL) break;
+		ItemLst->removeItemNode(rentIts);
+		break;
+	default: break;
+	}
+}
+
+void ModifyCtmr(CtmList* CustomerLst) {
+	string select, tempCtm;
+	string id, name, addr, phone, ctmType;
+	bool flag = false;
+	customer * rentCtm = NULL;
+	cout << "\nEnter an option below." << endl;
+	cout << "1. New customers" << endl;
+	cout << "2. Update customer information" << endl;
+	cout << "Exit." << endl;
+	getline(cin, select);
+	switch (atoi(select.c_str())) {
+	case 1:
+		cout << "1. New customers" << endl;
+		cout << "Enter customer ID: "; getline(cin, id);
+		cout << "Enter customer Name: "; getline(cin, name);
+		cout << "Enter customer Address: "; getline(cin, addr);
+		cout << "Enter customer Phone: "; getline(cin, phone);
+		cout << "Select customer Type:" << endl;
+		cout << "1. VIP" << endl;
+		cout << "2. REGULAR" << endl;
+		cout << "3. GUEST" << endl;
+		getline(cin, select);
+		switch (atoi(select.c_str())) {
+		case 1: ctmType = "Vip"; break;
+		case 2:	ctmType = "Regular"; break;
+		default: ctmType = "Guest"; break;
+		}
+		CustomerLst->appendTail(id, name, addr, phone, ctmTypeUtil(ctmType));
+		break;
+	case 2: 
+		cout << "2. Update customer information" << endl;
+		cout << "Enter Customer ID: ";
+		getline(cin, tempCtm);
+		rentCtm = CustomerLst->searchCtmID(tempCtm);
+		if (rentCtm == NULL) break;
+		while (!flag) {
+			cout << "Select information that want to change (update):" << endl;
+			cout << "1. Name" << endl;
+			cout << "2. Address" << endl;
+			cout << "3. Phone" << endl;
+			cout << "4. Exit" << endl;
+			getline(cin, select);
+			switch (atoi(select.c_str())) {
+			case 1:
+				cout << "Enter updated customer Name: ";
+				getline(cin, name);
+				rentCtm->setName(name);
+				break;
+			case 2:
+				cout << "Enter updated customer Address: ";
+				getline(cin, addr);
+				rentCtm->setAddr(addr);
+				break;
+			case 3:
+				cout << "Enter updated customer Phone: ";
+				getline(cin, phone);
+				rentCtm->setPhone(phone);
+				break;
+			default:
+				flag = true;
+				break;
+			}
+		}
+	default: break;
+	}
+}
+
+void DisplayOutofStock(ItemList* ItemLst) {
+	cout << "//////////////////////---LIST OF OUT OF STOCK ITEMS---////////////////////////" << endl;
+	ItemLst->printOosItem();
+	cout << "//////////////////////---LIST OF OUT OF STOCK ITEMS---////////////////////////" << endl;
 }
 
 void DispGroupCtmr(CtmList* CustomerLst) {
@@ -366,7 +640,6 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 						rentalPeriodUtil(inputVal[3]),
 						atoi(inputVal[4].c_str()),
 						std::stod(inputVal[5]),
-						true,
 						genreTypeUtil(inputVal[6].c_str()));
 				}
 				else if (inputVal[2] == "Game") {
@@ -375,8 +648,7 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 						rentalTypeUtil(inputVal[2]),
 						rentalPeriodUtil(inputVal[3]),
 						atoi(inputVal[4].c_str()),
-						std::stod(inputVal[5]),
-						true);
+						std::stod(inputVal[5]));
 				}
 				else {
 					// Redundant

@@ -21,14 +21,13 @@ item::item() {//by Defautl
 	isAvailable = 1; //borrowed(0) or available(1)
 	next = NULL;
 }
-item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS) { //parameterized
+item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS) { //parameterized
 	id = idS;
 	title = titleS;
 	rentalType = rentalTypeS;
 	loanStatus = loanStatusS;
 	numOfCopy = numOfCopyS;
 	rentFee = rentFeeS;
-	isAvailable = isAvailableS;
 	next = NULL;
 }
 item::item(const item& Obj) {//copy
@@ -38,7 +37,6 @@ item::item(const item& Obj) {//copy
 	loanStatus = Obj.loanStatus;
 	numOfCopy = Obj.numOfCopy;
 	rentFee = Obj.rentFee;
-	isAvailable = Obj.isAvailable;
 	next = NULL;
 }
 item::~item(void) { };
@@ -47,8 +45,8 @@ item::~item(void) { };
 record::record() : item::item() {//By default
 	genreType = ACTION;
 }
-record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS, genreTypeEnum genreTypeS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {
+record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, genreTypeEnum genreTypeS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {
 	genreType = genreTypeS;
 }
 record::record(const record& Obj) //Copy
@@ -61,8 +59,8 @@ record::~record(void) {}
 dvd::dvd() : item::item() {//By default
 	genreType = ACTION;
 }
-dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS, genreTypeEnum genreTypeS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {
+dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS , genreTypeEnum genreTypeS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {
 	genreType = genreTypeS;
 }
 dvd::dvd(const dvd& Obj) //Copy
@@ -73,8 +71,8 @@ dvd::~dvd(void) {}
 /////////////////////////--DVD--//////////////////////////
 /////////////////////////--GAME--//////////////////////////
 game::game() : item::item() {}//By default
-game::game(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, bool isAvailableS) //parameterized
-	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS, isAvailableS) {}
+game::game(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS) //parameterized
+	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {}
 game::game(const game& Obj) //Copy
 	: item::item(Obj) {}
 game::~game(void) {}

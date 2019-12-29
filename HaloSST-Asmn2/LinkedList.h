@@ -23,18 +23,20 @@ class ItemList {
 public:
 	ItemList() { head = NULL, cout << "Item List is created" << endl; }
 	~ItemList() { cout << "Item List is destroyed" << endl; }
-	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum); //Using for Video/Movies
-	void appendHead(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
+	void appendHead(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //Using for Video/Movies
+	void appendHead(string, string, rentalTypeEnum, bool, int, double); //Using for Game
 	void printList();
+	void printOosItem();
 	void printItem(item*);
-	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool); //Using for Game
-	void appendTail(string, string, rentalTypeEnum, bool, int, double, bool, genreTypeEnum);
+	void appendTail(string, string, rentalTypeEnum, bool, int, double); //Using for Game
+	void appendTail(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum);
 	void removeHead();
 	void removeTail();
 	item *searchItemByTitle(string);
 	item *searchItemByID(string);
 	item *getItemHead() { return this->head; }
 	bool removeItemByID(string);
+	bool removeItemNode(item*);
 	int size();
 	void deleteList();
 };
