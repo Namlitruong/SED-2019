@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "IC.h"
 #include "LinkedList.h"
 #include <iostream>
@@ -27,52 +27,48 @@ bool CheckExit(string optSel_str);
 string rentalTypeStr(rentalTypeEnum);
 string rentalPeriodStr(bool);
 string double2str(double);
-string genreTypeStr(genreTypeEnum);
+string genreTypeStr(item*);
 
-int main()
+/*int main()
 {
 
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
 
-	// CustomerLst->printList();
-	// CustomerLst->searchCtmID("C001");
-	// CustomerLst->removeHead();
+	/*CustomerLst->printList();
+	CustomerLst->searchCtmID("C001");
+	CustomerLst->removeHead();
 
-	// CustomerLst->printList();
-	// CustomerLst->searchCtmName("Minh Dinh");
-	// CustomerLst->removeTail();
-	// CustomerLst->printList();
-	// CustomerLst->searchCtmID("C003");
-	
-	// CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
-	// CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
-	// CustomerLst->printList();
+	CustomerLst->printList();
+	CustomerLst->searchCtmName("Minh Dinh");
+	CustomerLst->removeTail();
+	CustomerLst->printList();
+	CustomerLst->searchCtmID("C003");
+
+	CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
+	CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
+	CustomerLst->printList();
 
 
-	// cout << "Test remove node" << endl;
-	// int a = CustomerLst->removeNodeByID("C0013");
-	// CustomerLst->printList();
-	// cout << "Node remove successfully: " << a << endl;
+	cout << "Test remove node" << endl;
+	int a = CustomerLst->removeNodeByID("C0013");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
 
-	// cout << "Test remove node1" << endl;
-	// a = CustomerLst->removeNodeByID("C0012");
-	// CustomerLst->printList();
-	// cout << "Node remove successfully: " << a << endl;
+	cout << "Test remove node1" << endl;
+	a = CustomerLst->removeNodeByID("C0012");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
 
-	// cout << "Test remove node2" << endl;
-	// a = CustomerLst->removeNodeByID("C0015");
-	// CustomerLst->printList();
-	// cout << "Node remove successfully: " << a << endl;
+	cout << "Test remove node2" << endl;
+	a = CustomerLst->removeNodeByID("C0015");
+	CustomerLst->printList();
+	cout << "Node remove successfully: " << a << endl;
+	cout << "Size of the list: " << CustomerLst->size() << endl;
+	CustomerLst->printList();
 
-	// cout << "Size of the list: " << CustomerLst->size() << endl;
-	// CustomerLst->deleteList();
-	// cout << "Size of the list: " << CustomerLst->size() << endl;
-	// CustomerLst->printList();
-
-	/*cout << "####################ITEM TEST ######################" << endl;
-
+	cout << "####################ITEM TEST ######################" << endl;
 	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
 	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
 	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
@@ -81,45 +77,36 @@ int main()
 	ItemLst->removeHead();
 	ItemLst->removeTail();
 	ItemLst->printList();
-
 	ItemLst->searchItemByID("I001-2001");
 	ItemLst->searchItemByTitle("Captain America");
-
 	cout << "Test remove node" << endl;
 	a = ItemLst->removeItemByID("I002-2002");
 	ItemLst->printList();
 	cout << "Node remove successfully: " << a << endl;
-
 	cout << "Test remove node1" << endl;
 	a = ItemLst->removeItemByID("I001-2001");
 	ItemLst->printList();
 	cout << "Node remove successfully: " << a << endl;
-
 	cout << "Test remove node2" << endl;
 	a = ItemLst->removeItemByID("C0015");
 	ItemLst->printList();
 	cout << "Node remove successfully: " << a << endl;
-
 	cout << "Size of the list: " << ItemLst->size() << endl;
-	ItemLst->deleteList();
-	cout << "Size of the list: " << ItemLst->size() << endl;
-	ItemLst->printList();*/
-
+	ItemLst->printList();
 	finBaseDb(ItemLst, CustomerLst);
 
 	delete ItemLst;
 	delete CustomerLst;
 	return 0;
-}
+}*/
 
-/*int main()
+int main()
 {
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
 	while (1) {
 		string optSel_str; // Option Select Raw String
-
 		cout << "\n___________________________________________________________";
 		cout << "\nWelcome to Genie�s video store" << endl;
 		cout << "\nEnter an option below." << endl;
@@ -134,62 +121,56 @@ int main()
 		cout << "9. Display group of customers" << endl;
 		cout << "10. Search items or customers" << endl;
 		cout << "Exit." << endl;
-
 		getline(cin, optSel_str);
-		if (CheckExit(optSel_str)) return 0;
-
+		if (CheckExit(optSel_str)) {
+			finBaseDb(ItemLst, CustomerLst);
+			delete ItemLst;
+			delete CustomerLst;
+			return 0;
+		}
 		// TODO expand input evaluator here
 		switch (atoi(optSel_str.c_str()))
 		{
-		case 1:
+		case 1: //Hoang
 			//ModifyItem();
 			break;
-
-		case 2:
+		case 2://Hoang
 			//ModifyCtmr();
 			break;
-
 		case 3:
 			//PromoteCtmr();
 			break;
 		case 4:
 			//RentItem();
 			break;
-
 		case 5:
 			//ReturnItem();
 			break;
-
 		case 6:
 			ItemLst->printList();
 			break;
-
-		case 7:
+		case 7://Hoang
 			//DispOosItem();
 			break;
-
 		case 8:
 			CustomerLst->printList();
 			break;
-
 		case 9:
 			//DispGroupCtmr();
 			break;
-
-		case 10:
+		case 10://Hoang
 			//SearchItemCtmr();
 			break;
-
 		default:
 			// TODO non-supported operator, merge w input evaluator
 			break;
 		}
-
 	}
+	finBaseDb(ItemLst, CustomerLst);
 	delete ItemLst;
 	delete CustomerLst;
 	return 0;
-}*/
+}
 
 /*	Function name: CheckExit.
 Usage: Check if the input string is Exit or not. If "Exit" is pressed then exit the program and print team information.
@@ -204,7 +185,7 @@ bool CheckExit(string optSel_str) {
 		cout << "s3618889, s3618889@rmit.edu.vn, Hoang Tran" << endl;
 		return 1;
 	}
-return 0;
+	return 0;
 }
 
 
@@ -347,7 +328,7 @@ int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 		// IN-DEVELOP
 		// Iteratively output to buffer
 		customer* currCtm = ctmPtr->getCtmHead();
-		ctmFile << "#Final Customer Database updated\r\n";
+		ctmFile << "#Final Customer Database updated\n";
 		do {
 			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
 			textLine = currCtm->getID() + ','
@@ -356,42 +337,42 @@ int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 				+ currCtm->getPhone() + ','
 				+ std::to_string(currCtm->numOfRental()) + ','
 				+ ctmTypeStr(currCtm->getCtmType());
-			
+
 			//TODO add rental List of each Customer
-			textLine += "\r\n";
+			textLine += "\n";
 
 			for (int i = 0; i < currCtm->numOfRental(); i++) {
 				textLine += *(currCtm->getListOfRental() + i) + "\n";
 			};
-			if (textLine[textLine.length() - 1] != '\n'){
-				textLine += "\r\n";
+			if (textLine[textLine.length() - 1] != '\n') {
+				textLine += "\n";
 			}
-			
+			 
 			ctmFile << textLine;
 		} while ((currCtm = currCtm->getNext()) != NULL);
 		ctmFile.close();
 	}
-	
+
 	// Now Finalize Items DB
 	if (itemFile.is_open())
 	{
 		// IN-DEVELOP
 		// Iteratively output to buffer
 		item* currItem = itemPtr->getItemHead();
-		itemFile << "#Final Item Database updated\r\n";
+		itemFile << "#Final Item Database updated\n";
 		do {
 			// TODO arr2str Util function, getAllArr function from Ctm/Item cls
-			textLine = currItem->getID() 	+ ','
-				+ currItem->getTitle() 		+ ','
-				+ rentalTypeStr(currItem->getRentalType()) 	+ ','
-				+ rentalPeriodStr(currItem->getLoanStatus())+ ','
-				+ std::to_string(currItem->getNumOfCopy()) 	+ ','
-				+ double2str(currItem->getRentFee()) 		+ ','
-				+ genreTypeStr(currItem->getGenreType());
+			textLine = currItem->getID() + ','
+				+ currItem->getTitle() + ','
+				+ rentalTypeStr(currItem->getRentalType()) + ','
+				+ rentalPeriodStr(currItem->getLoanStatus()) + ','
+				+ std::to_string(currItem->getNumOfCopy()) + ','
+				+ double2str(currItem->getRentFee()) 
+				+ genreTypeStr(currItem);
 			// FIXME getGenreType() virtual function returns NONE except 1st iteration
 
-			if (textLine[textLine.length() - 1] != '\n'){
-				textLine += "\r\n";
+			if (textLine[textLine.length() - 1] != '\n') {
+				textLine += "\n";
 			}
 			itemFile << textLine;
 		} while ((currItem = currItem->getNext()) != NULL);
@@ -480,21 +461,29 @@ genreTypeEnum genreTypeUtil(string str) {
 	}
 }
 
-string genreTypeStr(genreTypeEnum genreEnum){
-	switch (genreEnum)
-	{
-	case ACTION:
-		return "Action";
-	case HORROR:
-		return "Horror";
-	case DRAMA:
-		return "Drama";
-	case COMEDY:
-		return "Comedy";
-
-	case NONE:
-	default:
-		return "";
+string genreTypeStr(item* its) { 
+	switch (its->getRentalType()) {
+	case RECORD: {
+		switch ((static_cast<record*>(its))->getGenreType()) {
+		case ACTION:	return ",Action"; break;
+		case HORROR:	return ",Horror"; break;
+		case DRAMA:		return ",Drama"; break;
+		case COMEDY:	return ",Comedy"; break;
+		default: return ""; break;
+		}
+		break; }
+	case DVD: {
+		switch ((static_cast<dvd*>(its))->getGenreType()) {
+		case ACTION:	return ",Action"; break;
+		case HORROR:	return ",Horror"; break;
+		case DRAMA:		return ",Drama"; break;
+		case COMEDY:	return ",Comedy"; break;
+		default: return ""; break;
+		}
+		break; }
+	default: {
+		return"";
+		break; }
 	}
 }
 
@@ -509,7 +498,7 @@ bool rentalPeriodUtil(string str) {
 	}
 }
 
-string rentalPeriodStr(bool bl){
+string rentalPeriodStr(bool bl) {
 	if (bl)
 	{
 		return "1-week";
@@ -522,14 +511,14 @@ string rentalPeriodStr(bool bl){
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
 	//FIXME swap strcpy_s for Windows supported "safe" String libary
-	//  strcpy_s(cTypeStr, str.length() + 1, str.c_str());
-	strcpy(cTypeStr, str.c_str());
+	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	//strcpy(cTypeStr, str.c_str());
 	return cTypeStr;
 }
 
 string double2str(double db) {
 	char buffer[100];
-	sprintf(buffer, "%.2f", db);
+	sprintf_s(buffer, "%.2f", db);
 	std::string str = buffer;
 	return str;
 }
