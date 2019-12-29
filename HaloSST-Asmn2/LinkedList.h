@@ -46,6 +46,7 @@ public:
 	~CtmList() { cout << "Customer List is destroyed" << endl; }
 	void appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void printList();
+	void printListByCtmType(ctmTypeEnum);
 	void printCtm(customer*);
 	void addCtmItemList(customer*, string);
 	customer* getCtmHead() { return this->head; }
@@ -55,6 +56,7 @@ public:
 	void appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void removeTail();
 	bool removeNodeByID(string name);
+	bool removeNode(customer*);
 	int size();
 	void deleteList();
 };

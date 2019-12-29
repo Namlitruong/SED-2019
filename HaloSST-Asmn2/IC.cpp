@@ -118,6 +118,28 @@ void customer::addItem(string item) {
 	this->listOfRental[this->numOfRental()] = item;
 }
 
+/*char* str2arr1(string str) {
+	char* cTypeStr = new char[str.length() + 1];
+	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
+	return cTypeStr;
+}*/
+
+int customer::removeItem(string item) {
+	int flag = 0;
+	for (int i = 0; i < this->numOfRental(); i++) {
+		if (strcmp(this->listOfRental[i].c_str(), item.c_str()) == 0) {
+			for (int j = i; j < this->numOfRental() - 1; j++) {
+				this->listOfRental[j] = this->listOfRental[j + 1];
+			}
+			flag++;
+			break;
+		}
+	}
+	this->listOfRental[this->numOfRental()-1] = "";
+	if (flag == 0) return 0;
+	else return 1;
+}
+
 void customer::printCtmRental() {
 	cout << "Rental list of customer: "<< this->getName() <<" rent "<< this->numOfRental() <<" items"<< endl;
 	for (int i = 0; i < this->numOfRental(); i++) {
@@ -170,3 +192,4 @@ vip::vip(const vip& Obj)//copy
 vip::~vip(void) {}
 /////////////////////////--VIP--//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
+

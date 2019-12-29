@@ -29,83 +29,19 @@ string rentalPeriodStr(bool);
 string double2str(double);
 string genreTypeStr(item*);
 
-/*int main()
-{
-
-	ItemList* ItemLst = new ItemList();
-	CtmList* CustomerLst = new CtmList();
-	initBaseDb(ItemLst, CustomerLst);
-
-	/*CustomerLst->printList();
-	CustomerLst->searchCtmID("C001");
-	CustomerLst->removeHead();
-
-	CustomerLst->printList();
-	CustomerLst->searchCtmName("Minh Dinh");
-	CustomerLst->removeTail();
-	CustomerLst->printList();
-	CustomerLst->searchCtmID("C003");
-
-	CustomerLst->appendTail("C0012", "Nam Truong", "45 Sydney Road", "0819847731", ctmTypeEnum::VIP);
-	CustomerLst->appendTail("C0013", "Tin Nguyen", "45 Sydney Road", "0819847713", ctmTypeEnum::VIP);
-	CustomerLst->printList();
-
-
-	cout << "Test remove node" << endl;
-	int a = CustomerLst->removeNodeByID("C0013");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-
-	cout << "Test remove node1" << endl;
-	a = CustomerLst->removeNodeByID("C0012");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-
-	cout << "Test remove node2" << endl;
-	a = CustomerLst->removeNodeByID("C0015");
-	CustomerLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-	cout << "Size of the list: " << CustomerLst->size() << endl;
-	CustomerLst->printList();
-
-	cout << "####################ITEM TEST ######################" << endl;
-	ItemLst->appendHead("I000-2000", "111111111111111", rentalTypeEnum::GAME, true, 3, 3.99, true);
-	ItemLst->appendTail("I001-2001", "Medal of Honour", rentalTypeEnum::DVD, true, 3, 6.99, false, genreTypeEnum::NONE);
-	ItemLst->appendTail("I002-2002", "Captain America", rentalTypeEnum::GAME, true, 2, 3.99, true);
-	ItemLst->appendTail("I003-2003", "Pes 2020: New Era", rentalTypeEnum::RECORD, true, 3, 4.99, true, genreTypeEnum::ACTION);
-	ItemLst->printList();
-	ItemLst->removeHead();
-	ItemLst->removeTail();
-	ItemLst->printList();
-	ItemLst->searchItemByID("I001-2001");
-	ItemLst->searchItemByTitle("Captain America");
-	cout << "Test remove node" << endl;
-	a = ItemLst->removeItemByID("I002-2002");
-	ItemLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-	cout << "Test remove node1" << endl;
-	a = ItemLst->removeItemByID("I001-2001");
-	ItemLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-	cout << "Test remove node2" << endl;
-	a = ItemLst->removeItemByID("C0015");
-	ItemLst->printList();
-	cout << "Node remove successfully: " << a << endl;
-	cout << "Size of the list: " << ItemLst->size() << endl;
-	ItemLst->printList();
-	finBaseDb(ItemLst, CustomerLst);
-
-	delete ItemLst;
-	delete CustomerLst;
-	return 0;
-}*/
-
+int renItem (ItemList*, CtmList*);
+int returnItem(ItemList*, CtmList*);
+int PromoteCtmrByID(CtmList*);
+int promoteCtm(customer*, CtmList*);
+//int autoPromoteCtmr(CtmList*);
+void DispGroupCtmr(CtmList*);
 int main()
 {
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
 	while (1) {
+		//autoPromoteCtmr(CustomerLst);
 		string optSel_str; // Option Select Raw String
 		cout << "\n___________________________________________________________";
 		cout << "\nWelcome to Genie�s video store" << endl;
@@ -138,13 +74,13 @@ int main()
 			//ModifyCtmr();
 			break;
 		case 3:
-			//PromoteCtmr();
+			PromoteCtmrByID(CustomerLst);
 			break;
 		case 4:
-			//RentItem();
+			renItem(ItemLst, CustomerLst);
 			break;
 		case 5:
-			//ReturnItem();
+			returnItem(ItemLst, CustomerLst);
 			break;
 		case 6:
 			ItemLst->printList();
@@ -156,7 +92,7 @@ int main()
 			CustomerLst->printList();
 			break;
 		case 9:
-			//DispGroupCtmr();
+			DispGroupCtmr(CustomerLst);
 			break;
 		case 10://Hoang
 			//SearchItemCtmr();
@@ -169,6 +105,143 @@ int main()
 	finBaseDb(ItemLst, CustomerLst);
 	delete ItemLst;
 	delete CustomerLst;
+	return 0;
+}
+
+void DispGroupCtmr(CtmList* CustomerLst) {
+	string select;
+	cout << "\nEnter an option below." << endl;
+	cout << "1. List of VIP customers" << endl;
+	cout << "2. List of Regular customers" << endl;
+	cout << "3. List of Guest customers" << endl;
+	getline(cin, select);
+	switch (atoi(select.c_str())) {
+	case 1:
+		cout << "List of VIP customers" << endl;
+		CustomerLst->printListByCtmType(ctmTypeEnum::VIP);
+		break;
+	case 2: 
+		cout << "List of Regular customers" << endl;
+		CustomerLst->printListByCtmType(ctmTypeEnum::REGULAR);
+		break;
+	default:
+		cout << "List of Guest customers" << endl;
+		CustomerLst->printListByCtmType(ctmTypeEnum::GUEST);
+		break;
+	}
+}
+
+int renItem(ItemList* ItemLst, CtmList* CustomerLst) {
+	string tempItem, tempCtm;
+	item * rentIt = NULL;
+	customer * rentCtm = NULL;
+	cout << "////////////////////---RENTING PROCESS START---////////////////////////" << endl;
+	cout << "Enter Item ID: ";
+	getline(cin, tempItem);
+	rentIt = ItemLst->searchItemByID(tempItem);
+	if (rentIt == NULL) return -1;
+	cout << "Enter Customer ID: ";
+	getline(cin, tempCtm);
+	rentCtm = CustomerLst->searchCtmID(tempCtm);
+	if (rentCtm == NULL) return -1;
+	if (rentCtm->getCtmType() == GUEST && rentIt->getLoanStatus() == false) {
+		cout << "GUEST customer can not borrow 2-day item" << endl;
+		return -1;
+	}
+	if (rentCtm->getCtmType() == GUEST && rentCtm->numOfRental() == 2) {
+		cout << "GUEST customer just can rent maximum 2 items" << endl;
+		return -1;
+	}
+	if (rentIt->getNumOfCopy() == 0) {
+		cout << "The Item: " << rentIt->getTitle() << " is not available" << endl;
+		return -1;
+	}
+	else {
+		rentIt->setNumOfCopy(-1);
+		CustomerLst->addCtmItemList(rentCtm, rentIt->getID());
+	}
+	cout << "////////////////////---UPDATE STATUS---////////////////////////" << endl;
+	ItemLst->searchItemByID(tempItem);
+	CustomerLst->searchCtmID(tempCtm);
+	cout << "////////////////////---RENTING PROCESS DONE---////////////////////////" << endl;
+	return 0;
+}
+
+int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
+	string tempItem, tempCtm;
+	item * rentIt = NULL;
+	customer * rentCtm = NULL;
+	cout << "////////////////////---RETURNING PROCESS START---////////////////////////" << endl;
+	cout << "Enter Item ID: ";
+	getline(cin, tempItem);
+	rentIt = ItemLst->searchItemByID(tempItem);
+	if (rentIt == NULL) return -1;
+	cout << "Enter Customer ID: ";
+	getline(cin, tempCtm);
+	rentCtm = CustomerLst->searchCtmID(tempCtm);
+	if (rentCtm == NULL) return -1;
+	rentIt->setNumOfCopy(1);
+	if (rentCtm->removeItem(rentIt->getID()) == 0) return -1;
+	else {
+		rentCtm->successReturn();
+		cout << "Customer "<< rentCtm->getName()<< " return successfully: " << rentCtm->getSuccessReturn() << " items"<< endl;
+	}
+	cout << "////////////////////---UPDATE STATUS---////////////////////////" << endl;
+	ItemLst->searchItemByID(tempItem);
+	CustomerLst->searchCtmID(tempCtm);
+	cout << "////////////////////---RETURNING PROCESS DONE---////////////////////////" << endl;
+	return 0;
+}
+
+/*int autoPromoteCtmr(CtmList* CustomerLst) {
+	customer *current = CustomerLst->getCtmHead();
+	while (current != NULL) {
+		if (current->getSuccessReturn() == 3) {
+			promoteCtm(current, CustomerLst);
+		}
+		current = current->getNext();
+	}
+	return 0;
+}*/
+
+int PromoteCtmrByID(CtmList* CustomerLst) {
+	string tempCtm;
+	customer * rentCtm = NULL;
+	cout << "////////////////////---PROMOTING PROCESS START---////////////////////////" << endl;
+	cout << "Enter Customer ID: ";
+	getline(cin, tempCtm);
+	rentCtm = CustomerLst->searchCtmID(tempCtm);
+	if (rentCtm == NULL) return -1;
+	tempCtm = rentCtm->getID();
+	if (promoteCtm(rentCtm, CustomerLst) == -1) return -1;
+	cout << "////////////////////---UPDATE STATUS---////////////////////////" << endl;
+	CustomerLst->searchCtmID(tempCtm); 
+	cout << "////////////////////---PROMOTING PROCESS DONE---////////////////////////" << endl;
+	return 0;
+}
+
+int promoteCtm(customer * rentCtm, CtmList* CustomerLst) {
+	string promote;
+	switch (rentCtm->getCtmType()) {
+	case REGULAR:	promote = "VIP"; break;
+	case GUEST:		promote = "Regular"; break;
+	default: {
+		cout << "Cannot promote VIP" << endl;
+		promote = "VIP";
+		return -1;
+		break;
+	}
+	}
+	CustomerLst->appendHead(rentCtm->getID(),
+		rentCtm->getName(),
+		rentCtm->getAddr(),
+		rentCtm->getPhone(),
+		ctmTypeUtil(promote));
+
+	for (int i = 0; i < rentCtm->numOfRental(); i++) {
+		CustomerLst->addCtmItemList(CustomerLst->getCtmHead(), *(rentCtm->getListOfRental() + i));
+	}
+	CustomerLst->removeNode(rentCtm);
 	return 0;
 }
 

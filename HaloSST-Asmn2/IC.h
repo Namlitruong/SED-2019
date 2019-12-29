@@ -61,7 +61,7 @@ public:
 	void setTitle(string title) { this->title = title; }
 	void setRentalType(rentalTypeEnum rentalType) { this->rentalType = rentalType; }
 	void setLoanStatus(bool loanType) { this->loanStatus = loanType; }
-	void setNumOfCopy(int numOfCopy) { this->numOfCopy = numOfCopy; }
+	void setNumOfCopy(int numOfCopy) { this->numOfCopy = this->numOfCopy + numOfCopy; }
 	void setRentFee(double rentFee) { this->rentFee = rentFee; }
 	void setIsAvailable(bool isAvailable) { this->isAvailable = isAvailable; }
 	//////////////////////////////VIRTTUAL
@@ -144,8 +144,9 @@ public:
 	void setPhone(string phone) { this->phone = phone; }
 	////////////////--Processing Item--/////////////////////////
 	void addItem(string);
+	int removeItem(string);
 	void printCtmRental();
-	////////////////--VIRYUAL
+	////////////////--VIRTUAL
 	virtual int getSuccessReturn() = 0;
 	virtual void successReturn() = 0;
 	virtual int getMaxVid() = 0;

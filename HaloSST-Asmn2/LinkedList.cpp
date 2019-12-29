@@ -275,6 +275,15 @@ customer* CtmList::searchCtmName(string name) {
 	return NULL;
 }
 
+void CtmList::printListByCtmType(ctmTypeEnum input) {
+	customer *current = head;
+	while (current != NULL)
+	{
+		if (current->getCtmType() == input) printCtm(current);
+		current = current->getNext();
+	}
+}
+
 void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 	cout << "Customer ID: " << ctm->getID() << endl;
@@ -371,6 +380,34 @@ bool CtmList::removeNodeByID(string id) {
 		previous->setNext(after);
 		current->setNext(NULL);
 		delete current;	
+	}
+	return true;
+}
+
+bool CtmList::removeNode(customer* node) {
+	customer* current = head;
+	customer* previous = NULL;
+	customer* after = current->getNext();
+	if (current == node) {
+		this->removeHead();
+		return true;
+	}
+	else {
+		while (current != node) {
+			previous = current;
+			current = current->getNext();
+			after = current->getNext();
+			if (after == NULL) {//	return false;	
+				if (current == node) {
+					this->removeTail();
+					return true;
+				}
+				else return false;
+			}
+		}
+		previous->setNext(after);
+		current->setNext(NULL);
+		delete current;
 	}
 	return true;
 }
