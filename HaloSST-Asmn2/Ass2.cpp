@@ -38,6 +38,9 @@ void DispGroupCtmr(CtmList*);
 void DisplayOutofStock(ItemList*);
 void ModifyCtmr(CtmList*);
 void ModifyItem(ItemList*);
+void SearchItemCtmr(CtmList*, ItemList*);
+
+void 
 int main()
 {
 	ItemList* ItemLst = new ItemList();
@@ -98,7 +101,7 @@ int main()
 			DispGroupCtmr(CustomerLst);
 			break;
 		case 10://Hoang
-			//SearchItemCtmr();
+			SearchItemCtmr(CustomerLst, ItemLst);
 			break;
 		default:
 			// TODO non-supported operator, merge w input evaluator
@@ -520,6 +523,48 @@ int promoteCtm(customer * rentCtm, CtmList* CustomerLst) {
 	CustomerLst->removeNode(rentCtm);
 	return 0;
 }
+
+void SearchItemCtmr(CtmList* CustomerLst, ItemList* ItemLst) {
+	string select;
+	string tempCtm;
+	string tempItem;
+	customer* rentCtm = NULL;
+	item* rentItem = NULL;
+	bool flag = false;
+	while (!flag) {
+		cout << "\nEnter an option below." << endl;
+		cout << "1. Search Customers" << endl;
+		cout << "2. Search Items" << endl;
+		cout << "3. Exit Searching" << endl;
+		getline(cin, select);
+		switch (atoi(select.c_str()))
+		{
+		case 1:
+			cout << "Search Customer. Please enter customer ID or name: ";
+			getline(cin, tempCtm);
+			rentCtm = CustomerLst->searchCtmName(tempCtm);
+			if (rentCtm == NULL) {
+				cout << "Find with ID customer. " << endl;
+				rentCtm = CustomerLst->searchCtmID(tempCtm);
+			};
+			break;
+		case 2:
+			cout << "Search Item. Please enter Item ID or title: ";
+			getline(cin, tempItem);
+			rentItem = ItemLst->searchItemByTitle(tempItem);
+			if (rentItem == NULL) {
+				cout << "Find with ID Item. " << endl;
+				rentItem = ItemLst->searchItemByID(tempItem);
+			};
+			break;
+		default:
+			flag = true;
+			break;
+		}
+
+	}
+}
+
 
 /*	Function name: CheckExit.
 Usage: Check if the input string is Exit or not. If "Exit" is pressed then exit the program and print team information.

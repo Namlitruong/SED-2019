@@ -178,7 +178,7 @@ item *ItemList::searchItemByTitle(string title) {
 		}
 		current = current->getNext();
 	}
-	cout << "Item " << title << " is not exist in the list" << endl;
+	cout << "Item with Title: " << title << " is not exist in the list" << endl;
 	return NULL;
 }
 
@@ -192,7 +192,7 @@ item *ItemList::searchItemByID(string id) {
 		}
 		current = current->getNext();
 	}
-	cout << "Item " << id << " is not exist in the list" << endl;
+	cout << "Item with ID: " << id << " is not exist in the list" << endl;
 	return NULL;
 }
 
@@ -300,7 +300,7 @@ customer* CtmList::searchCtmID(string id) {
 		}
 		current = current->getNext();
 	}
-	cout << "Customer " << id << " is not exist in the list" << endl;
+	cout << "Customer with ID: " << id << " is not exist in the list" << endl;
 	return NULL;
 }
 
@@ -315,7 +315,7 @@ customer* CtmList::searchCtmName(string name) {
 		}
 		current = current->getNext();
 	}
-	cout << "Customer " << name << " is not exist in the list" << endl;
+	cout << "Customer with Name: " << name << " is not exist in the list" << endl;
 	return NULL;
 }
 
