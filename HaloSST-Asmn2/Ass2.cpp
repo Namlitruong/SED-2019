@@ -33,7 +33,7 @@ int renItem (ItemList*, CtmList*);
 int returnItem(ItemList*, CtmList*);
 int PromoteCtmrByID(CtmList*);
 int promoteCtm(customer*, CtmList*);
-//int autoPromoteCtmr(CtmList*);
+int autoPromoteCtmr(CtmList*);
 void DispGroupCtmr(CtmList*);
 int main()
 {
@@ -41,7 +41,7 @@ int main()
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
 	while (1) {
-		//autoPromoteCtmr(CustomerLst);
+		autoPromoteCtmr(CustomerLst);
 		string optSel_str; // Option Select Raw String
 		cout << "\n___________________________________________________________";
 		cout << "\nWelcome to Genie�s video store" << endl;
@@ -193,16 +193,18 @@ int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	return 0;
 }
 
-/*int autoPromoteCtmr(CtmList* CustomerLst) {
+int autoPromoteCtmr(CtmList* CustomerLst) {
 	customer *current = CustomerLst->getCtmHead();
 	while (current != NULL) {
 		if (current->getSuccessReturn() == 3) {
+			customer *temp = current->getNext();
 			promoteCtm(current, CustomerLst);
+			current = temp;
 		}
 		current = current->getNext();
 	}
 	return 0;
-}*/
+}
 
 int PromoteCtmrByID(CtmList* CustomerLst) {
 	string tempCtm;
