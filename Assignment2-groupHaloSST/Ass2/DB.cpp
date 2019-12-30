@@ -1018,6 +1018,7 @@ void printItemList(ItemList* itemPtr) {
 	cout << "\nEnter an option below." << endl;
 	cout << "1. Item list sorted by Title" << endl;
 	cout << "2. Item list sorted by ID (Default)" << endl;
+	cout << "3. Item list non-sorting" << endl;
 	cout << "Exit." << endl;
 	getline(cin, select);
 	switch (atoi(select.c_str())) {
@@ -1026,6 +1027,9 @@ void printItemList(ItemList* itemPtr) {
 		break;
 	case 2:
 		itemPtr->prtSortedItemList(byID);
+		break;
+	case 3: 
+		itemPtr->printList();
 		break;
 	default:
 		break;
@@ -1043,6 +1047,7 @@ void printCtmList(CtmList* ctmPtr) {
 	cout << "\nEnter an option below." << endl;
 	cout << "1. Customer list sorted by Name" << endl;
 	cout << "2. Customerlist sorted by ID (Default)" << endl;
+	cout << "3. Item list non-sorting" << endl;
 	cout << "Exit." << endl;
 	getline(cin, select);
 	switch (atoi(select.c_str())) {
@@ -1051,6 +1056,9 @@ void printCtmList(CtmList* ctmPtr) {
 		break;
 	case 2:
 		ctmPtr->prtSortedCtmList(byID);
+		break;
+	case 3:
+		ctmPtr->printList();
 		break;
 	default:
 		break;
