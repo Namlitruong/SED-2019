@@ -26,6 +26,7 @@ public:
 	void appendHead(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //Using for Video/Movies
 	void appendHead(string, string, rentalTypeEnum, bool, int, double); //Using for Game
 	void printList();
+	void printSortTitle();
 	void printOosItem();
 	void printItem(item*);
 	void appendTail(string, string, rentalTypeEnum, bool, int, double); //Using for Game

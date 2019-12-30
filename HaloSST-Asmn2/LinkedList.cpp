@@ -41,6 +41,7 @@ void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bo
 	}
 }
 
+//TODO remove deprecated function
 void ItemList::printList()
 {
 	item *current = head;
@@ -48,7 +49,89 @@ void ItemList::printList()
 		cout << "No items are in the line" << endl;
 	else
 	{
+		item *temp = NULL;
+
 		while (current != NULL)
+		{
+			printItem(current);
+			current = current->getNext();
+		}
+	}
+}
+
+void swapItem(item* thisNode, item* nextNode) {
+	string tmpID = thisNode->getID();
+	thisNode->setID(nextNode->getID());
+	nextNode->setID(tmpID);
+
+	string tmpTitle = thisNode->getTitle();
+	thisNode->setTitle(nextNode->getTitle());
+	nextNode->setTitle(tmpTitle);
+
+	rentalTypeEnum tmpRentalType = thisNode->getRentalType();
+	thisNode->setRentalType(nextNode->getRentalType());
+	nextNode->setRentalType(tmpRentalType);
+
+	bool tmpLoanStatus = thisNode->getLoanStatus();
+	thisNode->setLoanStatus(nextNode->getLoanStatus());
+	nextNode->setLoanStatus(tmpLoanStatus);
+
+	//FIXME incorrect value
+	int tmpNumOfCopy = thisNode->getNumOfCopy();
+	thisNode->setNumOfCopy(nextNode->getNumOfCopy());
+	nextNode->setNumOfCopy(tmpNumOfCopy);
+
+	double tmpRentFee = thisNode->getRentFee();
+	thisNode->setRentFee(nextNode->getRentFee());
+	nextNode->setRentFee(tmpRentFee);
+
+	/*
+	bool isAvailable = thisNode->getID();
+	thisNode->setID(nextNode->getID());
+	nextNode->setID(tmp);
+	*/
+	
+}
+
+void ItemList::printSortTitle()
+{	
+	//NOTE Bubble Sort. Merge would be better for Linked List
+	item *current = head;
+	int itemCtr = ItemList::size(); // ItemList size, i.e. Total Items
+
+	if (current == NULL)
+		cout << "No items are in the line" << endl;
+	else
+	{
+
+		// Traverse through list element
+		for (int itemIdx = 0; itemIdx < itemCtr; itemIdx++)
+		{
+			// For each element
+			while (current->getNext())
+			{
+				// Swap Node on condition
+				if (current->getID() > current->getNext()->getID())
+				{
+					//TODO update swapItem() for all other fields
+					//NOTE swap() need lib-defined LinkedList->Node::Attribute
+					swapItem(current, current->getNext());
+
+					// Get next Node
+					current = current->getNext();
+				}
+				else
+				{
+					// Get next Node
+					current = current->getNext();
+				}
+			}
+			// Now update current as last Node (LIFO)
+			current = head;
+		}
+
+		// Print out the list
+		while (current)
 		{
 			printItem(current);
 			current = current->getNext();
