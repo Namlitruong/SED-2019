@@ -188,6 +188,17 @@ vip::vip(const vip& Obj)//copy
 	rewardPoint = 0;
 }
 vip::~vip(void) {}
+
+void vip::successReturn() {
+	this->rewardPoint = this->rewardPoint + 10;
+	if (this->rewardPoint == 100) {
+		cout << "This customer can rent 1 Item for free." << endl;
+		this->rewardPoint = 0;
+	}
+	else {
+		cout << "This VIP customer " << this->getName() << " return " << this->rewardPoint / 10 << " successfully." << endl;
+	}
+}
 /////////////////////////--VIP--//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
 
