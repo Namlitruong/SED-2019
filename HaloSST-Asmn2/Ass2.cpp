@@ -483,8 +483,8 @@ void printItemList(ItemList* itemPtr) {
 	case 1:
 		itemPtr->prtSortedItemList(byTitle);
 	case 2:
-	default:
 		itemPtr->prtSortedItemList(byID);
+	default:
 		break;
 	}
 }
