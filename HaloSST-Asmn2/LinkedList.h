@@ -55,6 +55,7 @@ public:
 	customer* getCtmHead() { return this->head; }
 	customer* searchCtmName(string);
 	customer* searchCtmID(string);
+	void prtSortedCtmList(prtSortedList printType);
 	void removeHead();
 	void appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType);
 	void removeTail();

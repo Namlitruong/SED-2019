@@ -40,7 +40,7 @@ void ModifyCtmr(CtmList*);
 void ModifyItem(ItemList*);
 void SearchItemCtmr(CtmList*, ItemList*);
 void printItemList(ItemList*);
-
+void printCtmList(CtmList*);
 
 int main()
 {
@@ -51,7 +51,7 @@ int main()
 		autoPromoteCtmr(CustomerLst);
 		string optSel_str; // Option Select Raw String
 		cout << "\n___________________________________________________________";
-		cout << "\nWelcome to Genie�s video store" << endl;
+		cout << "\nWelcome to Genie\'s video store" << endl;
 		cout << "\nEnter an option below." << endl;
 		cout << "1. Add a new item, update or delete an existing item" << endl;
 		cout << "2. Add new customer or update an existing customer" << endl;
@@ -96,7 +96,7 @@ int main()
 			DisplayOutofStock(ItemLst);
 			break;
 		case 8:
-			CustomerLst->printList();
+			printCtmList(CustomerLst);
 			break;
 		case 9:
 			DispGroupCtmr(CustomerLst);
@@ -484,6 +484,24 @@ void printItemList(ItemList* itemPtr) {
 		itemPtr->prtSortedItemList(byTitle);
 	case 2:
 		itemPtr->prtSortedItemList(byID);
+	default:
+		break;
+	}
+}
+
+void printCtmList(CtmList* ctmPtr) {
+	string select;
+
+	cout << "\nEnter an option below." << endl;
+	cout << "1. Customer list sorted by Name" << endl;
+	cout << "2. Customerlist sorted by ID (Default)" << endl;
+	cout << "Exit." << endl;
+	getline(cin, select);
+	switch (atoi(select.c_str())) {
+	case 1:
+		ctmPtr->prtSortedCtmList(byName);
+	case 2:
+		ctmPtr->prtSortedCtmList(byID);
 	default:
 		break;
 	}

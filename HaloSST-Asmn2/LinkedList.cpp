@@ -431,6 +431,7 @@ void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
+// TODO remove deprecated function
 void CtmList::printList()
 {
 	customer *current = head;
@@ -445,6 +446,87 @@ void CtmList::printList()
 		}
 	}
 }
+
+void swapCtm(customer* thisNode, customer* nextNode) {
+	string tmpID = thisNode->getID();
+	thisNode->setID(nextNode->getID());
+	nextNode->setID(tmpID);
+
+	string tmpName = thisNode->getName();
+	thisNode->setName(nextNode->getName());
+	nextNode->setName(tmpName);
+
+	string tmpAddr = thisNode->getAddr();
+	thisNode->setAddr(nextNode->getAddr());
+	nextNode->setAddr(tmpAddr);
+
+	ctmTypeEnum tmpCtmType = thisNode->getCtmType();
+	thisNode->setCtmType(nextNode->getCtmType());
+	nextNode->setCtmType(tmpCtmType);
+
+	string tmpPhone = thisNode->getPhone();
+	thisNode->setPhone(nextNode->getPhone());
+	nextNode->setPhone(tmpPhone);
+
+	//TODO no. of Rental
+	//int tmpNumOfRental;
+
+	//TODO list of rental print
+	// string *getListOfRental;
+}
+
+void CtmList::prtSortedCtmList(prtSortedList printType)
+{
+	//NOTE Bubble Sort. Merge would be better for Linked List
+	customer *current = head;
+
+	int ctmCtr = CtmList::size(); // ItemList size, i.e. Total Items
+
+	if (current == NULL)
+		cout << "No items are in the line" << endl;
+	else
+	{
+
+		// Traverse through list element
+		for (int itemIdx = 0; itemIdx < ctmCtr; itemIdx++)
+		{
+			// For each element
+			while (current->getNext())
+			{
+				switch (printType)
+				{
+				case byName:
+					if (current->getName() > current->getNext()->getName()) {
+						swapCtm(current, current->getNext());
+						current = current->getNext();
+					}
+					else { current = current->getNext(); }
+
+					break;
+				case byID:
+				default:
+					if (current->getID() > current->getNext()->getID()) {
+						swapCtm(current, current->getNext());
+						current = current->getNext();
+					}
+					else { current = current->getNext(); }
+					break;
+				}
+			}
+			// Now update current as last Node (LIFO)
+			current = head;
+		}
+
+		// Print out the list
+		while (current)
+		{
+			printCtm(current);
+			current = current->getNext();
+		}
+	}
+}
+
+
 
 void CtmList::removeHead() {
 	if (head == NULL) {
