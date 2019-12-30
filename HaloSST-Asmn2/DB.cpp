@@ -463,7 +463,7 @@ int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	if (rentCtm->removeItem(rentIt->getID()) == 0) return -1;
 	else {
 		rentCtm->successReturn();
-		cout << "Customer " << rentCtm->getName() << " return successfully: " << rentCtm->getSuccessReturn() << " items" << endl;
+		if (rentCtm->getCtmType() != VIP)	cout << "Customer " << rentCtm->getName() << " return successfully: " << rentCtm->getSuccessReturn() << " items" << endl;
 	}
 	cout << "////////////////////---UPDATE STATUS---////////////////////////" << endl;
 	ItemLst->searchItemByID(tempItem);
