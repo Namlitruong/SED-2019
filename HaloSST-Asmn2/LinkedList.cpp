@@ -1,11 +1,11 @@
 //##########################################################################################################################################
-//	School of Science & Technology				
-//	EEET2482 - Software Engineering Design		
-//	Asignment 2 - A VIDEO STORE	
-//	Team name: HaloSST							
-//	Member 1: Nam Truong - s3518702				
-//	Member 2: Tin Nguyen - s3607833				
-//	Member 3: Hoang Tran - s3618889				
+//	School of Science & Technology
+//	EEET2482 - Software Engineering Design
+//	Asignment 2 - A VIDEO STORE
+//	Team name: HaloSST
+//	Member 1: Nam Truong - s3518702
+//	Member 2: Tin Nguyen - s3607833
+//	Member 3: Hoang Tran - s3618889
 //###########################################################################################################################################
 
 //////////////////////////--Built-in libraries--/////////////////////////////
@@ -15,18 +15,21 @@
 
 // Function of adding new head item for Game
 void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
+	// set current pointer to head and create new item node
 	item *current = head;
 	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee);
-	if (current == NULL) {
+	if (current == NULL) { //item not exists, add new item to head
 		head = newItem;
 	}
-	else {
+	else { // item exists, move current to next item & new item as head.
 		newItem->setNext(current);
 		head = newItem;
 	}
 }
 
+//Overloading function of adding new head item for DVD & Record
 void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
+	// set current pointer to head and create new item node
 	item *current = head;
 	item *newItem;
 	switch (rentalType) {
@@ -34,16 +37,18 @@ void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bo
 	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	}
-	if (current == NULL) {
+	if (current == NULL) { //item not exists, add new item to head
 		head = newItem;
 	}
-	else {
+	else { // item exists, move current to next item & new item as head.
 		newItem->setNext(current);
 		head = newItem;
 	}
 }
 
 //TODO remove deprecated function
+
+// Function of displaying list of items
 void ItemList::printList()
 {
 	item *current = head;
@@ -52,7 +57,7 @@ void ItemList::printList()
 	else
 	{
 		item *temp = NULL;
-
+		// items exist, display to console and move pointer to next item.
 		while (current != NULL)
 		{
 			printItem(current);
@@ -92,11 +97,11 @@ void swapItem(item* thisNode, item* nextNode) {
 	thisNode->setID(nextNode->getID());
 	nextNode->setID(tmp);
 	*/
-	
+
 }
 
 void ItemList::prtSortedItemList(prtSortedList printType)
-{	
+{
 	//NOTE Bubble Sort. Merge would be better for Linked List
 	item *current = head;
 	int itemCtr = ItemList::size(); // ItemList size, i.e. Total Items
@@ -144,17 +149,20 @@ void ItemList::prtSortedItemList(prtSortedList printType)
 	}
 }
 
+// Function of displaying out of stock items
 void ItemList::printOosItem() {
+	// set current pointer to head item and initialize count variable
 	item *current = head;
 	int count = 0;
 	while (current != NULL)
-	{
+	{ // get number of copy of current & compare. If equal 0, display to console
 		if (current->getNumOfCopy() == 0) {
 			printItem(current);
 			count++;
 		}
-		current = current->getNext();
+		current = current->getNext(); // move to next current
 	}
+	// otherwise, display message that not having out of stock items
 	if (count == 0)cout << "No Out of Stock Item" << endl;
 }
 
@@ -190,7 +198,7 @@ void ItemList::printItem(item* its)
 		break; }
 	}
 	cout << "Item Number of Copy: " << its->getNumOfCopy() << endl;
-	
+
 	if (its->getLoanStatus()) cout << "Item Loan tyle: 1-week loan" << endl;
 	else cout << "Item Loan tyle: 2-day loan" << endl;
 
@@ -198,22 +206,26 @@ void ItemList::printItem(item* its)
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
+// Function of adding tail item for Game
 void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
+	// set current pointer to head and create new item node
 	item* current = head;
 	item* newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee);
-
+	// items not exist, add to head
 	if (current == NULL) {
 		head = newItem;
 	}
 	else {
 		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
-		current->setNext(newItem);
+		current->setNext(newItem); // link to new item
 		newItem->setNext(NULL);
 	}
 
 }
 
+// Overloading function of adding tail item using for Record and DVD
 void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
+	// set current pointer to head and create new item node
 	item* current = head;
 	item* newItem;
 	switch (rentalType)
@@ -222,45 +234,50 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 	case 1: newItem = new dvd(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	default: newItem = new record(id, title, rentalType, loanStatus, numOfCopy, rentFee, genreType); break;
 	}
+	// items not exist, add to head
 	if (current == NULL) {
 		head = newItem;
 	}
 	else {
 		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
-		current->setNext(newItem);
+		current->setNext(newItem); // link to new item
 		newItem->setNext(NULL);
 	}
 }
-
+// Function of removing head item
 void ItemList::removeHead() {
 	if (head == NULL) {
 		cout << "Linked list does not exit" << endl;
 	}
+	// set temp pointer to head, then move head to next item and delete temp
 	item* temp = head;
 	head = temp->getNext();
 	temp->setNext(NULL);
 	delete temp;
 }
-
+// Function of removing tail item
 void ItemList::removeTail() {
-	item* current = head;
-	if (current == NULL) {
-		cout << "Linked list does not exit" << endl;
+	item* current = head; // set current pointer to head
+	if (current == NULL) { // item not exist, display message to console
+		cout << "Linked list does not exist" << endl;
 	}
 	else {
 		while (current->getNext()->getNext() != NULL) { // node exists
 			current = current->getNext(); // set current to next node
 		}
-		delete current->getNext();
+		delete current->getNext(); // delete the next item until NULL
 		current->setNext(NULL);
 	}
 }
 
+//Function of searching item by title
 item *ItemList::searchItemByTitle(string title) {
 	item* current = head;
+	// loop through the existing list, compare the contents of both string.
 	while (current != NULL) {
 		if (strcmp(current->getTitle().c_str(), title.c_str()) == 0) {
 			cout << "ITEM FOUND" << endl;
+			// In case it return value = 0, means that equal, display item to the console
 			printItem(current);
 			return current;
 		}
@@ -270,11 +287,14 @@ item *ItemList::searchItemByTitle(string title) {
 	return NULL;
 }
 
+// Function of searching item by id
 item *ItemList::searchItemByID(string id) {
 	item* current = head;
+	// loop through the existing list, compare the contents of both string.
 	while (current != NULL) {
 		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 			cout << "ITEM FOUND" << endl;
+			// In case it return value = 0, means that equal, display item to the console
 			printItem(current);
 			return current;
 		}
@@ -297,7 +317,7 @@ bool ItemList::removeItemByID(string id) {
 			previous = current;
 			current = current->getNext();
 			after = current->getNext();
-			if (after == NULL) {//	return false;	
+			if (after == NULL) {//	return false;
 				if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 					this->removeTail();
 					return true;
@@ -325,7 +345,7 @@ bool ItemList::removeItemNode(item* node) {
 			previous = current;
 			current = current->getNext();
 			after = current->getNext();
-			if (after == NULL) {//	return false;	
+			if (after == NULL) {//	return false;
 				if (current == node) {
 					this->removeTail();
 					return true;
@@ -340,22 +360,26 @@ bool ItemList::removeItemNode(item* node) {
 	return true;
 }
 
+// Function of get number of existing items in list
 int ItemList::size()
 {
 	int count = 0;
 	item* current = head;
+	// loop through the list, increase 1 when having item
 	while (current != NULL)
 	{
 		count++;
-		current = current->getNext();
+		current = current->getNext(); // move current to next item
 	}
 	return count;
 }
 
+// Function of delete list of items
 void ItemList::deleteList()
-{
+{  // if the head item is not null, remove it until it is NULL
 	while (head != NULL)	this->removeHead();
 }
+
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	customer *current = head;
@@ -583,7 +607,7 @@ bool CtmList::removeNodeByID(string id) {
 			previous = current;
 			current = current->getNext();
 			after = current->getNext();
-			if (after == NULL) {//	return false;	
+			if (after == NULL) {//	return false;
 				if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 					this->removeTail();
 					return true;
@@ -593,7 +617,7 @@ bool CtmList::removeNodeByID(string id) {
 		}
 		previous->setNext(after);
 		current->setNext(NULL);
-		delete current;	
+		delete current;
 	}
 	return true;
 }
@@ -611,7 +635,7 @@ bool CtmList::removeNode(customer* node) {
 			previous = current;
 			current = current->getNext();
 			after = current->getNext();
-			if (after == NULL) {//	return false;	
+			if (after == NULL) {//	return false;
 				if (current == node) {
 					this->removeTail();
 					return true;
