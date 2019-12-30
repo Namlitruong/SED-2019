@@ -12,6 +12,11 @@
 
 using namespace std;
 
+/*	Function name: genItemID.
+Usage: Generate an random ID for item and make sure that the generated ID is not exist.
+Input: Pointer to Item List and the published year of the item.
+Output: The unique ID for the new item.
+*/
 string genItemID(ItemList* ItsLst, const char* year) {
 	char ID[10] = "I000-";
 	ID[5] = *(year + 0);
@@ -50,6 +55,11 @@ string genItemID(ItemList* ItsLst, const char* year) {
 	return ID;
 }
 
+/*	Function name: genCtmID.
+Usage: Generate an random ID for customer and make sure that the generated ID is not exist.
+Input: Pointer to customer List.
+Output: The unique ID for the new customer.
+*/
 string genCtmID(CtmList* CtmLst) {
 	char ID[5] = "C000";
 	char tempID[4];
@@ -82,6 +92,11 @@ string genCtmID(CtmList* CtmLst) {
 	return ID;
 }
 
+/*	Function name: SearchItemCtmr.
+Usage: Search item and customer by its ID or name.
+Input: Pointer to item and customer List.
+Output: NULL -- void function.
+*/
 void SearchItemCtmr(CtmList* CustomerLst, ItemList* ItemLst) {
 	string select;
 	string tempCtm;
@@ -123,6 +138,11 @@ void SearchItemCtmr(CtmList* CustomerLst, ItemList* ItemLst) {
 	}
 }
 
+/*	Function name: ModifyItem.
+Usage: Using to create, modify or delete item in the list.
+Input: Pointer to item List.
+Output: NULL -- void function.
+*/
 void ModifyItem(ItemList* ItemLst) {
 	string select, temp;
 	string year, title, rentalType, genType, numbOfCopy, rentFee;
@@ -315,6 +335,11 @@ void ModifyItem(ItemList* ItemLst) {
 	}
 }
 
+/*	Function name: ModifyCtmr.
+Usage: Using to create, modify customer in the list.
+Input: Pointer to customer List.
+Output: NULL -- void function.
+*/
 void ModifyCtmr(CtmList* CustomerLst) {
 	string select, tempCtm;
 	string id, name, addr, phone, ctmType;
@@ -381,12 +406,22 @@ void ModifyCtmr(CtmList* CustomerLst) {
 	}
 }
 
+/*	Function name: DisplayOutofStock.
+Usage: Display out of stock item in the list.
+Input: Pointer to item List.
+Output: NULL -- void function.
+*/
 void DisplayOutofStock(ItemList* ItemLst) {
 	cout << "//////////////////////---LIST OF OUT OF STOCK ITEMS---////////////////////////" << endl;
 	ItemLst->printOosItem();
 	cout << "//////////////////////---LIST OF OUT OF STOCK ITEMS---////////////////////////" << endl;
 }
 
+/*	Function name: DisplayOutofStock.
+Usage: Display customer by group (VIP, Regular, Guest).
+Input: Pointer to customer List.
+Output: NULL -- void function.
+*/
 void DispGroupCtmr(CtmList* CustomerLst) {
 	string select;
 	cout << "\nEnter an option below." << endl;
@@ -410,6 +445,11 @@ void DispGroupCtmr(CtmList* CustomerLst) {
 	}
 }
 
+/*	Function name: renItem.
+Usage: Process renting item procedure. 
+Input: Pointer to item and customer list.
+Output: return 0 -- successfully, 1 -- fail to rent. 
+*/
 int renItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	string tempItem, tempCtm;
 	item * rentIt = NULL;
@@ -451,6 +491,11 @@ int renItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	return 0;
 }
 
+/*	Function name: returnItem.
+Usage: Process returning item procedure.
+Input: Pointer to item and customer list.
+Output: return 0 -- successfully, 1 -- fail to rent.
+*/
 int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	string tempItem, tempCtm;
 	item * rentIt = NULL;
@@ -481,8 +526,14 @@ int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	return 0;
 }
 
+/*	Function name: autoPromoteCtmr.
+Usage: Auto promoting the customer when they meet the condition.
+Input: Pointer to customer list.
+Output: return 0 -- successfully, 1 -- fail to promote.
+*/
 int autoPromoteCtmr(CtmList* CustomerLst) {
 	customer *current = CustomerLst->getCtmHead();
+	if (current == NULL) return -1;
 	while (current != NULL) {
 		if (current->getSuccessReturn() == 3) {
 			customer *temp = current->getNext();
@@ -494,6 +545,11 @@ int autoPromoteCtmr(CtmList* CustomerLst) {
 	return 0;
 }
 
+/*	Function name: PromoteCtmrByID.
+Usage: Promoting the customer by input their ID (manual promoting process).
+Input: Pointer to customer list.
+Output: return 0 -- successfully, 1 -- fail to promote.
+*/
 int PromoteCtmrByID(CtmList* CustomerLst) {
 	string tempCtm;
 	customer * rentCtm = NULL;
@@ -510,6 +566,11 @@ int PromoteCtmrByID(CtmList* CustomerLst) {
 	return 0;
 }
 
+/*	Function name: promoteCtm.
+Usage: Promoting the customer by input their node in the list (manual promoting process).
+Input: Pointer to customer list and pointer to the customer node.
+Output: return 0 -- successfully, 1 -- fail to promote.
+*/
 int promoteCtm(customer * rentCtm, CtmList* CustomerLst) {
 	string promote;
 	switch (rentCtm->getCtmType()) {
@@ -551,7 +612,11 @@ bool CheckExit(string optSel_str) {
 	return 0;
 }
 
-
+/*	Function name: initBaseDb.
+Usage: Initalized the data from source files (text files of customer and item information)
+Input: Pointer to item and customer list.
+Output: return 0 -- successfully, 1 -- fail to promote.
+*/
 int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	bool isCtmProfile = false;
@@ -677,6 +742,11 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	return -1;
 }
 
+/*	Function name: finBaseDb.
+Usage: Save the data to source files (text files of customer and item information)
+Input: Pointer to item and customer list.
+Output: return 0 -- successfully, 1 -- fail to promote.
+*/
 int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	ofstream ctmFile("customers.txt");
@@ -744,6 +814,11 @@ int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	return -1;
 }
 
+/*	Function name: ctmTypeUtil.
+Usage: Convernt from string to corresponding customer type using ctmTypeEnum
+Input: Customer type in string.
+Output: return customer type in ctmTypeEnum.
+*/
 ctmTypeEnum ctmTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "VIP") == 0)
 	{
@@ -758,7 +833,11 @@ ctmTypeEnum ctmTypeUtil(string str) {
 		return ctmTypeEnum::GUEST;
 	}
 }
-
+/*	Function name: ctmTypeStr.
+Usage: Convernt from ctmTypeEnum to corresponding customer type in string to output to database file.
+Input: Customer type in ctmTypeEnum.
+Output: return customer type in string.
+*/
 string ctmTypeStr(ctmTypeEnum ctmEnum) {
 
 	switch (ctmEnum)
@@ -774,6 +853,11 @@ string ctmTypeStr(ctmTypeEnum ctmEnum) {
 	}
 }
 
+/*	Function name: rentalTypeUtil.
+Usage: Convernt from string to corresponding item type in rentalTypeEnum
+Input: Item type in string.
+Output: return Item type in rentalTypeEnum.
+*/
 rentalTypeEnum rentalTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "Game") == 0)
 	{
@@ -789,6 +873,11 @@ rentalTypeEnum rentalTypeUtil(string str) {
 	}
 }
 
+/*	Function name: rentalTypeStr.
+Usage: Convernt from rentalTypeEnum to corresponding Item type in string to output to database file.
+Input: Item type in rentalTypeEnum.
+Output: return Item type in string.
+*/
 string rentalTypeStr(rentalTypeEnum rentalEnum) {
 	switch (rentalEnum)
 	{
@@ -802,7 +891,11 @@ string rentalTypeStr(rentalTypeEnum rentalEnum) {
 		return "";
 	}
 }
-
+/*	Function name: genreTypeUtil.
+Usage: Convernt from string to corresponding item genre type in genreTypeEnum
+Input: Item genre type in string.
+Output: return Item genre type in genreTypeEnum.
+*/
 genreTypeEnum genreTypeUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "Action") == 0)
 	{
@@ -822,6 +915,11 @@ genreTypeEnum genreTypeUtil(string str) {
 	}
 }
 
+/*	Function name: genreTypeStr.
+Usage: Convernt from genreTypeEnum to corresponding Item genre type in string to output to database file.
+Input: Item genre type in genreTypeEnum.
+Output: return Item genre type in string.
+*/
 string genreTypeStr(item* its) {
 	switch (its->getRentalType()) {
 	case RECORD: {
@@ -848,6 +946,11 @@ string genreTypeStr(item* its) {
 	}
 }
 
+/*	Function name: rentalPeriodUtil.
+Usage: Convernt from loan type from string to bool (true = 1week; false = 2day).
+Input: Loan type in string.
+Output: return loan type in bool.
+*/
 bool rentalPeriodUtil(string str) {
 	if (strcmp(str2arr(str.c_str()), "1-week") == 0)
 	{
@@ -858,7 +961,11 @@ bool rentalPeriodUtil(string str) {
 		return false;
 	}
 }
-
+/*	Function name: rentalPeriodStr.
+Usage: Convernt from loan type from bool to string (true = 1week; false = 2day).
+Input: Loan type in bool.
+Output: return loan type in string.
+*/
 string rentalPeriodStr(bool bl) {
 	if (bl)
 	{
@@ -869,6 +976,11 @@ string rentalPeriodStr(bool bl) {
 	}
 }
 
+/*	Function name: str2arr.
+Usage: Convernt from std::string to character array.
+Input: String
+Output: Character array
+*/
 char* str2arr(string str) {
 	char* cTypeStr = new char[str.length() + 1];
 	//FIXME swap strcpy_s for Windows supported "safe" String libary
@@ -877,6 +989,11 @@ char* str2arr(string str) {
 	return cTypeStr;
 }
 
+/*	Function name: double2str.
+Usage: Convernt from double to string.
+Input: double.
+Output: string.
+*/
 string double2str(double db) {
 	char buffer[100];
 	sprintf_s(buffer, "%.2f", db);
@@ -884,6 +1001,11 @@ string double2str(double db) {
 	return str;
 }
 
+/*	Function name: printItemList.
+Usage: Print out the list which is already sorted.
+Input: Pointer to item list.
+Output: NULL -- void function.
+*/
 void printItemList(ItemList* itemPtr) {
 	string select;
 
@@ -895,13 +1017,20 @@ void printItemList(ItemList* itemPtr) {
 	switch (atoi(select.c_str())) {
 	case 1:
 		itemPtr->prtSortedItemList(byTitle);
+		break;
 	case 2:
 		itemPtr->prtSortedItemList(byID);
+		break;
 	default:
 		break;
 	}
 }
 
+/*	Function name: printCtmList.
+Usage: Print out the list which is already sorted.
+Input: Pointer to customer list.
+Output: NULL -- void function.
+*/
 void printCtmList(CtmList* ctmPtr) {
 	string select;
 
@@ -913,8 +1042,10 @@ void printCtmList(CtmList* ctmPtr) {
 	switch (atoi(select.c_str())) {
 	case 1:
 		ctmPtr->prtSortedCtmList(byName);
+		break;
 	case 2:
 		ctmPtr->prtSortedCtmList(byID);
+		break;
 	default:
 		break;
 	}
