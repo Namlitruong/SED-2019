@@ -42,8 +42,33 @@ void SearchItemCtmr(CtmList*, ItemList*);
 void printItemList(ItemList*);
 void printCtmList(CtmList*);
 
-int main()
+// Global DB Filename
+string ctmDbFileName, itemDbFileName;
+
+int main(int argc, char *argv[])
 {
+	if (argc > 1)
+	{
+		ctmDbFileName = argv[1];
+		itemDbFileName =  argv[2];
+
+		if (	 ctmDbFileName.substr(ctmDbFileName.find_last_of(".") + 1) != "txt" 
+			|| itemDbFileName.substr(itemDbFileName.find_last_of(".") + 1) != "txt"
+			) {
+			cout << "[Argument1] customerDatabase.txt [Argument2] itemDatabase.txt" << endl;
+			cout << "Unsupported Database Format (.txt Only) ! Please try again !" << endl;
+
+			return -1;
+		}
+
+	}
+	else {
+		ctmDbFileName = "customers.txt";
+		itemDbFileName = "items.txt";
+	}
+
+
+
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
 	initBaseDb(ItemLst, CustomerLst);
@@ -624,8 +649,8 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
 	bool isCtmProfile = false;
 	long totalRental = 0;
-	ifstream ctmFile("customers.txt");
-	ifstream itemFile("items.txt");
+	ifstream ctmFile(ctmDbFileName);
+	ifstream itemFile(itemDbFileName);
 
 	// initialize Customer DB
 
@@ -747,8 +772,8 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 
 int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 	string textLine;
-	ofstream ctmFile("customers.txt");
-	ofstream itemFile("items.txt");
+	ofstream ctmFile(ctmDbFileName);
+	ofstream itemFile(itemDbFileName);
 
 
 	// Finalize Customer DB
