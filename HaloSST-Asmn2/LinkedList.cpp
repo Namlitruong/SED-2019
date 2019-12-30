@@ -12,6 +12,8 @@
 #include "pch.h"
 #include "LinkedList.h"
 ////////////////////////////--ITEM--/////////////////////////////////////////
+
+// Function of adding new head item for Game
 void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
 	item *current = head;
 	item *newItem = new game(id, title, rentalType, loanStatus, numOfCopy, rentFee);
