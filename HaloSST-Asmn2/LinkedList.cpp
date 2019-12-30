@@ -93,7 +93,7 @@ void swapItem(item* thisNode, item* nextNode) {
 	
 }
 
-void ItemList::printSortTitle()
+void ItemList::prtSortedItemList(prtSortedList printType)
 {	
 	//NOTE Bubble Sort. Merge would be better for Linked List
 	item *current = head;
@@ -110,20 +110,23 @@ void ItemList::printSortTitle()
 			// For each element
 			while (current->getNext())
 			{
-				// Swap Node on condition
-				if (current->getID() > current->getNext()->getID())
+				switch (printType)
 				{
-					//TODO update swapItem() for all other fields
-					//NOTE swap() need lib-defined LinkedList->Node::Attribute
-					swapItem(current, current->getNext());
+				case byTitle:
+					if (current->getTitle() > current->getNext()->getTitle()) {
+						swapItem(current, current->getNext());
+						current = current->getNext();
+					} else { current = current->getNext(); }
 
-					// Get next Node
-					current = current->getNext();
-				}
-				else
-				{
-					// Get next Node
-					current = current->getNext();
+					break;
+				case byID:
+				default:
+					if (current->getID() > current->getNext()->getID()) {
+						swapItem(current, current->getNext());
+						current = current->getNext();
+					}
+					else { current = current->getNext(); }
+					break;
 				}
 			}
 			// Now update current as last Node (LIFO)

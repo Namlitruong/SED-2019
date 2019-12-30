@@ -39,6 +39,7 @@ void DisplayOutofStock(ItemList*);
 void ModifyCtmr(CtmList*);
 void ModifyItem(ItemList*);
 void SearchItemCtmr(CtmList*, ItemList*);
+void printItemList(ItemList*);
 
 
 int main()
@@ -89,7 +90,7 @@ int main()
 			returnItem(ItemLst, CustomerLst);
 			break;
 		case 6:
-			ItemLst->printList();
+			printItemList(ItemLst);
 			break;
 		case 7:
 			DisplayOutofStock(ItemLst);
@@ -468,6 +469,24 @@ int returnItem(ItemList* ItemLst, CtmList* CustomerLst) {
 	CustomerLst->searchCtmID(tempCtm);
 	cout << "////////////////////---RETURNING PROCESS DONE---////////////////////////" << endl;
 	return 0;
+}
+
+void printItemList(ItemList* itemPtr) {
+	string select;
+
+	cout << "\nEnter an option below." << endl;
+	cout << "1. Item list sorted by Title" << endl;
+	cout << "2. Item list sorted by ID (Default)" << endl;
+	cout << "Exit." << endl;
+	getline(cin, select);
+	switch (atoi(select.c_str())) {
+	case 1:
+		itemPtr->prtSortedItemList(byTitle);
+	case 2:
+	default:
+		itemPtr->prtSortedItemList(byID);
+		break;
+	}
 }
 
 int autoPromoteCtmr(CtmList* CustomerLst) {
