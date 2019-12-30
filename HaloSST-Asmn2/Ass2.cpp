@@ -40,7 +40,7 @@ void ModifyCtmr(CtmList*);
 void ModifyItem(ItemList*);
 void SearchItemCtmr(CtmList*, ItemList*);
 
-void 
+
 int main()
 {
 	ItemList* ItemLst = new ItemList();
