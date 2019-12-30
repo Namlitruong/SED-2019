@@ -13,7 +13,12 @@
 #include "LinkedList.h"
 ////////////////////////////--ITEM--/////////////////////////////////////////
 
-// Function of adding new head item for Game
+/*	Function name: appendHead()
+Usage: Check if the list of items exists or not. If not, append new item in head position. Otherwise, move current
+pointer to next item and place new item in head position
+Input: item information
+Output: new item with related attributes inserted at head position
+*/
 void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
 	// set current pointer to head and create new item node
 	item *current = head;
@@ -27,7 +32,12 @@ void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bo
 	}
 }
 
-//Overloading function of adding new head item for DVD & Record
+/*	Function name: appendHead()
+Usage: This overloadding function is used to check if the list of items exist or not. If not, append new item in head position
+			Otherwise, move current pointer to next item and place new item in head position of linkedlist.
+Input: item information
+Output: new item inserted at head position
+*/
 void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
 	// set current pointer to head and create new item node
 	item *current = head;
@@ -45,10 +55,13 @@ void ItemList::appendHead(string id, string title, rentalTypeEnum rentalType, bo
 		head = newItem;
 	}
 }
-
 //TODO remove deprecated function
 
-// Function of displaying list of items
+/*	Function name: printList()
+Usage: Use to display all items with its related information in the list. If there is no existing item, display a message to user
+Input: null
+Output: List of items with related information (id, title, rental type, loan status, num of copies, fee, status)
+*/
 void ItemList::printList()
 {
 	item *current = head;
@@ -66,6 +79,11 @@ void ItemList::printList()
 	}
 }
 
+/*	Function name: swapItem()
+Usage: Swap the data of two node
+Input: pointer to thisNode, pointer to nextNode
+Output: item thisNode moves to position of item nextNode and vice versa
+*/
 void swapItem(item* thisNode, item* nextNode) {
 	string tmpID = thisNode->getID();
 	thisNode->setID(nextNode->getID());
@@ -78,6 +96,10 @@ void swapItem(item* thisNode, item* nextNode) {
 	rentalTypeEnum tmpRentalType = thisNode->getRentalType();
 	thisNode->setRentalType(nextNode->getRentalType());
 	nextNode->setRentalType(tmpRentalType);
+
+	genreTypeEnum tmpGenreType = static_cast<record*>(thisNode)->getGenreType();
+	static_cast<record*>(thisNode)->setGenreType(nextNode->getGenreType());
+	static_cast<record*>(nextNode)->setGenreType(tmpGenreType);
 
 	bool tmpLoanStatus = thisNode->getLoanStatus();
 	thisNode->setLoanStatus(nextNode->getLoanStatus());
@@ -100,6 +122,11 @@ void swapItem(item* thisNode, item* nextNode) {
 
 }
 
+/*	Function name: prtSortedItemList()
+Usage: Display the item list in sorted order of id or title
+Input: prtSortedList
+Output: list of sorted item by id/title
+*/
 void ItemList::prtSortedItemList(prtSortedList printType) {
 	//NOTE Bubble Sort. Merge would be better for Linked List
 	item *current = head;
@@ -149,7 +176,12 @@ void ItemList::prtSortedItemList(prtSortedList printType) {
 	}
 }
 
-// Function of displaying out of stock items
+/*	Function name: printOosItem()
+Usage: This function is used to display the the item that is out of stock or not,
+			If there are out of stock items, display them to console.
+Input: null
+Output: item having numOfCopy = 0
+*/
 void ItemList::printOosItem() {
 	// set current pointer to head item and initialize count variable
 	item *current = head;
@@ -166,16 +198,19 @@ void ItemList::printOosItem() {
 	if (count == 0)cout << "No Out of Stock Item" << endl;
 }
 
-//Function of display specific item
+/*	Function name: printItem()
+Usage: Display item with regarding information including id, title,
+ 			rental type, loan status, fee, numOfCopy, genere type)
+Input: pointer to its
+Output: display related information of item
+*/
 void ItemList::printItem(item* its)
 {
 	cout << "/////////////////////////////////////////////////" << endl;
-	// display id & title item
 	cout << "Item ID: " << its->getID() << endl;
 	cout << "Item Title: " << its->getTitle() << endl;
 	//cout << "Item Type: " << its->getRentalType() << endl;
 	switch (its->getRentalType()) {
-	// choose genre type of RECORD
 	case RECORD: {
 		cout << "Item Type: RECORD" << endl;
 		switch ((static_cast<record*>(its))->getGenreType()) {
@@ -186,7 +221,6 @@ void ItemList::printItem(item* its)
 		default: break;
 		}
 		break; }
-	// choose genre type of DVD
 	case DVD: {
 		cout << "Item Type: DVD" << endl;
 		switch ((static_cast<record*>(its))->getGenreType()) {
@@ -201,17 +235,19 @@ void ItemList::printItem(item* its)
 		cout << "Item Type: GAME" << endl;
 		break; }
 	}
-	//display number of copy
 	cout << "Item Number of Copy: " << its->getNumOfCopy() << endl;
-	// display loan status of item
 	if (its->getLoanStatus()) cout << "Item Loan tyle: 1-week loan" << endl;
 	else cout << "Item Loan tyle: 2-day loan" << endl;
-	// display rent fee of item
 	cout << "Item Rent Fee: " << its->getRentFee() << endl;
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
-// Function of adding tail item for Game
+/*	Function name: appendTail()
+Usage: append new GAME item to tail of the list. Check if the list exists or not. If not, append new item in head position
+			If exists, find the tail node and link to the new item.
+Input: item information
+Output: add new item to the last of the list
+*/
 void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee) {
 	// set current pointer to head and create new item node
 	item* current = head;
@@ -228,7 +264,12 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 
 }
 
-// Overloading function of adding tail item using for Record and DVD
+/*	Function name: appendTail()
+Usage: This overloadding function is to append new DVD & RECORD item to tail of the list.
+ 			Check if the list exists or not. If not, append new item in head position. If exists, find the tail node and link to the new item.
+Input: item information
+Output: add new DVD or RECORD item
+*/
 void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bool loanStatus, int numOfCopy, double rentFee, genreTypeEnum genreType) {
 	// set current pointer to head and create new item node
 	item* current = head;
@@ -250,7 +291,11 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 	}
 }
 
-// Function of removing head item
+/*	Function name: removeHead()
+Usage: If list exists, set temp pointer to head, then move head to next item and remove the temp one
+Input: null
+Output: First item of the linked list removed
+*/
 void ItemList::removeHead() {
 	if (head == NULL) {
 		cout << "Linked list does not exit" << endl;
@@ -262,7 +307,11 @@ void ItemList::removeHead() {
 	delete temp;
 }
 
-// Function of removing tail item
+/*	Function name: removeTail()
+Usage: If list exists, set current to next node (item) until the last one. Then remove that item
+Input: null
+Output: item in tail position removed
+*/
 void ItemList::removeTail() {
 	item* current = head; // set current pointer to head
 	if (current == NULL) { // item not exist, display message to console
@@ -277,7 +326,12 @@ void ItemList::removeTail() {
 	}
 }
 
-//Function of searching item by title
+/*	Function name: searchItemByTitle()
+Usage: Search item with its title by compare the contents of string-title items with string-input from user
+ 			If equals, display the item to the console and move pointer to next item until no item matched
+Input: string title
+Output: display the item having title matched with user's input
+*/
 item *ItemList::searchItemByTitle(string title) {
 	item* current = head;
 	// loop through the existing list, compare the contents of both string.
@@ -294,7 +348,12 @@ item *ItemList::searchItemByTitle(string title) {
 	return NULL;
 }
 
-// Function of searching item by id
+/*	Function name: searchItemByID()
+Usage: Search item with its ID by compare the contents of string-ID items with string-input from user
+ 			If equals, display the item to the console and move pointer to next item until no item matched
+Input: string id
+Output: display the item having id matched with user's input
+*/
 item *ItemList::searchItemByID(string id) {
 	item* current = head;
 	// loop through the existing list, compare the contents of both string.
@@ -311,6 +370,11 @@ item *ItemList::searchItemByID(string id) {
 	return NULL;
 }
 
+/*	Function name: removeItemByID()
+Usage: Remove item by ID
+Input: string id
+Output: Item with specific ID is removed
+*/
 bool ItemList::removeItemByID(string id) {
 	item* current = head;
 	item* previous = NULL;
@@ -339,6 +403,11 @@ bool ItemList::removeItemByID(string id) {
 	return true;
 }
 
+/*	Function name: removeItemNode
+Usage: Remove item out of the list
+Input: pointer to node
+Output: Item is removed
+*/
 bool ItemList::removeItemNode(item* node) {
 	item* current = head;
 	item* previous = NULL;
@@ -367,7 +436,11 @@ bool ItemList::removeItemNode(item* node) {
 	return true;
 }
 
-// Function of get number of existing items in list
+/*	Function name: size()
+Usage: Count the number of existing items in list
+Input: null
+Output: Get the number of items
+*/
 int ItemList::size()
 {
 	int count = 0;
@@ -381,7 +454,11 @@ int ItemList::size()
 	return count;
 }
 
-// Function of delete list of items
+/*	Function name: deleteList()
+Usage: Delete all items from the list
+Input: null
+Output: Item list is destroyed
+*/
 void ItemList::deleteList()
 {  // if the head item is not null, remove it until it is NULL
 	while (head != NULL)	this->removeHead();
@@ -389,7 +466,12 @@ void ItemList::deleteList()
 
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
 
-// Function of adding new head customer
+/*	Function name: appendHead()
+Usage: Check if the list of customer exists or not. If not, append new customer node in head position.
+Otherwise, move current pointer to next customer and place new customer in head position
+Input: customer information
+Output: new customer with related attributes inserted at head position
+*/
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	// set current pointer to head and create new customer node
 	customer *current = head;
@@ -410,11 +492,18 @@ void CtmList::appendHead(string id, string name, string addr, string phone, ctmT
 	}
 }
 
+/*	Function name: addCtmItemList()
+*/
 void CtmList::addCtmItemList(customer* Ctm, string item) { // Using to test, Can be upgrade when implement successfully search
 	Ctm->addItem(item);
 }
 
-// Searching Customer by ID
+/*	Function name: searchCtmID()
+Usage: Search customer with its ID by compare the contents of string-ID customer with string-input from user
+ 			If equals, display the customer to the console and move pointer to next customer until no customer matched
+Input: string id
+Output: display the customer having id matched with user's input
+*/
 customer* CtmList::searchCtmID(string id) {
 	customer *current = head;
 	// loop through the existing list, compare the contents of both string.
@@ -431,7 +520,13 @@ customer* CtmList::searchCtmID(string id) {
 	return NULL;
 }
 
-// Searching Customer by name
+/*	Function name: searchCtmName
+Usage: Search customer with its name by compare the contents of string-name customer with string-input from user
+ 			If equals, display the customer to the console and move pointer to next customer until no item matched
+Input: string name
+Output: display the item having name matched with user's input
+*/
+
 customer* CtmList::searchCtmName(string name) {
 	customer *current = head;
 	// loop through the existing list, compare the contents of both string.
@@ -448,7 +543,11 @@ customer* CtmList::searchCtmName(string name) {
 	return NULL;
 }
 
-// Display list of customer regarding types (VIP, REGULAR, GUEST)
+/*	Function name: printListByCtmType
+Usage: Categorize the type of customers
+Input: types of customer
+Output: Display list of customers regarding types (VIP, REGULAR, GUEST)
+*/
 void CtmList::printListByCtmType(ctmTypeEnum input) {
 	customer *current = head; // set current pointer to head
 	// loop through exist customer list & display the customer if same types
@@ -460,7 +559,11 @@ void CtmList::printListByCtmType(ctmTypeEnum input) {
 	}
 }
 
-// Display customer and related information
+/*	Function name: printCtm()
+Usage: Display customer and related information
+Input: pointer to ctm
+Output: display related information of customer
+*/
 void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 	cout << "Customer ID: " << ctm->getID() << endl;
@@ -476,7 +579,11 @@ void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 }
 
-// TODO remove deprecated function
+/*	Function name: printList()
+Usage: Use to display all items with its related information in the list. If there is no existing item, display a message to user
+Input: null
+Output: List of customer with related information
+*/
 void CtmList::printList()
 {
 	customer *current = head;
@@ -492,6 +599,11 @@ void CtmList::printList()
 	}
 }
 
+/*	Function name: swapCtm()
+Usage: Swap the data of two node
+Input: pointer to thisNode, pointer to nextNode
+Output: item thisNode moves to position of item nextNode and vice versa
+*/
 void swapCtm(customer* thisNode, customer* nextNode) {
 	string tmpID = thisNode->getID();
 	thisNode->setID(nextNode->getID());
@@ -512,14 +624,13 @@ void swapCtm(customer* thisNode, customer* nextNode) {
 	string tmpPhone = thisNode->getPhone();
 	thisNode->setPhone(nextNode->getPhone());
 	nextNode->setPhone(tmpPhone);
-
-	//TODO no. of Rental
-	//int tmpNumOfRental;
-
-	//TODO list of rental print
-	// string *getListOfRental;
 }
 
+/*	Function name: prtSortedCtmList()
+Usage: Display the customer list in sorted order of id or name
+Input: prtSortedList
+Output: list of sorted customer by id/name
+*/
 void CtmList::prtSortedCtmList(prtSortedList printType)
 {
 	//NOTE Bubble Sort. Merge would be better for Linked List
@@ -571,7 +682,11 @@ void CtmList::prtSortedCtmList(prtSortedList printType)
 	}
 }
 
-// Removing head item
+/*	Function name: removeHead()
+Usage: If list exists, set temp pointer to head, then move head to next customer and remove the temp one
+Input: null
+Output: First customer of the linked list removed
+*/
 void CtmList::removeHead() {
 	if (head == NULL) {
 		cout << "Linked list does not exit" << endl;
@@ -583,7 +698,12 @@ void CtmList::removeHead() {
 	delete temp;
 }
 
-// Adding tail customer to list
+/*	Function name: appendTail()
+Usage: append new customer to tail of the list. Check if the list exists or not. If not, append new customer in head position
+			If exists, find the tail node and link to the new customer.
+Input: item information
+Output: add new customer to the last of the list
+*/
 void CtmList::appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
 	// set current pointer to head and create new customer node
 	customer* current = head;
@@ -604,7 +724,11 @@ void CtmList::appendTail(string id, string name, string addr, string phone, ctmT
 	}
 }
 
-// Removing tail item
+/*	Function name: removeTail()
+Usage: If list exists, set current to next node (customer) until the last one. Then remove that customer
+Input: null
+Output: customer in tail position removed
+*/
 void CtmList::removeTail() {
 	customer* current = head;
 	if (current == NULL) {
@@ -620,6 +744,11 @@ void CtmList::removeTail() {
 	}
 }
 
+/*	Function name: removeNodeByID()
+Usage: Remove node by ID
+Input: string id
+Output: Customer with specific ID is removed
+*/
 bool CtmList::removeNodeByID(string id) {
 	customer* current = head;
 	customer* previous = NULL;
@@ -648,6 +777,11 @@ bool CtmList::removeNodeByID(string id) {
 	return true;
 }
 
+/*	Function name: removeNode()
+Usage: Remove item out of the list
+Input: pointer to node
+Output: Item is removed
+*/
 bool CtmList::removeNode(customer* node) {
 	customer* current = head;
 	customer* previous = NULL;
@@ -676,6 +810,11 @@ bool CtmList::removeNode(customer* node) {
 	return true;
 }
 
+/*	Function name: deleteList()
+Usage: Delete all items from the list
+Input: null
+Output: Item list is destroyed
+*/
 // delete list of customers
 void CtmList::deleteList()
 {
@@ -683,7 +822,11 @@ void CtmList::deleteList()
 	while (head != NULL)	this->removeHead();
 }
 
-// Function of get number of existing customers in lists
+/*	Function name: size()
+Usage: Count the number of existing customers in list
+Input: null
+Output: Get the number of customer
+*/
 int CtmList::size()
 {
 	int count = 0;
