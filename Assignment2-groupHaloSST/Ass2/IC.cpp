@@ -11,7 +11,8 @@
 #include "IC.h"
 
 /////////////////////////////////////////////////////////////--Class Declare--/////////////////////////////////////////////////////////////////////////
-item::item() {//by Defautl
+//Class Constructor by Defautl
+item::item() {
 	id = "none";
 	title = "none";
 	rentalType = RECORD;
@@ -21,7 +22,8 @@ item::item() {//by Defautl
 	isAvailable = 1; //borrowed(0) or available(1)
 	next = NULL;
 }
-item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS) { //parameterized
+//Class Constructor by parameterized
+item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS) { 
 	id = idS;
 	title = titleS;
 	rentalType = rentalTypeS;
@@ -30,7 +32,8 @@ item::item(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatu
 	rentFee = rentFeeS;
 	next = NULL;
 }
-item::item(const item& Obj) {//copy
+//Class Constructor by copy
+item::item(const item& Obj) {
 	id = Obj.id;
 	title = Obj.title;
 	rentalType = Obj.rentalType;
@@ -39,42 +42,55 @@ item::item(const item& Obj) {//copy
 	rentFee = Obj.rentFee;
 	next = NULL;
 }
+//Class Destructor
 item::~item(void) { };
 /////////////////////////--ITEMS--//////////////////////////
 /////////////////////////--RECORD--//////////////////////////
-record::record() : item::item() {//By default
+//Class Constructor by Defautl
+record::record() : item::item() {
 	genreType = ACTION;
 }
-record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, genreTypeEnum genreTypeS) //parameterized
+//Class Constructor by parameterized
+record::record(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS, genreTypeEnum genreTypeS)
 	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {
 	genreType = genreTypeS;
 }
-record::record(const record& Obj) //Copy
+//Class Constructor by Copy
+record::record(const record& Obj) 
 	: item::item(Obj) {
 	genreType = Obj.genreType;
 }
+//Class Destructor
 record::~record(void) {}
 /////////////////////////--RECORD--//////////////////////////
-/////////////////////////--DVD--//////////////////////////
-dvd::dvd() : item::item() {//By default
+/////////////////////////--DVD--////////////////////////////
+//Class Constructor by default
+dvd::dvd() : item::item() {
 	genreType = ACTION;
 }
-dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS , genreTypeEnum genreTypeS) //parameterized
+//Class Constructor by parameterized
+dvd::dvd(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS , genreTypeEnum genreTypeS)
 	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {
 	genreType = genreTypeS;
 }
-dvd::dvd(const dvd& Obj) //Copy
+//Class Constructor by Copy
+dvd::dvd(const dvd& Obj) 
 	: item::item(Obj) {
 	genreType = Obj.genreType;
 }
+//Class Destructor
 dvd::~dvd(void) {}
 /////////////////////////--DVD--//////////////////////////
 /////////////////////////--GAME--//////////////////////////
-game::game() : item::item() {}//By default
+//Class Constructor by default
+game::game() : item::item() {}
+//Class Constructor by parameterized
 game::game(string idS, string titleS, rentalTypeEnum rentalTypeS, bool loanStatusS, int numOfCopyS, double rentFeeS) //parameterized
 	: item::item(idS, titleS, rentalTypeS, loanStatusS, numOfCopyS, rentFeeS) {}
-game::game(const game& Obj) //Copy
+//Class Constructor by Copy
+game::game(const game& Obj) 
 	: item::item(Obj) {}
+//Class Destructor
 game::~game(void) {}
 /////////////////////////--GAME--//////////////////////////
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
@@ -82,6 +98,7 @@ game::~game(void) {}
 
 
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
+//Constructor
 customer::customer() {//by Defautl
 	id = "";
 	name = "";
@@ -104,24 +121,34 @@ customer::customer(const customer& Obj) {//copy
 	ctmType = Obj.ctmType;
 	phone = Obj.phone;
 }
+//Destructor
 customer::~customer() { delete next; /*delete listOfRental;*/ }
 
+/*	Function name: numOfRental.
+Usage: To return the number of rental of a customer
+Input:	None -- inside the class
+Output: Return number of rental
+*/
 int customer::numOfRental() {
 	int i;
 	for (i = 0; !this->listOfRental[i].empty(); i++) {}
 	return i;
 }
 
+/*	Function name: addItem.
+Usage: Add item into listOfRental
+Input:	ID of an item
+Output: NULL -- void function
+*/
 void customer::addItem(string item) {
 	this->listOfRental[this->numOfRental()] = item;
 }
 
-/*char* str2arr1(string str) {
-	char* cTypeStr = new char[str.length() + 1];
-	strcpy_s(cTypeStr, str.length() + 1, str.c_str());
-	return cTypeStr;
-}*/
-
+/*	Function name: removeItem.
+Usage: Remove item into listOfRental
+Input:	ID of an item
+Output: NULL -- void function
+*/
 int customer::removeItem(string item) {
 	int flag = 0;
 	for (int i = 0; i < this->numOfRental(); i++) {
@@ -138,6 +165,11 @@ int customer::removeItem(string item) {
 	else return 1;
 }
 
+/*	Function name: printCtmRental.
+Usage: Print all items of listOfRental
+Input:	None -- inside the class
+Output: NULL -- void function
+*/
 void customer::printCtmRental() {
 	cout << "Rental list of customer: "<< this->getName() <<" rent "<< this->numOfRental() <<" items"<< endl;
 	for (int i = 0; i < this->numOfRental(); i++) {
@@ -145,6 +177,7 @@ void customer::printCtmRental() {
 	}
 }
 /////////////////////////--Guest--//////////////////////////
+//Constructor
 guest::guest() : customer::customer() { //by default
 	maxVid = 2;
 	successReturnNumb = 0;
@@ -159,9 +192,11 @@ guest::guest(const guest& Obj)//copy
 	maxVid = 2;
 	successReturnNumb = 0;
 }
+//Destructor
 guest::~guest(void) {}
 /////////////////////////--Guest--//////////////////////////
 /////////////////////////--Regular--//////////////////////////
+//Constructor
 regular::regular() : customer::customer() { //by default
 	successReturnNumb = 0;
 }
@@ -173,9 +208,11 @@ regular::regular(const regular& Obj)//copy
 	: customer::customer(Obj) {
 	successReturnNumb = 0;
 }
+//Destructor
 regular::~regular(void) {}
 /////////////////////////--Regular--//////////////////////////
 /////////////////////////--VIP--//////////////////////////
+//Constructor
 vip::vip() : customer::customer() { //by default
 	rewardPoint = 0;
 }
@@ -187,13 +224,19 @@ vip::vip(const vip& Obj)//copy
 	: customer::customer(Obj) {
 	rewardPoint = 0;
 }
+//Destructor
 vip::~vip(void) {}
 
+/*	Function name: successReturn.
+Usage: Adding reward points for VIP
+Input:	None -- inside the class
+Output: NULL -- void function
+*/
 void vip::successReturn() {
 	this->rewardPoint = this->rewardPoint + 10;
 	if (this->rewardPoint == 100) this->rewardPoint = 0;
 }
-
+// Getter of reward points
 int vip::getSuccessReturn() {return this->rewardPoint;}
 /////////////////////////--VIP--//////////////////////////
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////

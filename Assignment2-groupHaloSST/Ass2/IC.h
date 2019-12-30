@@ -16,7 +16,7 @@
 #include <fstream>
 //////////////////////////--Define Macro--/////////////////////////////
 using namespace std;
-
+// Enum type for sorting list
 enum prtSortedList {
 	byName,
 	byTitle,
@@ -24,12 +24,13 @@ enum prtSortedList {
 };
 
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
+//Enum type for rental type
 enum rentalTypeEnum {
 	RECORD,
 	DVD,
 	GAME,
 };
-
+//Enum type for genre type
 enum genreTypeEnum {
 	NONE,
 	ACTION,
@@ -60,6 +61,7 @@ public:
 	bool getLoanStatus() { return this->loanStatus; }
 	int getNumOfCopy() { return this->numOfCopy; }
 	double getRentFee() { return this->rentFee; }
+	virtual genreTypeEnum getGenreType() = 0;
 	//////////////////--Setter--//////////////
 	void setNext(item *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
@@ -68,12 +70,10 @@ public:
 	void setLoanStatus(bool loanType) { this->loanStatus = loanType; }
 	void setNumOfCopy(int numOfCopy) { this->numOfCopy = this->numOfCopy + numOfCopy; }
 	void setRentFee(double rentFee) { this->rentFee = rentFee; }
-	//////////////////////////////VIRTTUAL
 	virtual void setGenreType(genreTypeEnum genreType) = 0;
-	virtual genreTypeEnum getGenreType() = 0;
 };
 
-class record : public item {
+class record : public item { // Child class
 protected: 
 	genreTypeEnum genreType;
 public:
@@ -81,11 +81,12 @@ public:
 	record(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //parameterized
 	record(const record&);//copy
 	~record();
+	// Predefined virtual function
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
 	genreTypeEnum getGenreType() { return this->genreType; }
 };
 
-class dvd : public item {
+class dvd : public item {// Child class
 protected:
 	genreTypeEnum genreType;
 public:
@@ -93,24 +94,29 @@ public:
 	dvd(string, string, rentalTypeEnum, bool, int, double, genreTypeEnum); //parameterized
 	dvd(const dvd&);//copy
 	~dvd();
+	// Predefined virtual function
 	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
 	genreTypeEnum getGenreType() { return this->genreType; }
 };
 
-class game : public item {
+class game : public item { // Child class
+protected:
+	genreTypeEnum genreType;
 public:
 	game();//By default
 	game(string, string, rentalTypeEnum, bool, int, double); //parameterized
 	game(const game&);//copy
 	~game();
-	void setGenreType(genreTypeEnum genreType) {}
-	genreTypeEnum getGenreType() { return NONE; }
+	// Predefined virtual function
+	void setGenreType(genreTypeEnum genreType) { this->genreType = genreType; }
+	genreTypeEnum getGenreType() { return this->genreType; }
 };
 /////////////////////////---------------------------------------------------------------------ITEMS SECTION-------------------------------------------------------------------//////////////////////////
 
 
 
 /////////////////////////--------------------------------------------------------------------CUSTOMER SECTION-------------------------------------------------------------------//////////////////////////
+//Enum type for customer type
 enum ctmTypeEnum {
 	GUEST,
 	REGULAR,
@@ -123,7 +129,7 @@ protected:
 	string addr;
 	string phone;
 	ctmTypeEnum ctmType;
-	string listOfRental[20];
+	string listOfRental[50]; // It suppose to be infinite, but set limit to 50, because in reality no one borrow 50 itmes at a time. Setting 50 to prevent buffer overflow.
 	customer *next = NULL; // pointer to next
 public:
 	customer();//by Defautl
@@ -139,6 +145,8 @@ public:
 	string getPhone() { return this->phone; }
 	int numOfRental();
 	string *getListOfRental(){ return this->listOfRental; }
+	virtual int getSuccessReturn() = 0;
+	virtual int getMaxVid() = 0;
 	//////////////////--Setter--//////////////
 	void setNext(customer *next) { this->next = next; }
 	void setID(string id) { this->id = id; }
@@ -146,16 +154,14 @@ public:
 	void setAddr(string addr) { this->addr = addr; }
 	void setCtmType(ctmTypeEnum ctmType) { this->ctmType = ctmType; }
 	void setPhone(string phone) { this->phone = phone; }
-	////////////////--Processing Item--/////////////////////////
+	virtual void successReturn() = 0;
+	////////////////--Processing Item Function--/////////////////////////
 	void addItem(string);
 	int removeItem(string);
 	void printCtmRental();
-	////////////////--VIRTUAL
-	virtual int getSuccessReturn() = 0;
-	virtual void successReturn() = 0;
-	virtual int getMaxVid() = 0;
 };
-class guest : public customer {
+
+class guest : public customer {//Child class
 protected:
 	int maxVid;
 	int successReturnNumb;
@@ -164,12 +170,13 @@ public:
 	guest(string, string, string, string, ctmTypeEnum); //parameterized
 	guest(const guest&);//copy
 	~guest();
+	// Predefined virtual function
 	int getMaxVid() { return this->maxVid; }
 	void successReturn() { this->successReturnNumb++; }
 	int getSuccessReturn() { return this->successReturnNumb; }
 };
 
-class regular : public customer {
+class regular : public customer {//Child class
 protected:
 	int successReturnNumb;
 public:
@@ -177,12 +184,13 @@ public:
 	regular(string, string, string, string, ctmTypeEnum); //parameterized
 	regular(const regular&);//copy
 	~regular();
+	// Predefined virtual function
 	int getMaxVid() { return 1000; }
 	void successReturn() { this->successReturnNumb++; }
 	int getSuccessReturn() { return this->successReturnNumb; }
 };
 
-class vip : public customer {
+class vip : public customer {//Child class
 protected:
 	int rewardPoint;
 public:
@@ -190,6 +198,7 @@ public:
 	vip(string, string, string, string, ctmTypeEnum); //parameterized
 	vip(const vip&);//copy
 	~vip();
+	// Predefined virtual function
 	int getMaxVid() { return 1000; }
 	void successReturn();
 	int getSuccessReturn();
