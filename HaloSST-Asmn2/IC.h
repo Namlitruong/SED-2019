@@ -191,6 +191,6 @@ public:
 	vip(const vip&);//copy
 	~vip();
 	int getMaxVid() { return 1000; }
-	void successReturn() { this->rewardPoint = this->rewardPoint + 10; }
+	void successReturn();
 	int getSuccessReturn() { return this->rewardPoint; }
 };
