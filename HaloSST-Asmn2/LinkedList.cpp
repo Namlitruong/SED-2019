@@ -166,13 +166,16 @@ void ItemList::printOosItem() {
 	if (count == 0)cout << "No Out of Stock Item" << endl;
 }
 
+//Function of display specific item
 void ItemList::printItem(item* its)
 {
 	cout << "/////////////////////////////////////////////////" << endl;
+	// display id & title item
 	cout << "Item ID: " << its->getID() << endl;
 	cout << "Item Title: " << its->getTitle() << endl;
 	//cout << "Item Type: " << its->getRentalType() << endl;
 	switch (its->getRentalType()) {
+	// choose genre type of RECORD
 	case RECORD: {
 		cout << "Item Type: RECORD" << endl;
 		switch ((static_cast<record*>(its))->getGenreType()) {
@@ -183,6 +186,7 @@ void ItemList::printItem(item* its)
 		default: break;
 		}
 		break; }
+	// choose genre type of DVD
 	case DVD: {
 		cout << "Item Type: DVD" << endl;
 		switch ((static_cast<record*>(its))->getGenreType()) {
@@ -197,11 +201,12 @@ void ItemList::printItem(item* its)
 		cout << "Item Type: GAME" << endl;
 		break; }
 	}
+	//display number of copy
 	cout << "Item Number of Copy: " << its->getNumOfCopy() << endl;
-
+	// display loan status of item
 	if (its->getLoanStatus()) cout << "Item Loan tyle: 1-week loan" << endl;
 	else cout << "Item Loan tyle: 2-day loan" << endl;
-
+	// display rent fee of item
 	cout << "Item Rent Fee: " << its->getRentFee() << endl;
 	cout << "/////////////////////////////////////////////////" << endl;
 }
@@ -244,6 +249,7 @@ void ItemList::appendTail(string id, string title, rentalTypeEnum rentalType, bo
 		newItem->setNext(NULL);
 	}
 }
+
 // Function of removing head item
 void ItemList::removeHead() {
 	if (head == NULL) {
@@ -255,6 +261,7 @@ void ItemList::removeHead() {
 	temp->setNext(NULL);
 	delete temp;
 }
+
 // Function of removing tail item
 void ItemList::removeTail() {
 	item* current = head; // set current pointer to head
@@ -381,7 +388,10 @@ void ItemList::deleteList()
 }
 
 ////////////////////////////--CUSTOMER--/////////////////////////////////////////
+
+// Function of adding new head customer
 void CtmList::appendHead(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
+	// set current pointer to head and create new customer node
 	customer *current = head;
 	customer *newItem;
 	switch (ctmType) {
@@ -389,9 +399,11 @@ void CtmList::appendHead(string id, string name, string addr, string phone, ctmT
 	case 2: newItem = new vip(id, name, addr, phone, ctmType); break;
 	default: newItem = new guest(id, name, addr, phone, ctmType); break;
 	}
+	// customer not exists, add new customer to head
 	if (current == NULL) {
 		head = newItem;
 	}
+	// item exists, move current to next customer & new customer as head
 	else {
 		newItem->setNext(current);
 		head = newItem;
@@ -402,37 +414,45 @@ void CtmList::addCtmItemList(customer* Ctm, string item) { // Using to test, Can
 	Ctm->addItem(item);
 }
 
+// Searching Customer by ID
 customer* CtmList::searchCtmID(string id) {
 	customer *current = head;
+	// loop through the existing list, compare the contents of both string.
 	while (current != NULL) {
 		if (strcmp(current->getID().c_str(), id.c_str()) == 0) {
 			cout << "CUSTOMER FOUND" << endl;
+			// In case it return value = 0, means that equal, display customer to the console
 			printCtm(current);
 			return current;
 		}
-		current = current->getNext();
+		current = current->getNext(); // move current to next customer
 	}
 	cout << "Customer with ID: " << id << " is not exist in the list" << endl;
 	return NULL;
 }
 
-
+// Searching Customer by name
 customer* CtmList::searchCtmName(string name) {
 	customer *current = head;
+	// loop through the existing list, compare the contents of both string.
 	while (current != NULL) {
 		if (strcmp(current->getName().c_str(), name.c_str()) == 0) {
 			cout << "CUSTOMER FOUND" << endl;
+			// In case it return value = 0, means that equal, display customer to the console
 			printCtm(current);
 			return current;
 		}
-		current = current->getNext();
+		current = current->getNext(); // move to next customer
 	}
 	cout << "Customer with Name: " << name << " is not exist in the list" << endl;
 	return NULL;
 }
 
+// Display list of customer regarding types (VIP, REGULAR, GUEST)
 void CtmList::printListByCtmType(ctmTypeEnum input) {
-	customer *current = head;
+	customer *current = head; // set current pointer to head
+	// loop through exist customer list & display the customer if same types
+	// then moves current to next customer
 	while (current != NULL)
 	{
 		if (current->getCtmType() == input) printCtm(current);
@@ -440,6 +460,7 @@ void CtmList::printListByCtmType(ctmTypeEnum input) {
 	}
 }
 
+// Display customer and related information
 void CtmList::printCtm(customer* ctm) {
 	cout << "/////////////////////////////////////////////////" << endl;
 	cout << "Customer ID: " << ctm->getID() << endl;
@@ -550,19 +571,21 @@ void CtmList::prtSortedCtmList(prtSortedList printType)
 	}
 }
 
-
-
+// Removing head item
 void CtmList::removeHead() {
 	if (head == NULL) {
 		cout << "Linked list does not exit" << endl;
 	}
+	// set temp pointer to head, then move head to next item and delete temp
 	customer* temp = head;
 	head = temp->getNext();
 	temp->setNext(NULL);
 	delete temp;
 }
 
+// Adding tail customer to list
 void CtmList::appendTail(string id, string name, string addr, string phone, ctmTypeEnum ctmType) {
+	// set current pointer to head and create new customer node
 	customer* current = head;
 	customer* newItem;
 	switch (ctmType) {
@@ -570,16 +593,18 @@ void CtmList::appendTail(string id, string name, string addr, string phone, ctmT
 	case 2: newItem = new vip(id, name, addr, phone, ctmType); break;
 	default: newItem = new guest(id, name, addr, phone, ctmType); break;
 	}
+	// items not exist, add to head
 	if (current == NULL) {
 		head = newItem;
 	}
 	else {
 		while (current->getNext() != NULL)	current = current->getNext(); // find tail node
-		current->setNext(newItem);
+		current->setNext(newItem); // link to new customer node
 		newItem->setNext(NULL);
 	}
 }
 
+// Removing tail item
 void CtmList::removeTail() {
 	customer* current = head;
 	if (current == NULL) {
@@ -589,6 +614,7 @@ void CtmList::removeTail() {
 		while (current->getNext()->getNext() != NULL) { // node exists
 			current = current->getNext(); // set current to next node
 		}
+		// delete the next item until NULL
 		delete current->getNext();
 		current->setNext(NULL);
 	}
@@ -650,15 +676,20 @@ bool CtmList::removeNode(customer* node) {
 	return true;
 }
 
+// delete list of customers
 void CtmList::deleteList()
 {
+	// if the head customer is not null, remove it until it is NULL
 	while (head != NULL)	this->removeHead();
 }
 
+// Function of get number of existing customers in lists
 int CtmList::size()
 {
 	int count = 0;
 	customer *current = head;
+	// loop through the list, increase 1 when having customer
+	// then move current to next customer node
 	while (current != NULL)
 	{
 		count++;
