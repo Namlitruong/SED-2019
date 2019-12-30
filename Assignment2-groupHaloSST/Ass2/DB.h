@@ -24,8 +24,8 @@
 #define ctmDbInLength 6
 #define itemDbInLength 7
 
-int initBaseDb(ItemList*, CtmList*);
-int finBaseDb(ItemList*, CtmList*);
+int initBaseDb(ItemList*, CtmList*, string, string);
+int finBaseDb(ItemList*, CtmList*, string, string);
 ctmTypeEnum ctmTypeUtil(string);
 rentalTypeEnum rentalTypeUtil(string);
 genreTypeEnum genreTypeUtil(string);

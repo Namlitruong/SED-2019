@@ -614,15 +614,18 @@ bool CheckExit(string optSel_str) {
 
 /*	Function name: initBaseDb.
 Usage: Initalized the data from source files (text files of customer and item information)
-Input: Pointer to item and customer list.
+Input:	First arg: pointer to item list.
+		Second arg: pointer to customer list.
+		Third arg: name of the customer list, "customers.txt" by default.
+		Fourth arg: name of the item list, "items.txt" by default.
 Output: return 0 -- successfully, 1 -- fail to promote.
 */
-int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr, string Ctmfile, string Itsfile) {
 	string textLine;
 	bool isCtmProfile = false;
 	long totalRental = 0;
-	ifstream ctmFile("customers.txt");
-	ifstream itemFile("items.txt");
+	ifstream ctmFile(Ctmfile);
+	ifstream itemFile(Itsfile);
 
 	// initialize Customer DB
 
@@ -744,13 +747,16 @@ int initBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
 
 /*	Function name: finBaseDb.
 Usage: Save the data to source files (text files of customer and item information)
-Input: Pointer to item and customer list.
+Input:	First arg: pointer to item list.
+		Second arg: pointer to customer list.
+		Third arg: name of the customer list, "customers.txt" by default.
+		Fourth arg: name of the item list, "items.txt" by default.
 Output: return 0 -- successfully, 1 -- fail to promote.
 */
-int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr) {
+int finBaseDb(ItemList* itemPtr, CtmList* ctmPtr, string Ctmfile, string Itsfile) {
 	string textLine;
-	ofstream ctmFile("customers.txt");
-	ofstream itemFile("items.txt");
+	ofstream ctmFile(Ctmfile);
+	ofstream itemFile(Itsfile);
 
 
 	// Finalize Customer DB

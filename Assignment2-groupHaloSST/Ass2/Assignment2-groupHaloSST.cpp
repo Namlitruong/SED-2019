@@ -15,11 +15,36 @@
 
 using namespace std;
 
-int main()
+// Global DB Filename
+string ctmDbFileName, itemDbFileName;
+
+int main(int argc, char *argv[])
 {
+	if (argc > 1)
+	{
+		ctmDbFileName = argv[1];
+		itemDbFileName = argv[2];
+
+		if (ctmDbFileName.substr(ctmDbFileName.find_last_of(".") + 1) != "txt"
+			|| itemDbFileName.substr(itemDbFileName.find_last_of(".") + 1) != "txt"
+			) {
+			cout << "[Argument1] customerDatabase.txt [Argument2] itemDatabase.txt" << endl;
+			cout << "Unsupported Database Format (.txt Only) ! Please try again !" << endl;
+
+			return -1;
+		}
+
+	}
+	else {
+		ctmDbFileName = "customers.txt";
+		itemDbFileName = "items.txt";
+	}
+
+
+
 	ItemList* ItemLst = new ItemList();
 	CtmList* CustomerLst = new CtmList();
-	initBaseDb(ItemLst, CustomerLst);
+	initBaseDb(ItemLst, CustomerLst, ctmDbFileName, itemDbFileName);
 	while (1) {
 		autoPromoteCtmr(CustomerLst);
 		string optSel_str; // Option Select Raw String
@@ -39,7 +64,7 @@ int main()
 		cout << "Exit." << endl;
 		getline(cin, optSel_str);
 		if (CheckExit(optSel_str)) {
-			finBaseDb(ItemLst, CustomerLst);
+			finBaseDb(ItemLst, CustomerLst, ctmDbFileName, itemDbFileName);
 			delete ItemLst;
 			delete CustomerLst;
 			return 0;
@@ -80,7 +105,7 @@ int main()
 			break;
 		}
 	}
-	finBaseDb(ItemLst, CustomerLst);
+	finBaseDb(ItemLst, CustomerLst, ctmDbFileName, itemDbFileName);
 	delete ItemLst;
 	delete CustomerLst;
 	return 0;
