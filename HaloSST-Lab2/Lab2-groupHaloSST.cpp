@@ -40,30 +40,55 @@ int indpX = 0, dpA = 0, dpB = 0;
 
 // Function prototype
 char* SplitEqTerm(char*);
-
-// Util funcs
-
-
+char* calcAllTerms(char*);
+char* calcTypeId(char*);
 // Pre-defined
-char* SpaceEliminate(char*);
-bool CheckExit(int);
+// TODO: Adapt to new Equation format
+char* SpaceEliminate(char*); 
+bool CheckExit(int); // Checked
 
 //Main program
 int main(int argc, char* argv[]) {
 
 	if(CheckExit(argc)){ return 0; }	
 	cout << argv[1];
-	
-	SplitEqTerm(
-		SpaceEliminate(argv[1])
-	);
 
+	// TODO Define Linked List & replace argv[1] as input?
+	// Use return -1 as boolean for each stage?
+
+	// Traverse through List & calculate all
+	calcAllTerms(
+		// Identify Calcultion Type via Util funcs
+		// Update Linked List->calcType 
+		calcTypeId(
+			// Split terms into Linked List
+			// constA, constB, indp varX, operator Opt, index Idx
+			SplitEqTerm(
+			// Raw Equation without space
+			SpaceEliminate(argv[1])
+	)));
+}
+
+// Main Functions
+char* calcAllTerms(char* iEqtn){
+	return iEqtn;
+}
+
+char* calcTypeId(char* iEqtn){
+	return iEqtn;
 }
 
 char* SplitEqTerm(char* iEqtn){
 	//TODO Split based on delimeter "+" or "-"
 	return iEqtn;
 }
+
+// Util Functions
+
+
+
+
+// Pre-defined Functions
 /*	Function name: SpaceEliminate.
 	Usage: Using to eleiminate spaces before and after the input expression.
 	Input: Raw input argument string.
