@@ -17,11 +17,34 @@
 
 using namespace std;
 
+// Define Enum
+typedef enum calculationType {
+	Const = 1,		// 𝑎
+	Linear = 2,		// 𝑎 ∗ 𝑥 
+	Power = 3,		// 𝑎 ∗ 𝑥^(𝑏) 
+	Log10 = 4,		// 𝑎 ∗ 𝑙𝑜𝑔10( 𝑥) 
+	Log10Const = 5,	// 𝑎 ∗ 𝑙𝑜𝑔10(𝑏 ∗ 𝑥)
+	LogE = 6,		// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑥) 
+	LogEConst = 7,	// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑏 ∗ 𝑥)
+	Exp = 8,		// 𝑎 ∗ 𝑒^(𝑥)
+	ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥) 
+	Sin = 10,		// 𝑎 ∗ sin(𝑥) 
+	SinConst = 11,	// 𝑎 ∗ sin(𝑏 ∗ 𝑥)
+	CoSin = 12,		// 𝑎 ∗ cos(𝑥) 
+	CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
+} calcType;
+
 //Global variables
 char iString[1000];
 int indpX = 0, dpA = 0, dpB = 0;
 
 // Function prototype
+char* SplitEqTerm(char*);
+
+// Util funcs
+
+
+// Pre-defined
 char* SpaceEliminate(char*);
 bool CheckExit(int);
 
@@ -31,10 +54,16 @@ int main(int argc, char* argv[]) {
 	if(CheckExit(argc)){ return 0; }	
 	cout << argv[1];
 	
-	SpaceEliminate(argv[1]);
+	SplitEqTerm(
+		SpaceEliminate(argv[1])
+	);
 
 }
 
+char* SplitEqTerm(char* iEqtn){
+	//TODO Split based on delimeter "+" or "-"
+	return iEqtn;
+}
 /*	Function name: SpaceEliminate.
 	Usage: Using to eleiminate spaces before and after the input expression.
 	Input: Raw input argument string.
