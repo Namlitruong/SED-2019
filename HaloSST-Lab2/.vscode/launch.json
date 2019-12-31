@@ -14,7 +14,9 @@
                 "trace": false
             },
             "showDisplayString": false,
-            "args": [],
+            "args": [
+                "3*x^8+9*log10(8*x)-4*sin(2*x)-loge(x)+7*e^(5*x)"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
