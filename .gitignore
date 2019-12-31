@@ -20,3 +20,7 @@ HaloSST-Asmn2/HaloSST-Asmn2.sln
 HaloSST-Asmn2/HaloSST-Asmn2.vcxproj
 .vs/
 HaloSST-Asmn2/x64/
+/HaloSST-Lab2/HaloSST/Debug
+/HaloSST-Lab2/HaloSST/Release
+/HaloSST-Lab2/HaloSST/x64/Debug
+/HaloSST-Lab2/x64/Debug
