@@ -67,6 +67,8 @@ int main(int argc, char* argv[]) {
 			// Raw Equation without space
 			SpaceEliminate(argv[1])
 	)));
+
+	return 0;
 }
 
 // Main Functions
@@ -75,11 +77,24 @@ char* calcAllTerms(char* iEqtn){
 }
 
 char* calcTypeId(char* iEqtn){
+	//TODO Identify Type of calculation
 	return iEqtn;
 }
 
 char* SplitEqTerm(char* iEqtn){
+	string iEqtnStr = iEqtn;
+	int cursor = 0, idxCtm = 0;
+	string termsArr[1000]; // TODO define maximal supported terms
+
 	//TODO Split based on delimeter "+" or "-"
+	while (( (cursor = iEqtnStr.find("+")) != std::string::npos) 
+		  || (cursor = iEqtnStr.find("-")) != std::string::npos) 
+	{
+		termsArr[idxCtm++] = iEqtnStr.substr(0, cursor);
+		iEqtnStr.erase(0, cursor + 1); // Advance next term, +1 for delimeter
+	}
+		termsArr[idxCtm] = iEqtnStr; // Last term
+
 	return iEqtn;
 }
 
