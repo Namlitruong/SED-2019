@@ -19,6 +19,7 @@ using namespace std;
 
 // Define Enum
 typedef enum calculationType {
+	NONE = -1,
 	Const = 1,		// 𝑎
 	Linear = 2,		// 𝑎 ∗ 𝑥 
 	Power = 3,		// 𝑎 ∗ 𝑥^(𝑏) 
@@ -42,9 +43,9 @@ int indpX = 0, dpA = 0, dpB = 0;
 char* SplitEqTerm(char*);
 char* calcAllTerms(char*);
 char* calcTypeId(char*);
-bool isCnst(string);
-bool isLinear(string);
-bool isPower(string);
+bool isLog(string);
+bool isTrig(string);
+bool isExp(string);
 string getAllNum(string str);
 
 // Pre-defined
@@ -91,51 +92,56 @@ char* calcTypeId(char* iEqtn){
 	calcType tp;
 	string cnstA, cnstB;
 
-	//TODO Identify Type of calculation
+	// IN-DEVELOP
 	string termsArr[EQLIM] = { "4","2*x","x*2","3*4x^8" };
 
 	//FIXME While current = current->getNext() != NULL
 	for each (string term in termsArr)
 	{
-	/*
-		Const = 1,		// 𝑎
-		Linear = 2,		// 𝑎 ∗ 𝑥 
-		Power = 3,		// 𝑎 ∗ 𝑥^(𝑏) 
-		Log10 = 4,		// 𝑎 ∗ 𝑙𝑜𝑔10( 𝑥) 
-		Log10Const = 5,	// 𝑎 ∗ 𝑙𝑜𝑔10(𝑏 ∗ 𝑥)
-		LogE = 6,		// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑥) 
-		LogEConst = 7,	// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑏 ∗ 𝑥)
-		Exp = 8,		// 𝑎 ∗ 𝑒^(𝑥)
-		ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥) 
-		Sin = 10,		// 𝑎 ∗ sin(𝑥) 
-		SinConst = 11,	// 𝑎 ∗ sin(𝑏 ∗ 𝑥)
-		CoSin = 12,		// 𝑎 ∗ cos(𝑥) 
-		CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
-	*/
+		// IN-DEVELOP
+		term = "24x";
 
-		// Const
-		if (isCnst(term))
+		/* Logarithmic Equation
+			Log10 = 4,		// 𝑎 ∗ 𝑙𝑜𝑔10( 𝑥) 
+			Log10Const = 5,	// 𝑎 ∗ 𝑙𝑜𝑔10(𝑏 ∗ 𝑥)
+			LogE = 6,		// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑥) 
+			LogEConst = 7,	// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑏 ∗ 𝑥)
+		*/
+		if (isLog(term))
 		{
 			tp = Const;
 		}
-		// Linear
-		else if ( isLinear(term)) {
-			//FIXME multi-decimal constant a, i.e. 10*x
-			tp = Linear;
-			cnstA = term[0];
-		}
-		// Power
-		else if ( isPower(term) ) {
+
+		/* Exponential Equation
+			Exp = 8,		// 𝑎 ∗ 𝑒^(𝑥)
+			ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥) 
+		*/
+		else if ( isExp(term) ) {
 			tp = Linear;
 			cnstA = term[0];
 			cnstB = term[0];
 		}
-		// Not required
-		else if (term[0] == 'x' && term.length() == 1) {
 
+		/* Trigonometric Equation
+			Sin = 10,		// 𝑎 ∗ sin(𝑥)
+			SinConst = 11,	// 𝑎 ∗ sin(𝑏 ∗ 𝑥)
+			CoSin = 12,		// 𝑎 ∗ cos(𝑥)
+			CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
+		*/
+		else if (isTrig(term)) {
+			tp = Linear;
+			cnstA = term[0];
+			cnstB = term[0];
 		}
+
+		/*
+			NONE = -1		// Unsupported
+			Const = 1,		// 𝑎
+			Linear = 2,		// 𝑎 ∗ 𝑥 
+			Power = 3,		// 𝑎 ∗ 𝑥^(𝑏) 
+		*/
 		else {
-			// Unsupported, Redundant
+			// Unsupported
 		}
 
 
@@ -175,21 +181,17 @@ char* SplitEqTerm(char* iEqtn){
 }
 
 // Util Functions
-bool isCnst(string str) {
-	// isdigit(term[0]) != 0
+//FIXME Pass arguments by Reference as EqtnList&
+bool isLog(string str) {
+}
+
+bool isExp(string str) {
+
 
 	return false;
 }
-bool isLinear(string str) {
-	// isdigit(term[0]) != 0 && term[1] == '*' && term[2] == 'x' && term.length() == 3
 
-
-	return false;
-}
-
-bool isPower(string str) {
-
-
+bool isTrig(string str) {
 	return false;
 }
 
