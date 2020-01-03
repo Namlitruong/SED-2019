@@ -93,7 +93,8 @@ char* calcTypeId(char* iEqtn){
 	string cnstA, cnstB;
 
 	// IN-DEVELOP
-	string termsArr[EQLIM] = { "4*log10(2*x)","4*loge(2*x)","4*log10(*x)","4*loge(*x)", "4*log10(x^8)", "4*loge(x^8)"};
+	// string termsArr[EQLIM] = { "4*log10(2*x)","4*loge(2*x)","4*log10(*x)","4*loge(*x)", "4*log10(x^8)", "4*loge(x^8)"};
+	string termsArr[EQLIM] = { "4*e^(x*2)","4*e^(2*x)","4*e^(*x)" };
 
 	//FIXME While current = current->getNext() != NULL
 	for each (string term in termsArr)
@@ -108,7 +109,8 @@ char* calcTypeId(char* iEqtn){
 		*/
 		if (isLog(term))
 		{
-			tp = Const;
+			cnstA = term[0];
+			cnstB = term[0];
 		}
 
 		/* Exponential Equation
@@ -116,7 +118,6 @@ char* calcTypeId(char* iEqtn){
 			ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥) 
 		*/
 		else if ( isExp(term) ) {
-			tp = Linear;
 			cnstA = term[0];
 			cnstB = term[0];
 		}
@@ -128,7 +129,6 @@ char* calcTypeId(char* iEqtn){
 			CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
 		*/
 		else if (isTrig(term)) {
-			tp = Linear;
 			cnstA = term[0];
 			cnstB = term[0];
 		}
@@ -182,13 +182,6 @@ char* SplitEqTerm(char* iEqtn){
 // Util Functions
 //FIXME Pass arguments by Reference as EqtnList&
 bool isLog(string str) {
-	/*
-	Log10 = 4,		// 𝑎 ∗ 𝑙𝑜𝑔10( 𝑥)
-	Log10Const = 5,	// 𝑎 ∗ 𝑙𝑜𝑔10(𝑏 ∗ 𝑥)
-	LogE = 6,		// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑥)
-	LogEConst = 7,	// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑏 ∗ 𝑥)
-	*/
-
 	string log10 = "log10", loge = "loge", logE = "logE";
 	char inDpntChr = 'x';
 	int cursor = 0;
@@ -213,7 +206,8 @@ bool isLog(string str) {
 		return true;
 	}
 	else if((cursor = str.find(loge)) != std::string::npos 
-		 || (cursor = str.find(logE)) != std::string::npos){
+		 || (cursor = str.find(logE)) != std::string::npos)
+	{
 		// If ...loge(2...)
 		if (isdigit(str[cursor + loge.length() + 1])) // str[+5]="loge".length() + 1
 		{
@@ -234,7 +228,30 @@ bool isLog(string str) {
 }
 
 bool isExp(string str) {
+	/* Exponential Equation
+		Exp = 8,		// 𝑎 ∗ 𝑒^(𝑥)
+		ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥)
+	*/
+	int cursor = 0;
+	string exp = "e^";
+	char inDpntVar = 'x';
 
+	//FIXME pass to attr from argument EqtnList::Node->thisCalcType
+	calcType tp;
+
+	if ((cursor = str.find(exp)) != std::string::npos) {
+		if (isdigit(str[cursor + exp.length() + 1]))
+		{
+			tp = ExpConst;
+		}
+		else if (str[cursor + exp.length() + 1] == inDpntVar) {
+			tp = Exp;
+		}
+		else {
+			return false;
+		}
+		return true;
+	}
 
 	return false;
 }
