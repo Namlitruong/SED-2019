@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 	} 
 	else if (argc == 2) {
 		string usrInput = "";
+		cout << "Valid input" << endl;
 	}
 	else {
 		cout << "Wrong input argument." << endl;

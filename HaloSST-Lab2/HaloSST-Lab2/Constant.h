@@ -7,6 +7,6 @@ public:
 	Constant();
 	~Constant();
 	Constant(int a);
-	void differentiate();
+	void diff();
 };
 

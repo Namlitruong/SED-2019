@@ -7,6 +7,6 @@ public:
 	Power();
 	~Power();
 	Power(int a, int b);
-	void differentiate();
+	void diff();
 };
 

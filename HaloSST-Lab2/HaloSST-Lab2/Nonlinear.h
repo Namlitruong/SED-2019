@@ -9,6 +9,6 @@ public:
 	Nonlinear();
 	~Nonlinear();
 	Nonlinear(int a, int b);
-	void differentiate();
+	void diff();
 };
 

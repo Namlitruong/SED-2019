@@ -1,5 +1,12 @@
 #pragma once
-class Sinusoidal
+#include "Trigonometric.h"
+
+class Sinusoidal:public Trigonometric
 {
+public:
+	Sinusoidal();
+	~Sinusoidal();
+	Sinusoidal(int a, int b);
+	void diff();
 };
 

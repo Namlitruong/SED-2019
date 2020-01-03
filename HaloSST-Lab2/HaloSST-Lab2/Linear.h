@@ -7,6 +7,6 @@ public:
 	Linear();
 	~Linear();
 	Linear(int a);
-	void differentiate();
+	void diff();
 };
 
