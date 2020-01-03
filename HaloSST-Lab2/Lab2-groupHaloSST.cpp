@@ -42,6 +42,11 @@ int indpX = 0, dpA = 0, dpB = 0;
 char* SplitEqTerm(char*);
 char* calcAllTerms(char*);
 char* calcTypeId(char*);
+bool isCnst(string);
+bool isLinear(string);
+bool isPower(string);
+string getAllNum(string str);
+
 // Pre-defined
 // TODO: Adapt to new Equation format
 char* SpaceEliminate(char*); 
@@ -56,6 +61,7 @@ int main(int argc, char* argv[]) {
 	// TODO Define Linked List & replace argv[1] as input?
 	// Use return -1 as boolean for each stage?
 
+	// TODO re-factor Procedural to OOP
 	// Traverse through List & calculate all
 	calcAllTerms(
 		// Identify Calcultion Type via Util funcs
@@ -68,40 +74,130 @@ int main(int argc, char* argv[]) {
 			SpaceEliminate(argv[1])
 	)));
 
+
 	return 0;
 }
 
 // Main Functions
 char* calcAllTerms(char* iEqtn){
+
 	return iEqtn;
 }
 
 char* calcTypeId(char* iEqtn){
+	//TODO input argument *EqtnList
+
+	//TODO EqtnList::Node->attributes
+	calcType tp;
+	string cnstA, cnstB;
+
 	//TODO Identify Type of calculation
+	string termsArr[EQLIM] = { "4","2*x","x*2","3*4x^8" };
+
+	//FIXME While current = current->getNext() != NULL
+	for each (string term in termsArr)
+	{
+	/*
+		Const = 1,		// 𝑎
+		Linear = 2,		// 𝑎 ∗ 𝑥 
+		Power = 3,		// 𝑎 ∗ 𝑥^(𝑏) 
+		Log10 = 4,		// 𝑎 ∗ 𝑙𝑜𝑔10( 𝑥) 
+		Log10Const = 5,	// 𝑎 ∗ 𝑙𝑜𝑔10(𝑏 ∗ 𝑥)
+		LogE = 6,		// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑥) 
+		LogEConst = 7,	// 𝑎 ∗ 𝑙𝑜𝑔𝑒(𝑏 ∗ 𝑥)
+		Exp = 8,		// 𝑎 ∗ 𝑒^(𝑥)
+		ExpConst = 9,	// 𝑎 ∗ 𝑒^(𝑏 ∗ 𝑥) 
+		Sin = 10,		// 𝑎 ∗ sin(𝑥) 
+		SinConst = 11,	// 𝑎 ∗ sin(𝑏 ∗ 𝑥)
+		CoSin = 12,		// 𝑎 ∗ cos(𝑥) 
+		CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
+	*/
+
+		// Const
+		if (isCnst(term))
+		{
+			tp = Const;
+		}
+		// Linear
+		else if ( isLinear(term)) {
+			//FIXME multi-decimal constant a, i.e. 10*x
+			tp = Linear;
+			cnstA = term[0];
+		}
+		// Power
+		else if ( isPower(term) ) {
+			tp = Linear;
+			cnstA = term[0];
+			cnstB = term[0];
+		}
+		// Not required
+		else if (term[0] == 'x' && term.length() == 1) {
+
+		}
+		else {
+			// Unsupported, Redundant
+		}
+
+
+		// TODO Increment EqtnList::Node->next()
+	}
+
 	return iEqtn;
 }
 
 char* SplitEqTerm(char* iEqtn){
 	string iEqtnStr = iEqtn;
 	int cursor = 0, idxCtm = 0;
-	string termsArr[1000]; // TODO define maximal supported terms
+
+	// Main Class EqtnList
+	string termsArr[EQLIM];
+
+	// EqtnList::Node->attributes
+	string term;
+	bool isSubtract = false;
+
 
 	//TODO Split based on delimeter "+" or "-"
 	while (( (cursor = iEqtnStr.find("+")) != std::string::npos) 
 		  || (cursor = iEqtnStr.find("-")) != std::string::npos) 
 	{
+
+		// TODO any other attribute for subtraction ?
+		iEqtnStr[cursor] == '-' ? (isSubtract = true) : (isSubtract = false);
+
 		termsArr[idxCtm++] = iEqtnStr.substr(0, cursor);
 		iEqtnStr.erase(0, cursor + 1); // Advance next term, +1 for delimeter
 	}
 		termsArr[idxCtm] = iEqtnStr; // Last term
 
+	//TODO return EqtnList
 	return iEqtn;
 }
 
 // Util Functions
+bool isCnst(string str) {
+	// isdigit(term[0]) != 0
+
+	return false;
+}
+bool isLinear(string str) {
+	// isdigit(term[0]) != 0 && term[1] == '*' && term[2] == 'x' && term.length() == 3
 
 
+	return false;
+}
 
+bool isPower(string str) {
+
+
+	return false;
+}
+
+string getAllNum(string str) {
+
+
+	return str;
+}
 
 // Pre-defined Functions
 /*	Function name: SpaceEliminate.
