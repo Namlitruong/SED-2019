@@ -38,6 +38,8 @@ typedef enum calculationType {
 
 typedef enum calculationError {
 	spcErr = 1,
+	syntaxErr,
+	unBlcTerms,
 	invLog,
 } calcError;
 
@@ -52,6 +54,7 @@ string calcTypeId(string);
 bool isLog(string);
 bool isTrig(string);
 bool isExp(string);
+void syntaxChecker(string);
 string getAllNum(string);
 string getErrMsg(calcError);
 
@@ -172,29 +175,54 @@ string calcTypeId(string iEqtn){
 
 string SplitEqTerm(string iEqtn){
 	string iEqtnStr = iEqtn;
-	int cursor = 0, idxCtm = 0;
+	int cursor = 0, idxTerm = 0;
 
 	// Main Class EqtnList
 	string termsArr[EQLIM];
-	throw invLog;
 
 	// EqtnList::Node->attributes
 	string term;
 	bool isSubtract = false;
 
+	// Syntax Error Special Case Invalid equation[0]
+	if (iEqtn[0] == '+' 
+	|| iEqtn[0] == '-' 
+	|| iEqtn[0] == '*' 
+	|| iEqtn[0] == '^' 
+	) throw syntaxErr;
 
+	int curPos, curNeg;
 	//TODO Split based on delimeter "+" or "-"
-	while (( (cursor = iEqtnStr.find("+")) != std::string::npos) 
-		  || (cursor = iEqtnStr.find("-")) != std::string::npos) 
+	while (( (curPos = iEqtnStr.find('+')) != std::string::npos) 
+		  || (curNeg = iEqtnStr.find('-')) != std::string::npos) 
 	{
-
+		// FIXME error skipped '-' separated terms
+		if (curPos != std::string::npos)
+		{
+			cursor = curPos;
+		}
+		else if (curNeg != std::string::npos){
+			cursor = curPos;
+		}
+		
 		// TODO any other attribute for subtraction ?
 		iEqtnStr[cursor] == '-' ? (isSubtract = true) : (isSubtract = false);
 
-		termsArr[idxCtm++] = iEqtnStr.substr(0, cursor);
+		termsArr[idxTerm++] = iEqtnStr.substr(0, cursor);
 		iEqtnStr.erase(0, cursor + 1); // Advance next term, +1 for delimeter
 	}
-		termsArr[idxCtm] = iEqtnStr; // Last term
+		termsArr[idxTerm] = iEqtnStr; // Last term
+	
+	// Empty Error
+	if (termsArr[0] == "") throw unBlcTerms;
+
+	// NOTE first:last+1
+	for(int idx=0; idx <= idxTerm; idx++){
+		string eachTerm = termsArr[idx];
+		syntaxChecker(eachTerm);
+	}
+
+	// Syntax Checker
 
 	//TODO return EqtnList
 	return iEqtn;
@@ -280,7 +308,15 @@ bool isExp(string str) {
 bool isTrig(string str) {
 	return false;
 }
-
+void syntaxChecker(string term){
+	// Syntax Checker
+	// TODO add more syntax checker cases
+	if (term[0] == '+' 
+	|| term[0] == '-' 
+	|| term[0] == '*' 
+	|| term[0] == '^' 
+	) throw syntaxErr;
+}
 string getAllNum(string str) {
 
 
@@ -293,12 +329,17 @@ string getErrMsg(calcError thisErr){
 	case spcErr:
 		return "Not all Spaces Eliminated";
 		break;
+	case unBlcTerms:
+		return "Unbalanced Terms";
+		break;
 	case invLog:
 		return "Invalid Log";
 		break;
 	default:
+		return "Non-supported Error";
 		break;
 	}
+	return "Non-supported Error";
 }
 
 // Pre-defined Functions
