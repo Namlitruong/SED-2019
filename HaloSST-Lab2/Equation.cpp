@@ -249,10 +249,68 @@ bool Equation::checkTerm(string term)
 }
 
 //TODO checkEquation
-bool Equation::checkEquation(){}
+bool Equation::checkEquation()
+{
+	string term = "";
+	for (int i = 0; i < usrInput.length(); i++) {
+		char inputCharacter = usrInput[i];
+		if ((inputCharacter == '+' || inputCharacter == '-') && i != 0 && usrInput[i - 1] != '(') {
+
+			if (term == "" || i == usrInput.length() - 1) return false;
+			else {
+				if (!checkTerm(term)) {
+					cout << "invalid term: " << term << endl;
+					return false;
+				}
+				term = "";
+			}
+		}
+		else {
+			if (inputCharacter != '+' && inputCharacter != '-') term += inputCharacter;
+			if (i == usrInput.length() - 1) {
+				if (!checkTerm(term)) {
+					cout << "invalid term: " << term << endl;
+					return false;
+				}
+			}
+		}
+	}
+	return true;
+}
 
 // TODO printResult
-void Equation::printResult() {}
+void Equation::printResult() {
+	string result = "The result is: ";
+	Term* current = head;
+	bool isFirstNumber = false;
+	while (current != NULL) {
+		current->diff();
+		int coeff = current->getCoeff();
+		if (!isFirstNumber) {
+			result += "";
+			isFirstNumber = true;
+			result += current->getResult();
+		}
+		else if (coeff > 0) {
+			result += "+";
+			result += current->getResult();
+		}
+		else if (coeff == 0 && current->getResult() != "0") {
+
+			result += "";
+		}
+		else if (coeff == 0) {
+			result += "";
+		}
+		else {
+			result += current->getResult();
+		}
+		current = current->getNext();
+	}
+
+	cout << endl;
+	cout << result << endl;
+}
 
 // TODO formEquation
 void Equation::formEquation(){}
