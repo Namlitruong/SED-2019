@@ -248,7 +248,6 @@ bool Equation::checkTerm(string term)
 	return true;
 }
 
-//TODO checkEquation
 bool Equation::checkEquation()
 {
 	string term = "";
@@ -278,7 +277,6 @@ bool Equation::checkEquation()
 	return true;
 }
 
-// TODO printResult
 void Equation::printResult() {
 	string result = "The result is: ";
 	Term* current = head;
@@ -312,5 +310,201 @@ void Equation::printResult() {
 	cout << result << endl;
 }
 
-// TODO formEquation
-void Equation::formEquation(){}
+// TODO check x^b without bracket
+void Equation::formEquation() {
+	int strLength = usrInput.length();
+	int coeffA = 0;
+	int coeffB = 0;
+	int pow = 0;
+	string coeffAstr = "";
+	string coeffBstr = "";
+	string powStr = "";
+	string func = "";
+	bool xDetect = false;
+	bool eDetect = false;
+	bool funcDetect = false;
+	bool consDetect = false;
+	bool digitDetect = false;
+	bool bracket = false;
+	int track = 0;
+	for (int i = 0; i < strLength; i++) {
+		char inputCharacter = usrInput[i];
+		track = i + 1;
+		if (inputCharacter == '+' || inputCharacter == '-' || track == strLength - 1) {
+			digitDetect = true;
+		}
+		if (!xDetect && !eDetect && !funcDetect && !consDetect) {
+			if (inputCharacter == 'x') {
+				if (i == strLength - 1) {
+					i = strLength - 2;
+				}
+				xDetect = true, digitDetect = false, func += inputCharacter;
+			}
+			else if (digitDetect && (inputCharacter == '+' || inputCharacter == '-' || i == strLength - 1) && i != 0) {
+				if (i == strLength - 1) {
+					coeffAstr += inputCharacter;
+				}
+				if (inputCharacter == '+' || inputCharacter == '-')coeffAstr += inputCharacter;
+				consDetect = true, func = "none";
+			}
+			else if (inputCharacter == 'e') eDetect = true, digitDetect = false, func += inputCharacter;
+			else if (isalpha(inputCharacter) && inputCharacter != 'x' && inputCharacter != 'e') funcDetect = true, digitDetect = false;
+			else if (inputCharacter != '(' && inputCharacter != ')') coeffAstr += inputCharacter;
+		}
+		else if (xDetect) {
+			if (inputCharacter == '(') bracket = true;
+			if (coeffAstr == "" || coeffAstr == "+") coeffA = 1;
+			else if (coeffAstr == "-") {
+				coeffA = -1;
+			}
+			else coeffA = atoi(coeffAstr.c_str());
+			// insert linear to term
+			if (bracket) {
+				if (inputCharacter == ')' || i == strLength - 1) {
+					xDetect = false;
+					if (powStr == "") pow = 1;
+					else if (i == strLength - 1) {
+						powStr += inputCharacter;
+					}
+					pow = atoi(powStr.c_str());
+					if (func.compare("x")==0) {
+						Term* newterm = new Power(coeffA, pow);
+						appendTerm(newterm);
+					}
+					else {
+						Term* newterm = new Linear(coeffA);
+						appendTerm(newterm);
+					}
+
+					func = "";
+					coeffAstr = "";
+					coeffBstr = "";
+					powStr = "";
+					coeffA = 0;
+					coeffB = 0;
+					pow = 0;
+					bracket = false;
+				}
+				else if (inputCharacter == '^') func += inputCharacter;
+				else if (isdigit(inputCharacter) || inputCharacter == '-')powStr += inputCharacter;
+			}
+			else {
+				// insert power to term
+				if ((!isdigit(inputCharacter) && inputCharacter != '^') || i == strLength - 1) {
+					xDetect = false;
+					if (i == strLength - 1) {
+						powStr += inputCharacter;
+					}
+					if (powStr == "") pow = 1;
+					else pow = atoi(powStr.c_str());
+					if (func.compare("x^")==0) {
+						Term* newterm = new Power(coeffA, pow);
+						appendTerm(newterm);
+					}
+					else {
+						Term* newterm = new Linear(coeffA);
+						appendTerm(newterm);
+					}
+
+					func = "";
+					coeffAstr = inputCharacter;
+					coeffBstr = "";
+					powStr = "";
+					coeffA = 0;
+					coeffB = 0;
+					pow = 0;
+				}
+				else if (inputCharacter == '^') func += inputCharacter;
+				else if (isdigit(inputCharacter) || inputCharacter == '-')powStr += inputCharacter;
+			}
+
+		}
+		if (eDetect) {
+			if (coeffAstr == "" || coeffAstr == "+") coeffA = 1;
+			else if (coeffAstr == "-") {
+				coeffA = -1;
+			}
+			else coeffA = atoi(coeffAstr.c_str());
+			if (inputCharacter == 'x') {
+				eDetect = false;
+				if (coeffBstr == "") coeffB = 1;
+				else if (coeffBstr == "-")coeffB = -1;
+				else coeffB = atoi(coeffBstr.c_str());
+				Term* newterm = new Exponential(coeffA, coeffB);
+				appendTerm(newterm);
+				func = "";
+				coeffAstr = "";
+				coeffBstr = "";
+				powStr = "";
+				coeffA = 0;
+				coeffB = 0;
+				pow = 0;
+			}
+			else if (inputCharacter == '^') func += inputCharacter;
+			else if (inputCharacter != 'e' && inputCharacter != '^' && inputCharacter != '(') coeffBstr += inputCharacter;
+		}
+		if (consDetect) {
+			coeffA = atoi(coeffAstr.c_str());
+			consDetect = false;
+			if (coeffA != 0) {
+				Term* newterm = new Constant(coeffA);
+				appendTerm(newterm);
+				coeffAstr = "";
+				coeffBstr = "";
+				powStr = "";
+				coeffA = 0;
+				coeffB = 0;
+				pow = 0;
+			}
+			func = "";
+		}
+		if (funcDetect) {
+			if (coeffAstr == "" || coeffAstr == "+") coeffA = 1;
+			else if (coeffAstr == "-") {
+				coeffA = -1;
+			}
+			else coeffA = atoi(coeffAstr.c_str());
+			if (inputCharacter == ')') {
+				funcDetect = false;
+				if (coeffBstr == "") coeffB = 1;
+				else if (coeffBstr == "-") coeffB = -1;
+				else if (func == "log") {
+					size_t remove = coeffBstr.find("10");
+					coeffBstr.replace(remove, 2, "");
+					if (coeffBstr == "") coeffB = 1;
+					else if (coeffBstr == "-") coeffB = -1;
+					else coeffB = atoi(coeffBstr.c_str());
+				}
+				else {
+					coeffB = atoi(coeffBstr.c_str());
+				}
+				if (func == "loge") {
+					Term* newterm = new LogE(coeffA, coeffB);
+					appendTerm(newterm);
+				}
+				else if (func == "log") {
+					Term* newterm = new Log10(coeffA, coeffB);
+					appendTerm(newterm);
+				}
+				else if (func == "sin") {
+					Term* newterm = new Sinusoidal(coeffA, coeffB);
+					appendTerm(newterm);
+				}
+				else if (func == "cos") {
+					Term* newterm = new Cosinusoidal(coeffA, coeffB);
+					appendTerm(newterm);
+				}
+				func = "";
+				coeffAstr = "";
+				coeffBstr = "";
+				powStr = "";
+				coeffA = 0;
+				coeffB = 0;
+				pow = 0;
+			}
+			else if (isalpha(inputCharacter) && inputCharacter != 'x') func += inputCharacter;
+			else if (isdigit(inputCharacter) || inputCharacter == '-')coeffBstr += inputCharacter;
+		}
+
+	}
+}
