@@ -10,6 +10,7 @@
 
 #include "pch.h"
 #include <iostream>	
+#include <string>
 #define ASCIIspace 32
 #define EQLIM 100 // Equation limit length
 #define INTUPPERLIMIT 32767
@@ -35,6 +36,10 @@ typedef enum calculationType {
 	CoSinConst = 13 // 𝑎 ∗ cos(𝑏 ∗ 𝑥)
 } calcType;
 
+typedef enum calculationError {
+	invLog = 1,
+} calcError;
+
 //Global variables
 char iString[1000];
 int indpX = 0, dpA = 0, dpB = 0;
@@ -46,7 +51,8 @@ char* calcTypeId(char*);
 bool isLog(string);
 bool isTrig(string);
 bool isExp(string);
-string getAllNum(string str);
+string getAllNum(string);
+string getErrMsg(calcError);
 
 // Pre-defined
 // TODO: Adapt to new Equation format
@@ -56,24 +62,55 @@ bool CheckExit(int); // Checked
 //Main program
 int main(int argc, char* argv[]) {
 
-	if(CheckExit(argc)){ return 0; }	
-	cout << argv[1];
+	//if(CheckExit(argc)){ return 0; }	
+	//cout << argv[1];
+	char* inRaw = "3*x^8+9*log10(8*x)-4*sin(2*x)-loge(x)+7*e^(5*x)";
 
 	// TODO Define Linked List & replace argv[1] as input?
 	// Use return -1 as boolean for each stage?
 
 	// TODO re-factor Procedural to OOP
 	// Traverse through List & calculate all
-	calcAllTerms(
-		// Identify Calcultion Type via Util funcs
-		// Update Linked List->calcType 
-		calcTypeId(
-			// Split terms into Linked List
-			// constA, constB, indp varX, operator Opt, index Idx
-			SplitEqTerm(
-			// Raw Equation without space
-			SpaceEliminate(argv[1])
-	)));
+	// calcAllTerms(
+	// 	// Identify Calcultion Type via Util funcs
+	// 	// Update Linked List->calcType 
+	// 	calcTypeId(
+	// 		// Split terms into Linked List
+	// 		// constA, constB, indp varX, operator Opt, index Idx
+	// 		SplitEqTerm(
+	// 		// Raw Equation without space
+	// 		SpaceEliminate(argv[1])
+	// )));
+	char* inEqtn = inRaw;
+	/*
+	try
+	{
+		inEqtn = SpaceEliminate(inRaw);
+	}
+	catch(calcError err)
+	{
+		std::cout << getErrMsg(err) << endl;
+	}
+	*/
+
+	try
+	{
+		inEqtn = SplitEqTerm(inEqtn);
+	}
+	catch(calcError err)
+	{
+		std::cerr << getErrMsg(err) << endl;
+	}
+
+	try
+	{
+		inEqtn = calcTypeId(inEqtn);
+	}
+	catch(calcError err)
+	{
+		std::cerr << getErrMsg(err) << endl;
+	}
+
 
 
 	return 0;
@@ -97,7 +134,7 @@ char* calcTypeId(char* iEqtn){
 	string termsArr[EQLIM] = { "4*e^(x*2)","4*e^(2*x)","4*e^(*x)" };
 
 	//FIXME While current = current->getNext() != NULL
-	for each (string term in termsArr)
+	for (string &term : termsArr)
 	{
 		// IN-DEVELOP
 
@@ -156,6 +193,7 @@ char* SplitEqTerm(char* iEqtn){
 
 	// Main Class EqtnList
 	string termsArr[EQLIM];
+	throw invLog;
 
 	// EqtnList::Node->attributes
 	string term;
@@ -264,6 +302,18 @@ string getAllNum(string str) {
 
 
 	return str;
+}
+
+string getErrMsg(calcError thisErr){
+	switch (thisErr)
+	{
+	case invLog:
+		return "Invalid Log";
+		break;
+	
+	default:
+		break;
+	}
 }
 
 // Pre-defined Functions
