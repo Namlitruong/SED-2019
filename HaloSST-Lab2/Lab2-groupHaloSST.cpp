@@ -37,7 +37,8 @@ typedef enum calculationType {
 } calcType;
 
 typedef enum calculationError {
-	invLog = 1,
+	spcErr = 1,
+	invLog,
 } calcError;
 
 //Global variables
@@ -45,9 +46,9 @@ char iString[1000];
 int indpX = 0, dpA = 0, dpB = 0;
 
 // Function prototype
-char* SplitEqTerm(char*);
-char* calcAllTerms(char*);
-char* calcTypeId(char*);
+string SplitEqTerm(string);
+string calcAllTerms(string);
+string calcTypeId(string);
 bool isLog(string);
 bool isTrig(string);
 bool isExp(string);
@@ -56,15 +57,16 @@ string getErrMsg(calcError);
 
 // Pre-defined
 // TODO: Adapt to new Equation format
-char* SpaceEliminate(char*); 
+string SpaceEliminate(string); 
 bool CheckExit(int); // Checked
 
 //Main program
 int main(int argc, char* argv[]) {
 
-	//if(CheckExit(argc)){ return 0; }	
-	//cout << argv[1];
-	char* inRaw = "3*x^8+9*log10(8*x)-4*sin(2*x)-loge(x)+7*e^(5*x)";
+	// if(CheckExit(argc)){ return 0; }	
+	// cout << argv[1];
+	// char* inRaw = argv[1];
+	char* inRaw = "  3* x ^8 +9*log10(8*x)-4*sin(2*x)-loge(x)+7*e^(5*x)";
 
 	// TODO Define Linked List & replace argv[1] as input?
 	// Use return -1 as boolean for each stage?
@@ -81,48 +83,29 @@ int main(int argc, char* argv[]) {
 	// 		// Raw Equation without space
 	// 		SpaceEliminate(argv[1])
 	// )));
-	char* inEqtn = inRaw;
-	/*
+	string inEqtnStr = argv[1];
+
 	try
 	{
-		inEqtn = SpaceEliminate(inRaw);
+		inEqtnStr = SpaceEliminate(inRaw);
+		inEqtnStr = SplitEqTerm(inEqtnStr);
+		inEqtnStr = calcTypeId(inEqtnStr);
 	}
 	catch(calcError err)
 	{
 		std::cout << getErrMsg(err) << endl;
 	}
-	*/
-
-	try
-	{
-		inEqtn = SplitEqTerm(inEqtn);
-	}
-	catch(calcError err)
-	{
-		std::cerr << getErrMsg(err) << endl;
-	}
-
-	try
-	{
-		inEqtn = calcTypeId(inEqtn);
-	}
-	catch(calcError err)
-	{
-		std::cerr << getErrMsg(err) << endl;
-	}
-
-
 
 	return 0;
 }
 
 // Main Functions
-char* calcAllTerms(char* iEqtn){
+string calcAllTerms(string iEqtn){
 
 	return iEqtn;
 }
 
-char* calcTypeId(char* iEqtn){
+string calcTypeId(string iEqtn){
 	//TODO input argument *EqtnList
 
 	//TODO EqtnList::Node->attributes
@@ -187,7 +170,7 @@ char* calcTypeId(char* iEqtn){
 	return iEqtn;
 }
 
-char* SplitEqTerm(char* iEqtn){
+string SplitEqTerm(string iEqtn){
 	string iEqtnStr = iEqtn;
 	int cursor = 0, idxCtm = 0;
 
@@ -307,10 +290,12 @@ string getAllNum(string str) {
 string getErrMsg(calcError thisErr){
 	switch (thisErr)
 	{
+	case spcErr:
+		return "Not all Spaces Eliminated";
+		break;
 	case invLog:
 		return "Invalid Log";
 		break;
-	
 	default:
 		break;
 	}
@@ -322,16 +307,13 @@ string getErrMsg(calcError thisErr){
 	Input: Raw input argument string.
 	Output: New expression without spaces at the front and from the back.
 */
-char* SpaceEliminate(char* iString) {
-	int StartIndex = 0;
-	int EndIndex = strlen(iString);
-	char* Data = &(*iString);
+string SpaceEliminate(string str) {
+	str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
+	
+	// Precaution, redundant
+	if (str.find(' ') != std::string::npos) throw spcErr;
 
-	for (int i = 1; iString[i - 1] == ' '; i++) StartIndex = i;								// Check space from the front 
-	for (int i = strlen(iString) - 1; iString[i] == ' '; i--) EndIndex = i - 1;				// Check space from the back  
-	for (int i = 0; i <= (EndIndex - StartIndex); i++) Data[i] = iString[StartIndex + i];	// Take out the expression from 'Start Index' to 'End Index'
-	Data[(EndIndex - StartIndex) + 1] = '\0';												// Add NULL at the end of the new string
-	return Data;
+	return str;
 }
 
 /*	Function name: CheckExit.
