@@ -14,10 +14,10 @@ public:
 	Equation();
 	~Equation();
 	Equation(string usrInput);
-	void constructEquation();
-	void insertTerm(Term* term);
+	void formEquation();
+	void appendTerm(Term* term);
 	void printResult();
-	bool scanCharacter();
+	bool checkCharacter();
 	bool checkEquation();
 };
 
