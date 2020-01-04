@@ -191,20 +191,9 @@ string SplitEqTerm(string iEqtn){
 	|| iEqtn[0] == '^' 
 	) throw syntaxErr;
 
-	int curPos, curNeg;
-	//TODO Split based on delimeter "+" or "-"
-	while (( (curPos = iEqtnStr.find('+')) != std::string::npos) 
-		  || (curNeg = iEqtnStr.find('-')) != std::string::npos) 
-	{
-		// FIXME error skipped '-' separated terms
-		if (curPos != std::string::npos)
-		{
-			cursor = curPos;
-		}
-		else if (curNeg != std::string::npos){
-			cursor = curPos;
-		}
-		
+	// Split based on delimeter "+" or "-"
+	while ( (cursor = iEqtnStr.find_first_of("+-") ) != std::string::npos)	
+	{	
 		// TODO any other attribute for subtraction ?
 		iEqtnStr[cursor] == '-' ? (isSubtract = true) : (isSubtract = false);
 
