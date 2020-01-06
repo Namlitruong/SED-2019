@@ -263,6 +263,58 @@ bool Equation::checkEquation()
 	string term = "";
 	for (int i = 0; i < usrInput.length(); i++) {
 		char inputCharacter = usrInput[i];
+		
+		// Quick Syntax Checker
+		int cursor = 0;
+		string rawUsrInput = usrInput;
+		// lecs = log e^ cos sin
+		while ((cursor = rawUsrInput.find_first_of("lecsx*")) != std::string::npos ){
+			if (rawUsrInput[cursor] == 'l') {
+				// log
+				if (rawUsrInput[cursor + 1] != 'o' || rawUsrInput[cursor + 2] != 'g') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			else if (rawUsrInput[cursor] == 'e'){
+				// not loge and e^x
+				if (rawUsrInput[cursor - 1] != 'g' && rawUsrInput[cursor + 1] != '^') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			else if (rawUsrInput[cursor] == 'c') {
+				// cos
+				if (rawUsrInput[cursor + 1] != 'o' && rawUsrInput[cursor + 2] != 's') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			else if (rawUsrInput[cursor] == 's') {
+				// sin
+				if (rawUsrInput[cursor + 1] != 'i' && rawUsrInput[cursor + 2] != 'n') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			// x^
+			else if (rawUsrInput[cursor] == 'x' && rawUsrInput[cursor + 1] == '^') {
+				// x^(
+				if (rawUsrInput[cursor + 2] != '(') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			else if (rawUsrInput[cursor] == '*') {
+				// sin
+				if (rawUsrInput[cursor - 1] == 'x' && rawUsrInput[cursor + 1] == 'x') {
+					cout << "Invalid syntax at index " << cursor << endl;
+					return false;
+				}
+			}
+			rawUsrInput.erase(0, cursor);
+		}
+
 		if ((inputCharacter == '+' || inputCharacter == '-') && i != 0 && usrInput[i - 1] != '(') {
 
 			if (term == "" || i == usrInput.length() - 1) return false;
