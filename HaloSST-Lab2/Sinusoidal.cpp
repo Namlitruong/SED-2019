@@ -1,7 +1,6 @@
-#include "pch.h"
 #include "Sinusoidal.h"
 
-Sinusoidal::Sinusoidal(){}
+Sinusoidal::Sinusoidal() {}
 Sinusoidal::~Sinusoidal() {}
 Sinusoidal::Sinusoidal(int a, int b) : Trigonometric(a, b) {}
 void Sinusoidal::diff() {

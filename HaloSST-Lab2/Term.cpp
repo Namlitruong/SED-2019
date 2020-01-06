@@ -1,4 +1,3 @@
-#include "pch.h"
 #include "Term.h"
 
 Term::Term() {
@@ -6,14 +5,14 @@ Term::Term() {
 	a = 0;
 }
 
-Term::~Term(){}
+Term::~Term() {}
 
 Term::Term(int newCoeff) {
 	nextTerm = NULL;
 	a = newCoeff;
 }
 
-Term::Term(int newCoeff, Term *nextTerm) {
+Term::Term(int newCoeff, Term* nextTerm) {
 	a = newCoeff;
 	this->nextTerm = nextTerm;
 }
