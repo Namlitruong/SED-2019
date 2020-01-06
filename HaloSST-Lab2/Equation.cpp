@@ -298,11 +298,11 @@ bool Equation::checkEquation()
 				}
 			}
 			// x^
-			else if (rawUsrInput[cursor] == 'x' && rawUsrInput[cursor + 1] == '^') {
+			else if (rawUsrInput[cursor] == 'x' ) {
 				// x^(
-				if (rawUsrInput.length() >= cursor + 2)
+				if (rawUsrInput.length() >= cursor + 1 && rawUsrInput.length() > 1)
 				{	
-					if (rawUsrInput[cursor + 2] != '(') {
+					if (rawUsrInput[cursor + 1] == '^' && rawUsrInput[cursor + 2] != '(') {
 						cout << "Invalid syntax at index " << cursor << endl;
 						return false;
 					}
@@ -310,7 +310,7 @@ bool Equation::checkEquation()
 			}
 			else if (rawUsrInput[cursor] == '*') {
 				// *x*x
-				if (rawUsrInput.length() >= cursor + 2)
+				if (rawUsrInput.length() >= cursor + 1 && rawUsrInput.length() > 1)
 				{	
 					if (rawUsrInput[cursor - 1] == 'x' && rawUsrInput[cursor + 1] == 'x') {
 						cout << "Invalid syntax at index " << cursor << endl;
@@ -318,6 +318,7 @@ bool Equation::checkEquation()
 					}
 				}
 			}
+			if (rawUsrInput.length() <= 2) cursor++;
 			rawUsrInput.erase(0, cursor);
 		}
 
