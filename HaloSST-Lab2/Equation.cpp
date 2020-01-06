@@ -9,21 +9,27 @@
 #include "Sinusoidal.h"
 #include "Cosinusoidal.h"
 
+// Class default constructor/destructor
 Equation::Equation() {}
 Equation::~Equation() {}
 
+// Initialize method
 Equation::Equation(string eqtnInput) {
 	usrInput = eqtnInput;
 }
 
+// Append each successive term to the Term List
 void Equation::appendTerm(Term* term) {
 	Term* current = NULL;
 	term->setNextTerm(NULL);
+
+	// if empty list
 	if (head == NULL) {
 		head = term;
 	}
 	else {
 		current = head;
+		// Traverse to last Term and then append
 		while (current->getNext() != NULL) {
 			current = current->getNext();
 		}
@@ -32,7 +38,11 @@ void Equation::appendTerm(Term* term) {
 
 }
 
-// check each character
+/*	Function name: checkCharacter.
+	Usage: Validate if characters in euqation supported
+	Input: String usrInput User input.
+	Output: Boolean true if all character supported
+*/
 bool Equation::checkCharacter() {
 	if (usrInput[0] == '*' || usrInput[0] == '^' || usrInput[0] == 'o' || usrInput[0] == 'g' || usrInput[0] == ')' || usrInput[0] == 'i' 
 		|| usrInput[0] == 'n')
@@ -54,6 +64,11 @@ bool Equation::checkCharacter() {
 	} return true;
 }
 
+/*	Function name: checkCharacter.
+	Usage: Validate and tokenize each term
+	Input: String term each term from Equation List.
+	Output: Boolean true if all term in correct format
+*/
 bool Equation::checkTerm(string term)
 {
 	bool cnstA = false;
@@ -113,6 +128,7 @@ bool Equation::checkTerm(string term)
 			cout << "Invalid character at: " << inputCharacter << endl;
 			return false;
 		}
+		// 'log' must consist of all three characters
 		if (logDetect) {
 			if (inputCharacter == 'o' && term[i + 1] == 'g') {
 				if (term[i + 2] == '1' && term[i + 3] == '0' && term[i + 4] == '(') {
@@ -129,6 +145,7 @@ bool Equation::checkTerm(string term)
 				return false;
 			}
 		}
+		// 'sin' must consist of all three characters
 		if (sinDetect) {
 			if (inputCharacter == 'i' && term[i + 1] == 'n' && term[i + 2] == '(') {
 				i = i + 1;
@@ -137,6 +154,7 @@ bool Equation::checkTerm(string term)
 				return false;
 			}
 		}
+		// 'cos' must consist of all three characters
 		if (cosDetect) {
 			if (inputCharacter == 'o' && term[i + 1] == 's' && term[i + 2] == '(') {
 				i = i + 1;
@@ -145,7 +163,7 @@ bool Equation::checkTerm(string term)
 				return false;
 			}
 		}
-
+		// validate constant A
 		if (!cnstA && isdigit(inputCharacter) && !openBracket) {
 			cnstA = true;
 		}
@@ -154,7 +172,7 @@ bool Equation::checkTerm(string term)
 			cnstA = false;
 		}
 
-
+		// Detect cursor for each term
 		if (inputCharacter == 'x' && !xDetect) {
 			firstMulti = false;
 			xDetect = true;
@@ -257,69 +275,16 @@ bool Equation::checkTerm(string term)
 	return true;
 }
 
+/*	Function name: checkEquation.
+	Usage: Validate if the equation is in supported format
+	Input: String usrInput User input.
+	Output: Boolean true if all term is valid
+*/
 bool Equation::checkEquation()
 {
 	string term = "";
 	for (int i = 0; i < usrInput.length(); i++) {
 		char inputCharacter = usrInput[i];
-		
-		// Quick Syntax Checker
-		int cursor = 0;
-		string rawUsrInput = usrInput;
-		// lecs = log e^ cos sin
-		while ((cursor = rawUsrInput.find_first_of("lecsx*")) != std::string::npos ){
-			if (rawUsrInput[cursor] == 'l') {
-				// log
-				if (rawUsrInput[cursor + 1] != 'o' || rawUsrInput[cursor + 2] != 'g') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
-				}
-			}
-			else if (rawUsrInput[cursor] == 'e'){
-				// not loge and e^x
-				if (rawUsrInput[cursor - 1] != 'g' && rawUsrInput[cursor + 1] != '^') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
-				}
-			}
-			else if (rawUsrInput[cursor] == 'c') {
-				// cos
-				if (rawUsrInput[cursor + 1] != 'o' && rawUsrInput[cursor + 2] != 's') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
-				}
-			}
-			else if (rawUsrInput[cursor] == 's') {
-				// sin
-				if (rawUsrInput[cursor + 1] != 'i' && rawUsrInput[cursor + 2] != 'n') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
-				}
-			}
-			// x^
-			else if (rawUsrInput[cursor] == 'x' ) {
-				// x^(
-				if (rawUsrInput.length() >= cursor + 1 && rawUsrInput.length() > 1)
-				{	
-					if (rawUsrInput[cursor + 1] == '^' && rawUsrInput[cursor + 2] != '(') {
-						cout << "Invalid syntax at index " << cursor << endl;
-						return false;
-					}
-				}
-			}
-			else if (rawUsrInput[cursor] == '*') {
-				// *x*x
-				if (rawUsrInput.length() >= cursor + 1 && rawUsrInput.length() > 1)
-				{	
-					if (rawUsrInput[cursor - 1] == 'x' && rawUsrInput[cursor + 1] == 'x') {
-						cout << "Invalid syntax at index " << cursor << endl;
-						return false;
-					}
-				}
-			}
-			if (rawUsrInput.length() <= 2) cursor++;
-			rawUsrInput.erase(0, cursor);
-		}
 
 		if ((inputCharacter == '+' || inputCharacter == '-') && i != 0 && usrInput[i - 1] != '(') {
 
@@ -345,6 +310,11 @@ bool Equation::checkEquation()
 	return true;
 }
 
+/*	Function name: printResult.
+	Usage: Traverse through the Equation List and print results
+	Input: Term* current pointer.
+	Output: Void type function
+*/
 void Equation::printResult() {
 	string result = "The result is: ";
 	Term* current = head;
@@ -378,6 +348,11 @@ void Equation::printResult() {
 	cout << result << endl;
 }
 
+/*	Function name: formEquation.
+	Usage: Construct the equation from each term
+	Input: String usrInput User input.
+	Output: Void type function
+*/
 // TODO check x^b without bracket
 void Equation::formEquation() {
 	int strLength = usrInput.length();
@@ -395,12 +370,15 @@ void Equation::formEquation() {
 	bool digitDetect = false;
 	bool bracket = false;
 	int track = 0;
+
 	for (int i = 0; i < strLength; i++) {
 		char inputCharacter = usrInput[i];
 		track = i + 1;
+		// Track each digit
 		if (inputCharacter == '+' || inputCharacter == '-' || track == strLength - 1) {
 			digitDetect = true;
 		}
+		// Track independent variable
 		if (!xDetect && !eDetect && !funcDetect && !consDetect) {
 			if (inputCharacter == 'x') {
 				if (i == strLength - 1) {
@@ -419,6 +397,7 @@ void Equation::formEquation() {
 			else if (isalpha(inputCharacter) && inputCharacter != 'x' && inputCharacter != 'e') funcDetect = true, digitDetect = false;
 			else if (inputCharacter != '(' && inputCharacter != ')') coeffAstr += inputCharacter;
 		}
+		// If Independent variable then
 		else if (xDetect) {
 			if (inputCharacter == '(') bracket = true;
 			if (coeffAstr == "" || coeffAstr == "+") coeffA = 1;
@@ -487,6 +466,7 @@ void Equation::formEquation() {
 			}
 
 		}
+		// Calculate exponential
 		if (eDetect) {
 			if (coeffAstr == "" || coeffAstr == "+") coeffA = 1;
 			else if (coeffAstr == "-") {
@@ -511,6 +491,7 @@ void Equation::formEquation() {
 			else if (inputCharacter == '^') func += inputCharacter;
 			else if (inputCharacter != 'e' && inputCharacter != '^' && inputCharacter != '(') coeffBstr += inputCharacter;
 		}
+		// Calculate constant term
 		if (consDetect) {
 			coeffA = atoi(coeffAstr.c_str());
 			consDetect = false;
