@@ -300,16 +300,22 @@ bool Equation::checkEquation()
 			// x^
 			else if (rawUsrInput[cursor] == 'x' && rawUsrInput[cursor + 1] == '^') {
 				// x^(
-				if (rawUsrInput[cursor + 2] != '(') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
+				if (rawUsrInput.length() >= cursor + 2)
+				{	
+					if (rawUsrInput[cursor + 2] != '(') {
+						cout << "Invalid syntax at index " << cursor << endl;
+						return false;
+					}
 				}
 			}
 			else if (rawUsrInput[cursor] == '*') {
-				// sin
-				if (rawUsrInput[cursor - 1] == 'x' && rawUsrInput[cursor + 1] == 'x') {
-					cout << "Invalid syntax at index " << cursor << endl;
-					return false;
+				// *x*x
+				if (rawUsrInput.length() >= cursor + 2)
+				{	
+					if (rawUsrInput[cursor - 1] == 'x' && rawUsrInput[cursor + 1] == 'x') {
+						cout << "Invalid syntax at index " << cursor << endl;
+						return false;
+					}
 				}
 			}
 			rawUsrInput.erase(0, cursor);
