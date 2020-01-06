@@ -9,8 +9,8 @@
 #include "Sinusoidal.h"
 #include "Cosinusoidal.h"
 
-Equation::Equation(){}
-Equation::~Equation(){}
+Equation::Equation() {}
+Equation::~Equation() {}
 
 Equation::Equation(string eqtnInput) {
 	usrInput = eqtnInput;
@@ -34,6 +34,13 @@ void Equation::appendTerm(Term* term) {
 
 // check each character
 bool Equation::checkCharacter() {
+	if (usrInput[0] == '*' || usrInput[0] == '^' || usrInput[0] == 'o' || usrInput[0] == 'g' || usrInput[0] == ')' || usrInput[0] == 'i' 
+		|| usrInput[0] == 'n')
+	{
+		cout << "First character is illegal " << usrInput[0] << endl;
+		exit(1);
+
+	}
 	for (int i = 0; i < usrInput.length(); i++) {
 		char inputCharacter = usrInput[i];
 		if (!isdigit(inputCharacter) && inputCharacter != '+' && inputCharacter != '-'
@@ -65,8 +72,7 @@ bool Equation::checkTerm(string term)
 	bool secondxDetect = false;
 	for (int i = 0; i < term.length(); i++) {
 		char inputCharacter = term[i];
-
-		
+		//after a must be digit/*/) - a* (a)
 		if (cnstA && !isdigit(inputCharacter) && inputCharacter != '*' && inputCharacter != ')') {
 			cout << "Invalid character at: " << inputCharacter << endl;
 			return false;
@@ -81,6 +87,7 @@ bool Equation::checkTerm(string term)
 			cout << "Invalid character at: " << inputCharacter << endl;
 			return false;
 		}
+
 		// after pow (^) must be (
 		if (powDetect && inputCharacter != '(') {
 			cout << "Invalid character at: " << inputCharacter << endl;
@@ -206,6 +213,8 @@ bool Equation::checkTerm(string term)
 			powDetect = false;
 			openBracket = true;
 		}
+
+		// not having closing bracket
 		if (isdigit(inputCharacter) && openBracket) {
 			if (i == term.length() - 1) {
 				cout << "coeff B detect invalid end" << endl;
@@ -367,7 +376,7 @@ void Equation::formEquation() {
 						powStr += inputCharacter;
 					}
 					pow = atoi(powStr.c_str());
-					if (func.compare("x")==0) {
+					if (func.compare("x") == 0) {
 						Term* newterm = new Power(coeffA, pow);
 						appendTerm(newterm);
 					}
@@ -397,7 +406,7 @@ void Equation::formEquation() {
 					}
 					if (powStr == "") pow = 1;
 					else pow = atoi(powStr.c_str());
-					if (func.compare("x^")==0) {
+					if (func.compare("x^") == 0) {
 						Term* newterm = new Power(coeffA, pow);
 						appendTerm(newterm);
 					}
