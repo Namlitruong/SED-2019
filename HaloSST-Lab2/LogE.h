@@ -1,4 +1,5 @@
 #pragma once
+#include "pch.h"
 #include "Log.h"
 
 class LogE:public Log

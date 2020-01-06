@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Equation.h"
 #include <iostream>
 #include "Constant.h"

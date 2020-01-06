@@ -1,8 +1,9 @@
+#include "pch.h"
 #include "Power.h"
 
-Power::Power() {}
-Power::~Power() {}
-Power::Power(int a, int b) : Nonlinear(a, b) {}
+Power::Power(){}
+Power::~Power(){}
+Power::Power(int a, int b): Nonlinear(a,b){}
 void Power::diff() {
 	a = a * b;
 	b = b - 1;

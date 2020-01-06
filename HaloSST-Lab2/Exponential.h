@@ -1,4 +1,5 @@
 #pragma once
+#include "pch.h"
 #include "Nonlinear.h"
 
 class Exponential:public Nonlinear

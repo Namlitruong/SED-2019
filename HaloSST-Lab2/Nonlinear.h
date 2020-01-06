@@ -1,4 +1,5 @@
 #pragma once
+#include "pch.h"
 #include"Term.h"
 
 //CHILD CLASS
